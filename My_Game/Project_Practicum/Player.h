@@ -7,15 +7,15 @@ class Player
 {
 private:
 	float x, y;
-	float speed = 10;
+	float speed = 15;
 
 	float radius = 50;
 	Color color = Color::Green;
 	float outlineThickness = 5;
 	Color outlineColor = Color::Red;
 
-public:
 	CircleShape shape = CircleShape(radius);
+public:
 	Player(float _x, float _y);
 	~Player() {};
 
