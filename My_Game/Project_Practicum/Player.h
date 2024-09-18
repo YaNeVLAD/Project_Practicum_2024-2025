@@ -10,9 +10,9 @@ private:
 	float speed = 10;
 
 	float radius = 50;
-	Color color = sf::Color::Green;
+	Color color = Color::Green;
 	float outlineThickness = 5;
-	Color outlineColor = sf::Color::Red;
+	Color outlineColor = Color::Red;
 
 public:
 	CircleShape shape = CircleShape(radius);

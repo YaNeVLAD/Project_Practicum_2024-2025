@@ -62,7 +62,7 @@ int main()
 		//Draw objects
 		/*for (int i = 0; i < state.size(); i++)
 		{
-			window.draw(state[i]);
+			i.draw(window);
 		}*/
 
 		player.draw(window);
