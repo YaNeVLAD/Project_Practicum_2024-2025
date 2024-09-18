@@ -1,25 +1,34 @@
 #include "SFML/Graphics.hpp"
-#include <iostream>
+#include "Player.h"
 
-constexpr unsigned int FPSLimit = 60;
+using namespace sf;
 
-void setWindowSettings(sf::RenderWindow& window);
-sf::CircleShape initPlayer();
-void tryMovePlayer(sf::CircleShape& player, sf::Window& window);
+constexpr unsigned int FPS_LIMIT = 60;
 
-float plrX = 100.0, plrY = 100.0, plrRadius = 50.0, plrOutlineThickness = 3.0;
+enum Direction
+{
+	UP = -1,
+	DOWN = 1,
+	LEFT = -1,
+	RIGHT = 1,
+	IDLE = 0,
+};
+
+void setWindowSettings(RenderWindow& window);
+void handleInput(Player& player, Event::KeyEvent event);
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "My Game");
+	RenderWindow window(VideoMode::getDesktopMode(), "My Game");
 	setWindowSettings(window);
 
-	sf::Event event;
+	Event event;
 
-	sf::CircleShape player = initPlayer();
+	Player player(window.getSize().x / 2, window.getSize().y / 2);
+	player.initShape();
 
-	std::vector<sf::CircleShape> state;
-	state.push_back(player);
+	//std::vector<GameObject> state;
+	//state.insert(state.end(), player);
 
 	while (window.isOpen())
 	{
@@ -29,31 +38,34 @@ int main()
 		{
 			switch (event.type)
 			{
-			case sf::Event::Closed: window.close(); break;
-			case sf::Event::MouseMoved: tryMovePlayer(player, window); break;
+			case Event::Closed: window.close(); break;
+			case Event::KeyPressed: handleInput(player, event.key); break;
 			}
 		}
 
 		//Draw game
 		//-------------
 		//Clear game state
-		window.clear(sf::Color::Black);
-		state.clear();
+		window.clear(Color::Black);
+		//state.clear();
 
 		//Update objects positions
 		//updatePositions(state);
-
+		//
 		//Check collisions
 		//checkCollisions(state);
-
+		//
 		//Load all objects in state
-		state.push_back(player);
-
+		//
+		//state.push_back(player);
+		//
 		//Draw objects
-		for (int i = 0; i < state.size(); i++)
+		/*for (int i = 0; i < state.size(); i++)
 		{
 			window.draw(state[i]);
-		}
+		}*/
+
+		player.draw(window);
 
 		//Render
 		window.display();
@@ -62,29 +74,19 @@ int main()
 	return EXIT_SUCCESS;
 }
 
-void setWindowSettings(sf::RenderWindow& window)
+void setWindowSettings(RenderWindow& window)
 {
-	window.setFramerateLimit(FPSLimit);
+	window.setFramerateLimit(FPS_LIMIT);
 }
 
-sf::CircleShape initPlayer()
+void handleInput(Player& player, Event::KeyEvent event)
 {
-	sf::CircleShape player(plrRadius);
-	player.setFillColor(sf::Color::Green);
-	player.setPosition(plrX, plrY);
-	player.setOrigin(plrRadius / 2, plrRadius / 2);
-	player.setOutlineColor(sf::Color::Red);
-	player.setOutlineThickness(plrOutlineThickness);
-
-	return player;
-}
-
-void tryMovePlayer(sf::CircleShape& player, sf::Window& window)
-{
-	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	switch (event.scancode)
 	{
-		player.setPosition(mousePos.x, mousePos.y);
+	case Keyboard::Scancode::W: player.move(IDLE, player.getSpeed() * UP); break;
+	case Keyboard::Scancode::A: player.move(player.getSpeed() * LEFT, IDLE); break;
+	case Keyboard::Scancode::S: player.move(IDLE, player.getSpeed() * DOWN); break;
+	case Keyboard::Scancode::D: player.move(player.getSpeed() * RIGHT, IDLE); break;
 	}
 }
 
