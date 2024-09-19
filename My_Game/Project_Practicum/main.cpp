@@ -1,24 +1,18 @@
 #include "SFML/Graphics.hpp"
+#include "GameConstants.hpp"
 #include "Player.h"
-
+#include "lab2.h"
+	 
 using namespace sf;
-
-constexpr unsigned int FPS_LIMIT = 60;
-
-enum Direction
-{
-	UP = -1,
-	DOWN = 1,
-	LEFT = -1,
-	RIGHT = 1,
-	IDLE = 0,
-};
 
 void setWindowSettings(RenderWindow& window);
 void handleInput(Player& player, Event::KeyEvent event);
 
 int main()
 {
+	Lab2();
+	return EXIT_SUCCESS;
+
 	RenderWindow window(VideoMode::getDesktopMode(), "My Game");
 	setWindowSettings(window);
 
@@ -29,6 +23,7 @@ int main()
 
 	//std::vector<GameObject> state;
 	//state.insert(state.end(), player);
+
 
 	while (window.isOpen())
 	{
@@ -76,17 +71,17 @@ int main()
 
 void setWindowSettings(RenderWindow& window)
 {
-	window.setFramerateLimit(FPS_LIMIT);
+	window.setFramerateLimit(GC::FPS_LIMIT);
 }
 
 void handleInput(Player& player, Event::KeyEvent event)
 {
 	switch (event.scancode)
 	{
-	case Keyboard::Scancode::W: player.move(IDLE, player.getSpeed() * UP); break;
-	case Keyboard::Scancode::A: player.move(player.getSpeed() * LEFT, IDLE); break;
-	case Keyboard::Scancode::S: player.move(IDLE, player.getSpeed() * DOWN); break;
-	case Keyboard::Scancode::D: player.move(player.getSpeed() * RIGHT, IDLE); break;
+	case Keyboard::Scancode::W: player.move(GC::IDLE, player.getSpeed() * GC::UP); break;
+	case Keyboard::Scancode::A: player.move(player.getSpeed() * GC::LEFT, GC::IDLE); break;
+	case Keyboard::Scancode::S: player.move(GC::IDLE, player.getSpeed() * GC::DOWN); break;
+	case Keyboard::Scancode::D: player.move(player.getSpeed() * GC::RIGHT, GC::IDLE); break;
 	}
 }
 

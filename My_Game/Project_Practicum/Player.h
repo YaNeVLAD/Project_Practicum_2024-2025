@@ -15,6 +15,8 @@ private:
 	Color outlineColor = Color::Red;
 
 	CircleShape shape = CircleShape(radius);
+
+	
 public:
 	Player(float _x, float _y);
 	~Player() {};
