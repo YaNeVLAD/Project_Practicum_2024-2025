@@ -10,9 +10,6 @@ void handleInput(Player& player, Event::KeyEvent event);
 
 int main()
 {
-	Lab2();
-	return EXIT_SUCCESS;
-
 	RenderWindow window(VideoMode::getDesktopMode(), "My Game");
 	setWindowSettings(window);
 
