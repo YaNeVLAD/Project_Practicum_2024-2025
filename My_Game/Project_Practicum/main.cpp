@@ -40,6 +40,43 @@ int main()
 	redCircle.setPosition(175, 470);
 
 	//LAB2.2
+	RectangleShape KLeft = RectangleShape(Vector2f(50, 200));
+	KLeft.setFillColor(Color::Blue);
+	KLeft.setPosition(400, 200);
+
+	RectangleShape KTop = RectangleShape(Vector2f(50, 150));
+	KTop.setFillColor(Color::Blue);
+	KTop.setRotation(-135);
+	KTop.setPosition(450, 300);
+
+	RectangleShape KBottom = RectangleShape(Vector2f(50, 150));
+	KBottom.setFillColor(Color::Blue);
+	KBottom.setRotation(-55);
+	KBottom.setPosition(430, 320);
+
+
+	RectangleShape VLeft1 = RectangleShape(Vector2f(50, 200));
+	VLeft1.setFillColor(Color::Blue);
+	VLeft1.setRotation(-45);
+	VLeft1.setPosition(600, 250);
+
+	RectangleShape VRight1 = RectangleShape(Vector2f(50, 200));
+	VRight1.setFillColor(Color::Blue);
+	VRight1.setRotation(45);
+	VRight1.setPosition(850, 218);
+
+
+	RectangleShape VLeft2 = RectangleShape(Vector2f(50, 200));
+	VLeft2.setFillColor(Color::Blue);
+	VLeft2.setRotation(-45);
+	VLeft2.setPosition(600 + 300, 250);
+
+	RectangleShape VRight2 = RectangleShape(Vector2f(50, 200));
+	VRight2.setFillColor(Color::Blue);
+	VRight2.setRotation(45);
+	VRight2.setPosition(850 + 300, 218);
+
+	//LAB2.3
 	
 
 	while (window.isOpen())
@@ -82,6 +119,16 @@ int main()
 		window.draw(greenCircle);
 		window.draw(yellowCircle);
 		window.draw(redCircle);
+
+
+
+		window.draw(KLeft);
+		window.draw(KTop);
+		window.draw(KBottom);
+		window.draw(VLeft1);
+		window.draw(VRight1);
+		window.draw(VLeft2);
+		window.draw(VRight2);
 
 		player.draw(window);
 
