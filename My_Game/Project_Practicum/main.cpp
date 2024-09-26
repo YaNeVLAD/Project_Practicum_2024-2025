@@ -77,7 +77,46 @@ int main()
 	VRight2.setPosition(850 + 300, 218);
 
 	//LAB2.3
-	
+	ConvexShape roof;
+	roof.setFillColor(Color::Red);
+	roof.setPosition(1200, 600);
+	roof.setPointCount(4);
+	roof.setPoint(0, { -90, 0 });
+	roof.setPoint(1, { +90, 0 });
+	roof.setPoint(2, { +220, 90 });
+	roof.setPoint(3, { -220, 90 });
+
+	RectangleShape walls = RectangleShape(Vector2f(350, 300));
+	walls.setFillColor(Color(0x44, 0x21, 0x12));
+	walls.setPosition(1020, 690);
+
+	RectangleShape door = RectangleShape(Vector2f(100, 150));
+	door.setFillColor(Color::Black);
+	door.setPosition(1050, 850);
+
+	RectangleShape pipe1 = RectangleShape(Vector2f(50, 80));
+	pipe1.setFillColor(Color(0x80, 0x80, 0x80));
+	pipe1.setPosition(1230, 570);
+
+	RectangleShape pipe2 = RectangleShape(Vector2f(80, 40));
+	pipe2.setFillColor(Color(0x80, 0x80, 0x80));
+	pipe2.setPosition(1215, 550);
+
+	CircleShape smoke1 = CircleShape(20);
+	smoke1.setFillColor(Color(0xA0,0xA0,0xA0));
+	smoke1.setPosition(1250, 520);
+
+	CircleShape smoke2 = CircleShape(25);
+	smoke2.setFillColor(Color(0xA0, 0xA0, 0xA0));
+	smoke2.setPosition(1265, 495);
+
+	CircleShape smoke3 = CircleShape(30);
+	smoke3.setFillColor(Color(0xA0, 0xA0, 0xA0));
+	smoke3.setPosition(1275, 460);
+
+	CircleShape smoke4 = CircleShape(35);
+	smoke4.setFillColor(Color(0xA0, 0xA0, 0xA0));
+	smoke4.setPosition(1275, 420);
 
 	while (window.isOpen())
 	{
@@ -121,7 +160,6 @@ int main()
 		window.draw(redCircle);
 
 
-
 		window.draw(KLeft);
 		window.draw(KTop);
 		window.draw(KBottom);
@@ -129,6 +167,18 @@ int main()
 		window.draw(VRight1);
 		window.draw(VLeft2);
 		window.draw(VRight2);
+
+
+		window.draw(roof);
+		window.draw(walls);
+		window.draw(door);
+		window.draw(smoke1);
+		window.draw(smoke2);
+		window.draw(smoke3);
+		window.draw(smoke4);
+		window.draw(pipe1);
+		window.draw(pipe2);
+
 
 		player.draw(window);
 
