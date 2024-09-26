@@ -1,8 +1,6 @@
 #include <iostream>
 #include "lab2.h"
 
-using namespace std;
-
 void WriteHelloWorld();
 void InputNumbers();
 void LinearEquasion1();
@@ -27,7 +25,7 @@ int Lab2()
 
 void WriteHelloWorld()
 {
-	cout << "Hello World!" << endl;
+	std::cout << "Hello World!" << std::endl;
 
 	puts("Hello Vlad!");
 }
@@ -36,7 +34,7 @@ void InputNumbers()
 {
 	int x, y;
 	scanf_s("%d %d", &x, &y);
-	cout << endl;
+	std::cout << std::endl;
 	printf("%d %d\n", x, y);
 }
 
@@ -53,7 +51,7 @@ void LinearEquasion1()
 
 void LinearEquasion2()
 {
-	cout << "please enter a and b for ax + b" << endl;
+	std::cout << "please enter a and b for ax + b" << std::endl;
 	float a = 0;
 	float b = 0;
 	scanf_s("%d %d", &a, &b);
@@ -66,21 +64,21 @@ void SquareEquasion()
 {
 	float a, b, c;
 	float D = 0.0;
-	cout << "ax^2 + bx + c = 0" << endl;
-	cout << "Введите коэфициенты a, b, c" << endl;
-	cin >> a >> b >> c;
+	std::cout << "ax^2 + bx + c = 0" << std::endl;
+	std::cout << "Введите коэфициенты a, b, c" << std::endl;
+	std::cin >> a >> b >> c;
 	D = b * b - 4 * a * c;
 	if (D > 0)
 	{
-		cout << "Первый корень: " << (-b + sqrt(D)) / (2 * a) << endl;
-		cout << "Второй корень: " << (-b - sqrt(D)) / (2 * a) << endl;
+		std::cout << "Первый корень: " << (-b + sqrt(D)) / (2 * a) << std::endl;
+		std::cout << "Второй корень: " << (-b - sqrt(D)) / (2 * a) << std::endl;
 	}
 	else if (D == 0)
 	{
-		cout << "Единственный Корень: " << - b / (2 * a) << endl; 
+		std::cout << "Единственный Корень: " << - b / (2 * a) << std::endl;
 	}
 	else
 	{
-		cout << "Корень из дискриминанта < 0. Корней нет." << endl;
+		std::cout << "Корень из дискриминанта < 0. Корней нет." << std::endl;
 	}
 }
