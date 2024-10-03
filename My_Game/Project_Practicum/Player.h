@@ -7,7 +7,7 @@ class Player
 {
 private:
 	float x, y;
-	float speed = 15;
+	float speed = 200;
 
 	float radius = 50;
 	Color color = Color::Green;
@@ -21,10 +21,20 @@ public:
 	Player(float _x, float _y);
 	~Player() {};
 
-	void initShape();
 	float getSpeed();
+	void setSpeed(float _speed);
+
+	float getRadius();
+
+	float getX();
+	float getY();
+	
+	void setX(float _x);
+	void setY(float _y);
 
 	void draw(RenderWindow& window);
-	void move(float x, float y);
+	
+	void setPosition(Vector2f position);
+	Vector2f getPosition();
 };
 
