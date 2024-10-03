@@ -135,12 +135,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameConstants.hpp" />
-    <ClCompile Include="lab2.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lab2.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

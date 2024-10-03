@@ -1,8 +1,7 @@
 #include "SFML/Graphics.hpp"
 #include "GameConstants.hpp"
 #include "Player.h"
-#include "lab2.h"
-	 
+
 using namespace sf;
 
 void setWindowSettings(RenderWindow& window);
@@ -38,7 +37,7 @@ int main()
 		//Draw game
 		//-------------
 		//Clear game state
-		window.clear(Color::Black);
+		window.clear();
 		//state.clear();
 
 		//Update objects positions
