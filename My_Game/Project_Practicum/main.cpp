@@ -1,118 +1,74 @@
-#include <cmath>
 #include "SFML/Graphics.hpp"
 #include "GameConstants.hpp"
-#include "Player.h"
-#include "lab2.h"
 
 using namespace sf;
 
-constexpr float periodY = 2;
-constexpr float amplitudeY = 10;
+constexpr int pointCount = 200;
+const Vector2f radius = { 200, 50 };
 
-void setWindowSettings(RenderWindow& window);
-//void handleInput(Player& player, Event::KeyEvent event);
+const float PETAL_SIZE = 200;
+const float PETAL_COUNT = 6;
+
+const float MOVEMENT_SPEED = 1;
+const float MOVEMENT_RADIUS = 350;
+
+const float ROTATION_SPEED = 100;
 
 int main()
 {
-	RenderWindow window(VideoMode::getDesktopMode(), "My Game");
-	setWindowSettings(window);
+	ContextSettings settings;
+	settings.antialiasingLevel = 8;
+
+	RenderWindow window(VideoMode::getDesktopMode(), "My Game", Style::Default, settings);
+
+	ConvexShape ellipse;
+	ellipse.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
+	ellipse.setFillColor(Color(0xFF, 0x60, 0x3D));
+	ellipse.setPointCount(pointCount);
+	for (int i = 0; i < pointCount; i++)
+	{
+		float angle = float((2 * 3.14 * i) / pointCount);
+		float r = PETAL_SIZE * sin(PETAL_COUNT * angle);
+		Vector2f point = {
+			r * std::sin(angle),
+			r * std::cos(angle),
+		};
+		ellipse.setPoint(i, point);
+	}
+
+	float movementAngle = 0;
+	Vector2f movementCenter = { window.getSize().x / 2.f, window.getSize().y / 2.f };
+
+	float rotationAngle = 0;
 
 	Clock clock;
-
 	Event event;
-
-
-	Player player(window.getSize().x / 2.f, window.getSize().y / 2.f);
-	sf::Vector2f position = player.getPosition();
-
-	float speedY = 0;
-	float wavePhase = 0;
-
-	//std::vector<GameObject> state;
-	//state.insert(state.end(), player);
 
 	while (window.isOpen())
 	{
-		//Handle Events
-		//-------------
 		while (window.pollEvent(event))
 		{
 			switch (event.type)
 			{
 			case Event::Closed: window.close(); break;
-			//case Event::KeyPressed: handleInput(player, event.key); break;
 			}
 		}
 
-		const float deltaTime = clock.restart().asSeconds();
+		window.clear(Color(0x2E, 0x31, 0x36));
 
-		wavePhase += deltaTime * (2 * 3.14);
+		float dt = clock.restart().asSeconds();
+		movementAngle += MOVEMENT_SPEED * dt;
+		rotationAngle += ROTATION_SPEED * dt;
+		float x = movementCenter.x + MOVEMENT_RADIUS * std::cos(movementAngle);
+		float y = movementCenter.y + MOVEMENT_RADIUS * std::sin(movementAngle);
 
-		player.setX(player.getX() + player.getSpeed() * deltaTime);
-		speedY = amplitudeY * std::sin(wavePhase / periodY);
-		player.setY(player.getY() + speedY);
+		ellipse.setPosition(x, y);
+		ellipse.setRotation(rotationAngle);
 
-		const Vector2f offset = { player.getX(), player.getY() };
+		window.draw(ellipse);
 
-		if ((offset.x + 2 * player.getRadius() >= window.getSize().x) && (player.getSpeed() > 0))
-			player.setSpeed(-player.getSpeed());
-		if ((offset.x < 0) && (player.getSpeed() < 0))
-			player.setSpeed(-player.getSpeed());
-
-		player.setPosition(offset);
-
-		//Draw game
-		//-------------
-		//Clear game state
-		window.clear();
-		//state.clear();
-
-		//Update objects positions
-		//updatePositions(state);
-		//
-		//Check collisions
-		//checkCollisions(state);
-		//
-		//Load all objects in state
-		//
-		//state.push_back(player);
-		//
-		//Draw objects
-		/*for (int i = 0; i < state.size(); i++)
-		{
-			i.draw(window);
-		}*/
-
-		player.draw(window);
-
-		//Render
 		window.display();
 	}
 
 	return EXIT_SUCCESS;
 }
-
-void setWindowSettings(RenderWindow& window)
-{
-	window.setFramerateLimit(GC::FPS_LIMIT);
-}
-
-//void handleInput(Player& player, Event::KeyEvent event)
-//{
-//	switch (event.scancode)
-//	{
-//	case Keyboard::Scancode::W: player.move(GC::IDLE, player.getSpeed() * GC::UP); break;
-//	case Keyboard::Scancode::A: player.move(player.getSpeed() * GC::LEFT, GC::IDLE); break;
-//	case Keyboard::Scancode::S: player.move(GC::IDLE, player.getSpeed() * GC::DOWN); break;
-//	case Keyboard::Scancode::D: player.move(player.getSpeed() * GC::RIGHT, GC::IDLE); break;
-//	}
-//}
-
-//Игра на C++ и SFML
-//SFML - канвас для C++, который позволяет рисовать графику
-//Для игры сделать такие же шаги как на практике
-//Название, Логлайн, Цель, Препятствие, Жанр, Таблица сравнения, MindMap, RoadMap
-//Логлайн - краткое описание сюжета и положения дел в игре
-//Таблица сравнения - название игры, что в ней понравилось, насколько понравилось
-//MindMap - возможные состояния игры, например, меню/геймплей, у меню есть несколько пунктов и т.д.
-//!НЕРЕАЛЬНО! Нарисовать круг
