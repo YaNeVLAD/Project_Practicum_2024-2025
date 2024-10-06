@@ -8,6 +8,14 @@ using namespace sf;
 void setWindowSettings(RenderWindow& window);
 void handleInput(Player& player, Event::KeyEvent event);
 
+const float PETAL_SIZE = 200;
+const float PETAL_COUNT = 6;
+
+const float MOVEMENT_SPEED = 1;
+const float MOVEMENT_RADIUS = 350;
+
+const float ROTATION_SPEED = 100;
+
 int main()
 {
 	RenderWindow window(VideoMode::getDesktopMode(), "My Game");
