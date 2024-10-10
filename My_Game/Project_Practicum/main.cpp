@@ -1,28 +1,37 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
-#include <algorithm>
+#include "main.h"
 
-float toDegrees(float radians)
+const sf::Vector2f eyeRadius = { 60, 80 };
+const sf::Vector2f pupilRadius = { 40, 40 };
+
+sf::Vector2f normalizeEllipse(const sf::Vector2f& vector, const sf::Vector2f& radius)
 {
-    return radians * 180.f / 3.14159265f;
+    sf::Vector2f normalizedVector = { vector.x / radius.x, vector.y / radius.y };
+    float length = std::sqrt(normalizedVector.x * normalizedVector.x + normalizedVector.y * normalizedVector.y);
+    if (length != 0)
+    {
+        return normalizedVector / length;
+    }
+    return { 0, 0 };
 }
 
-void onMouseMove(const sf::Event::MouseMoveEvent& event, sf::Vector2f& mousePosition)
+void updateEye(const sf::Vector2f& mousePosition, sf::ConvexShape& pupil, const sf::ConvexShape& eye)
 {
-    mousePosition.x = static_cast<float>(event.x);
-    mousePosition.y = static_cast<float>(event.y);
+    sf::Vector2f delta = mousePosition - eye.getPosition();
+
+    float distance = std::sqrt(delta.x * delta.x + delta.y * delta.y);
+    float maxDistance = eyeRadius.x - pupilRadius.x;
+
+    if (distance > maxDistance)
+    {
+        delta *= maxDistance / distance;
+    }
+
+    pupil.setPosition(eye.getPosition() + delta);
 }
 
-void init(sf::ConvexShape& pointer)
-{
-    pointer.setPointCount(3);
-    pointer.setPoint(0, { 40, 0 });
-    pointer.setPoint(1, { -40, 25 });
-    pointer.setPoint(2, { -40, -25 });
-    pointer.setPosition({ 400, 300 });
-    pointer.setFillColor(sf::Color(255, 165, 0));
-}
-
+// Обработка событий
 void pollEvents(sf::RenderWindow& window, sf::Vector2f& mousePosition)
 {
     sf::Event event{};
@@ -34,57 +43,68 @@ void pollEvents(sf::RenderWindow& window, sf::Vector2f& mousePosition)
         }
         if (event.type == sf::Event::MouseMoved)
         {
-            onMouseMove(event.mouseMove, mousePosition);
+            mousePosition.x = static_cast<float>(event.mouseMove.x);
+            mousePosition.y = static_cast<float>(event.mouseMove.y);
         }
     }
 }
 
-void update(const sf::Vector2f& mousePosition, sf::ConvexShape& pointer, const sf::Clock& clock)
-{
-    sf::Vector2f delta = mousePosition - pointer.getPosition();
-    const float targetAngle = std::atan2(delta.y, delta.x);
-    float targetRotation = toDegrees(targetAngle);
-
-    float currentRotation = pointer.getRotation();
-    float deltaTime = clock.getElapsedTime().asSeconds();
-
-    const float maxRotationSpeed = 0.15;
-
-    float rotationDifference = targetRotation - currentRotation;
-
-    if (rotationDifference > 180)
-        rotationDifference -= 360;
-    else if (rotationDifference < -180)
-        rotationDifference += 360;
-
-    float rotationStep = std::clamp(rotationDifference, -maxRotationSpeed, maxRotationSpeed);
-
-    pointer.setRotation(currentRotation + rotationStep);
-}
-
-void drawFrame(sf::RenderWindow& window, sf::ConvexShape& pointer)
+// Отрисовка кадра
+void drawFrame(sf::RenderWindow& window, const sf::ConvexShape& leftEye, const sf::ConvexShape& leftPupil, const sf::ConvexShape& rightEye, const sf::ConvexShape& rightPupil)
 {
     window.clear();
-    window.draw(pointer);
+    window.draw(leftEye);
+    window.draw(leftPupil);
+    window.draw(rightEye);
+    window.draw(rightPupil);
     window.display();
+}
+
+sf::ConvexShape createEllipse(sf::Vector2f pos, sf::Vector2f radius, sf::Color color, int pointCount)
+{
+    sf::ConvexShape ellipse;
+    ellipse.setPointCount(pointCount);
+
+    for (int pointNo = 0; pointNo < pointCount; pointNo++)
+    {
+        float angle = float(2 * 3.14 * pointNo / pointCount);
+        sf::Vector2f point =
+        {
+            radius.x * std::sin(angle),
+            radius.y * std::cos(angle)
+        };
+        ellipse.setPoint(pointNo, point);
+    }
+
+    ellipse.setFillColor(color);
+    ellipse.setOrigin(radius.x, radius.y);
+    ellipse.setPosition(pos);
+
+    return ellipse;
 }
 
 int main()
 {
     constexpr unsigned WINDOW_WIDTH = 800;
     constexpr unsigned WINDOW_HEIGHT = 600;
-    sf::RenderWindow window(sf::VideoMode({ WINDOW_WIDTH, WINDOW_HEIGHT }), "SFML 3.1");
+    sf::RenderWindow window(sf::VideoMode({ WINDOW_WIDTH, WINDOW_HEIGHT }), "Eyes follow mouse");
 
-    sf::ConvexShape pointer;
-    init(pointer);
+    // Инициализация глаз и зрачков
+    sf::ConvexShape leftEye = createEllipse({200, 300}, eyeRadius, sf::Color::White, 200);
+
+    sf::ConvexShape leftPupil = createEllipse({ 200, 300 }, pupilRadius, sf::Color::Black, 200);
+
+    sf::ConvexShape rightEye = createEllipse({ 600, 300 }, eyeRadius, sf::Color::White, 200);
+
+    sf::ConvexShape rightPupil = createEllipse({ 200, 300 }, pupilRadius, sf::Color::Black, 200);
+
     sf::Vector2f mousePosition;
-    sf::Clock clock;
 
     while (window.isOpen())
     {
         pollEvents(window, mousePosition);
-        update(mousePosition, pointer, clock);
-        drawFrame(window, pointer);
-        clock.restart();
+        updateEye(mousePosition, leftPupil, leftEye);
+        updateEye(mousePosition, rightPupil, rightEye);
+        drawFrame(window, leftEye, leftPupil, rightEye, rightPupil);
     }
 }
