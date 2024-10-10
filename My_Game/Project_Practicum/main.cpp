@@ -42,21 +42,24 @@ void pollEvents(sf::RenderWindow& window, sf::Vector2f& mousePosition)
 void update(const sf::Vector2f& mousePosition, sf::ConvexShape& pointer, const sf::Clock& clock)
 {
     sf::Vector2f delta = mousePosition - pointer.getPosition();
-    float angle = std::atan2(delta.y, delta.x);
+    const float targetAngle = std::atan2(delta.y, delta.x);
+    float targetRotation = toDegrees(targetAngle);
+
     float currentRotation = pointer.getRotation();
-    float targetRotation = toDegrees(angle);
+    float deltaTime = clock.getElapsedTime().asSeconds();
 
-    float maxRotationSpeed = 15;
-    float dt = clock.getElapsedTime().asSeconds();
-    float maxRotation = maxRotationSpeed * dt;
+    const float maxRotationSpeed = 0.15;
 
-    float deltaRotation = targetRotation - currentRotation;
-    std::cout << deltaRotation << ""std::endl;
-    if (std::abs(deltaRotation) > maxRotation)
-    {
-        deltaRotation = std::copysign(maxRotation, deltaRotation);
-    }
-    pointer.setRotation(currentRotation + deltaRotation);
+    float rotationDifference = targetRotation - currentRotation;
+
+    if (rotationDifference > 180)
+        rotationDifference -= 360;
+    else if (rotationDifference < -180)
+        rotationDifference += 360;
+
+    float rotationStep = std::clamp(rotationDifference, -maxRotationSpeed, maxRotationSpeed);
+
+    pointer.setRotation(currentRotation + rotationStep);
 }
 
 void drawFrame(sf::RenderWindow& window, sf::ConvexShape& pointer)
