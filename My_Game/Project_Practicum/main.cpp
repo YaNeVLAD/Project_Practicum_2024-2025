@@ -51,10 +51,11 @@ void update(const sf::Vector2f& mousePosition, sf::ConvexShape& pointer, const s
     float maxRotation = maxRotationSpeed * dt;
 
     float deltaRotation = targetRotation - currentRotation;
-    //if (std::abs(deltaRotation) > maxRotation)
-    //{
-    //    deltaRotation = std::copysign(maxRotation, deltaRotation);
-    //}
+    std::cout << deltaRotation << ""std::endl;
+    if (std::abs(deltaRotation) > maxRotation)
+    {
+        deltaRotation = std::copysign(maxRotation, deltaRotation);
+    }
     pointer.setRotation(currentRotation + deltaRotation);
 }
 
