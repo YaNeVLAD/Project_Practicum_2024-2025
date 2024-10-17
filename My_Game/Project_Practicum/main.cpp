@@ -2,8 +2,8 @@
 #include <cmath>
 #include "main.h"
 
-const sf::Vector2f eyeRadius = { 60, 100 };
-const sf::Vector2f pupilRadius = { 30, 30 };
+const sf::Vector2f eyeRadius = { 70, 150 };
+const sf::Vector2f pupilRadius = { 30, 40 };
 
 sf::Vector2f normalizeEllipse(const sf::Vector2f& vector, const sf::Vector2f& radius)
 {
