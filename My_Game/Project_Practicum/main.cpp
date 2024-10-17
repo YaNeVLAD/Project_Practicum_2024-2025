@@ -7,7 +7,12 @@ const sf::Vector2f pupilRadius = { 30, 40 };
 
 sf::Vector2f normalizeEllipse(const sf::Vector2f& vector, const sf::Vector2f& radius)
 {
-	sf::Vector2f normalizedVector = { vector.x / radius.x, vector.y / radius.y };
+	sf::Vector2f normalizedVector =
+	{ 
+		vector.x / radius.x, 
+		vector.y / radius.y 
+	};
+	
 	float length = std::sqrt(normalizedVector.x * normalizedVector.x + normalizedVector.y * normalizedVector.y);
 	if (length != 0)
 	{
@@ -18,21 +23,23 @@ sf::Vector2f normalizeEllipse(const sf::Vector2f& vector, const sf::Vector2f& ra
 
 void updateEye
 (
-	const sf::Vector2f& mousePosition,
 	sf::ConvexShape& pupil,
-	const sf::ConvexShape& eye
+	const sf::ConvexShape& eye,
+	const sf::Vector2f& mousePosition
 )
 {
 	sf::Vector2f delta = mousePosition - eye.getPosition();
 
 	sf::Vector2f normalizedDelta = normalizeEllipse(delta, eyeRadius);
 
-	sf::Vector2f maxOffset = {
+	sf::Vector2f maxOffset = 
+	{
 		(eyeRadius.x - pupilRadius.x),
 		(eyeRadius.y - pupilRadius.y)
 	};
 
-	sf::Vector2f clampedDelta = {
+	sf::Vector2f clampedDelta = 
+	{
 		normalizedDelta.x * maxOffset.x,
 		normalizedDelta.y * maxOffset.y
 	};
