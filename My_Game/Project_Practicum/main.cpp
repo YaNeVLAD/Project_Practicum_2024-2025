@@ -13,6 +13,8 @@ const sf::Vector2f PUPIL_RADIUS = { 30, 40 };
 const sf::Vector2f LEFT_EYE_CENTER_POS = { 300, 300 };
 const sf::Vector2f RIGHT_EYE_CENTER_POS = { 600, 300 };
 
+const float ALLOWED_AREA_SHRINK_OFFSET = 7;
+
 sf::Vector2f normalize(const sf::Vector2f& vector, const sf::Vector2f& scale)
 {
 	sf::Vector2f scaledVector = {
@@ -43,8 +45,8 @@ void updateEye(
 	sf::Vector2f normalizedDelta = normalize(deltaToMouse, EYE_RADIUS);
 
 	sf::Vector2f maxPupilOffset = {
-		(EYE_RADIUS.x - PUPIL_RADIUS.x),
-		(EYE_RADIUS.y - PUPIL_RADIUS.y)
+		EYE_RADIUS.x - PUPIL_RADIUS.x,
+		EYE_RADIUS.y - PUPIL_RADIUS.y
 	};
 
 	sf::Vector2f turnedPupilOffset = {
@@ -62,7 +64,7 @@ void updateEye(
 		turnedPupilOffset.y * turnedPupilOffset.y
 	);
 
-	if (deltaToMouseLen > turnedPupilOffsetLen) 
+	if (deltaToMouseLen > turnedPupilOffsetLen - ALLOWED_AREA_SHRINK_OFFSET) 
 	{
 		pupil.setPosition(eye.getPosition() + turnedPupilOffset);
 	}
@@ -118,8 +120,7 @@ sf::ConvexShape createEllipse(
 	for (int pointNo = 0; pointNo < pointCount; pointNo++)
 	{
 		float angle = float(2 * 3.14 * pointNo / pointCount);
-		sf::Vector2f point =
-		{
+		sf::Vector2f point = {
 			radius.x * std::sin(angle),
 			radius.y * std::cos(angle)
 		};
@@ -134,7 +135,7 @@ sf::ConvexShape createEllipse(
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode({ WINDOW_WIDTH, WINDOW_HEIGHT }), "Eyes follow mouse");
+	sf::RenderWindow window(sf::VideoMode({ WINDOW_WIDTH, WINDOW_HEIGHT }), "SFML 3.3");
 
 	sf::ConvexShape leftEye = createEllipse(
 		LEFT_EYE_CENTER_POS, EYE_RADIUS, sf::Color::White, ELLIPSE_POINT_COUNT
