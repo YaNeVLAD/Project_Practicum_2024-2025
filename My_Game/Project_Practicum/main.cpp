@@ -47,24 +47,24 @@ void updateEye(
 		(EYE_RADIUS.y - PUPIL_RADIUS.y)
 	};
 
-	sf::Vector2f allowedPupilArea = {
+	sf::Vector2f turnedPupilOffset = {
 		normalizedDelta.x * maxPupilOffset.x,
 		normalizedDelta.y * maxPupilOffset.y
 	};
 
-	float deltaToMouseLength = std::sqrt(
+	float deltaToMouseLen = std::sqrt(
 		deltaToMouse.x * deltaToMouse.x + 
 		deltaToMouse.y * deltaToMouse.y
 	);
 
-	float allowedAreaLength = std::sqrt(
-		allowedPupilArea.x * allowedPupilArea.x + 
-		allowedPupilArea.y * allowedPupilArea.y
+	float turnedPupilOffsetLen = std::sqrt(
+		turnedPupilOffset.x * turnedPupilOffset.x + 
+		turnedPupilOffset.y * turnedPupilOffset.y
 	);
 
-	if (deltaToMouseLength > allowedAreaLength) 
+	if (deltaToMouseLen > turnedPupilOffsetLen) 
 	{
-		pupil.setPosition(eye.getPosition() + allowedPupilArea);
+		pupil.setPosition(eye.getPosition() + turnedPupilOffset);
 	}
 	else 
 	{
