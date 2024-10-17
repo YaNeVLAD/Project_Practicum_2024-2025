@@ -16,28 +16,28 @@ sf::Vector2f normalizeEllipse(const sf::Vector2f& vector, const sf::Vector2f& ra
 	return { 0, 0 };
 }
 
-void updateEye(const sf::Vector2f& mousePosition, sf::ConvexShape& pupil, const sf::ConvexShape& eye)
-{
+void updateEye(const sf::Vector2f& mousePosition, sf::ConvexShape& pupil, const sf::ConvexShape& eye) {
 	sf::Vector2f delta = mousePosition - eye.getPosition();
 
-	sf::Vector2f normalized = normalizeEllipse(delta, eyeRadius);
+	sf::Vector2f normalizedDelta = normalizeEllipse(delta, eyeRadius);
 
-	sf::Vector2f maxDistance = eyeRadius - pupilRadius;
+	sf::Vector2f maxOffset = {
+		(eyeRadius.x - pupilRadius.x),
+		(eyeRadius.y - pupilRadius.y)
+	};
 
-	float deltaLen = std::sqrt(delta.x * delta.x + delta.y * delta.y);
-	float maxDistanceLen = std::sqrt(maxDistance.x * maxDistance.x + maxDistance.y * maxDistance.y);
+	sf::Vector2f clampedDelta = {
+		normalizedDelta.x * maxOffset.x,
+		normalizedDelta.y * maxOffset.y
+	};
 
-	if (deltaLen > maxDistanceLen)
-	{
-		pupil.setPosition(eye.getPosition() + sf::Vector2f
-			{
-			normalized.x * maxDistance.x,
-			normalized.y * maxDistance.y
-			}
-		);
+	float deltaLength = std::sqrt(delta.x * delta.x + delta.y * delta.y);
+	float clampedLength = std::sqrt(clampedDelta.x * clampedDelta.x + clampedDelta.y * clampedDelta.y);
+
+	if (deltaLength > clampedLength) {
+		pupil.setPosition(eye.getPosition() + clampedDelta);
 	}
-	else
-	{
+	else {
 		pupil.setPosition(eye.getPosition() + delta);
 	}
 }
