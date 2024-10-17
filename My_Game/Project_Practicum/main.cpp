@@ -14,8 +14,8 @@ int main()
 	sf::Event event;
 
 	Manager manager;
-	auto& newPlayer(manager.addEntity());
-	newPlayer.addComponent<Position>();
+	Entity player;
+	player.addComponent<Position>();
 
 	while (window.isOpen())
 	{
@@ -29,9 +29,7 @@ int main()
 
 		window.clear();
 
-		manager.update();
-		auto& const playerPosition = newPlayer.getComponent<Position>();
-		std::cout << playerPosition.x() << "," << playerPosition.y() << std::endl;
+
 
 		window.display();
 	}

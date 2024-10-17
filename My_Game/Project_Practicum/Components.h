@@ -1,6 +1,12 @@
 #pragma once
 
-#include "ECS.h"
+#include "SFML/Graphics.hpp"
+
+//class Component
+//{
+//public:
+//	virtual ~Component() = default;
+//};
 
 class Position : public Component
 {
