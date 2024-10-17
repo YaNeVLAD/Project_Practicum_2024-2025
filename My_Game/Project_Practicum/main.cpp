@@ -1,61 +1,77 @@
-#include <SFML/Graphics.hpp>
 #include <cmath>
 #include "main.h"
 
-const sf::Vector2f eyeRadius = { 70, 150 };
-const sf::Vector2f pupilRadius = { 30, 40 };
+#include "SFML/Graphics.hpp"
 
-sf::Vector2f normalizeEllipse(const sf::Vector2f& vector, const sf::Vector2f& radius)
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 600;
+const int ELLIPSE_POINT_COUNT = 200;
+
+const sf::Vector2f EYE_RADIUS = { 70, 150 };
+const sf::Vector2f PUPIL_RADIUS = { 30, 40 };
+
+const sf::Vector2f LEFT_EYE_CENTER_POS = { 300, 300 };
+const sf::Vector2f RIGHT_EYE_CENTER_POS = { 600, 300 };
+
+sf::Vector2f normalize(const sf::Vector2f& vector, const sf::Vector2f& scale)
 {
-	sf::Vector2f normalizedVector =
-	{ 
-		vector.x / radius.x, 
-		vector.y / radius.y 
+	sf::Vector2f scaledVector = {
+		vector.x / scale.x,
+		vector.y / scale.y
 	};
-	
-	float length = std::sqrt(normalizedVector.x * normalizedVector.x + normalizedVector.y * normalizedVector.y);
+
+	float length = std::sqrt(
+		scaledVector.x * scaledVector.x + 
+		scaledVector.y * scaledVector.y
+	);
+
 	if (length != 0)
 	{
-		return normalizedVector / length;
+		return scaledVector / length;
 	}
 	return { 0, 0 };
 }
 
-void updateEye
-(
+void updateEye(
 	const sf::Vector2f& mousePosition,
 	const sf::ConvexShape& eye,
 	sf::ConvexShape& pupil
 )
 {
-	sf::Vector2f delta = mousePosition - eye.getPosition();
+	sf::Vector2f deltaToMouse = mousePosition - eye.getPosition();
 
-	sf::Vector2f normalizedDelta = normalizeEllipse(delta, eyeRadius);
+	sf::Vector2f normalizedDelta = normalize(deltaToMouse, EYE_RADIUS);
 
-	sf::Vector2f maxOffset = 
-	{	
-		(eyeRadius.x - pupilRadius.x),
-		(eyeRadius.y - pupilRadius.y)
+	sf::Vector2f maxPupilOffset = {
+		(EYE_RADIUS.x - PUPIL_RADIUS.x),
+		(EYE_RADIUS.y - PUPIL_RADIUS.y)
 	};
 
-	sf::Vector2f clampedDelta = 
+	sf::Vector2f allowedPupilArea = {
+		normalizedDelta.x * maxPupilOffset.x,
+		normalizedDelta.y * maxPupilOffset.y
+	};
+
+	float deltaToMouseLength = std::sqrt(
+		deltaToMouse.x * deltaToMouse.x + 
+		deltaToMouse.y * deltaToMouse.y
+	);
+
+	float allowedAreaLength = std::sqrt(
+		allowedPupilArea.x * allowedPupilArea.x + 
+		allowedPupilArea.y * allowedPupilArea.y
+	);
+
+	if (deltaToMouseLength > allowedAreaLength) 
 	{
-		normalizedDelta.x * maxOffset.x,
-		normalizedDelta.y * maxOffset.y
-	};
-
-	float deltaLength = std::sqrt(delta.x * delta.x + delta.y * delta.y);
-	float clampedLength = std::sqrt(clampedDelta.x * clampedDelta.x + clampedDelta.y * clampedDelta.y);
-
-	if (deltaLength > clampedLength) {
-		pupil.setPosition(eye.getPosition() + clampedDelta);
+		pupil.setPosition(eye.getPosition() + allowedPupilArea);
 	}
-	else {
-		pupil.setPosition(eye.getPosition() + delta);
+	else 
+	{
+		pupil.setPosition(eye.getPosition() + deltaToMouse);
 	}
 }
 
-// Обработка событий
 void pollEvents(sf::RenderWindow& window, sf::Vector2f& mousePosition)
 {
 	sf::Event event{};
@@ -73,9 +89,7 @@ void pollEvents(sf::RenderWindow& window, sf::Vector2f& mousePosition)
 	}
 }
 
-// Отрисовка кадра
-void drawFrame
-(
+void drawFrame(
 	sf::RenderWindow& window,
 	const sf::ConvexShape& leftEye,
 	const sf::ConvexShape& leftPupil,
@@ -91,8 +105,7 @@ void drawFrame
 	window.display();
 }
 
-sf::ConvexShape createEllipse
-(
+sf::ConvexShape createEllipse(
 	sf::Vector2f pos,
 	sf::Vector2f radius,
 	sf::Color color,
@@ -121,18 +134,23 @@ sf::ConvexShape createEllipse
 
 int main()
 {
-	constexpr unsigned WINDOW_WIDTH = 800;
-	constexpr unsigned WINDOW_HEIGHT = 600;
 	sf::RenderWindow window(sf::VideoMode({ WINDOW_WIDTH, WINDOW_HEIGHT }), "Eyes follow mouse");
 
-	// Инициализация глаз и зрачков
-	sf::ConvexShape leftEye = createEllipse({ 300, 300 }, eyeRadius, sf::Color::White, 200);
+	sf::ConvexShape leftEye = createEllipse(
+		LEFT_EYE_CENTER_POS, EYE_RADIUS, sf::Color::White, ELLIPSE_POINT_COUNT
+	);
 
-	sf::ConvexShape leftPupil = createEllipse({ 300, 300 }, pupilRadius, sf::Color::Black, 200);
+	sf::ConvexShape leftPupil = createEllipse(
+		LEFT_EYE_CENTER_POS, PUPIL_RADIUS, sf::Color::Black, ELLIPSE_POINT_COUNT
+	);
 
-	sf::ConvexShape rightEye = createEllipse({ 600, 300 }, eyeRadius, sf::Color::White, 200);
+	sf::ConvexShape rightEye = createEllipse(
+		RIGHT_EYE_CENTER_POS, EYE_RADIUS, sf::Color::White, ELLIPSE_POINT_COUNT
+	);
 
-	sf::ConvexShape rightPupil = createEllipse({ 600, 300 }, pupilRadius, sf::Color::Black, 200);
+	sf::ConvexShape rightPupil = createEllipse(
+		RIGHT_EYE_CENTER_POS, PUPIL_RADIUS, sf::Color::Black, ELLIPSE_POINT_COUNT
+	);
 
 	sf::Vector2f mousePosition;
 
