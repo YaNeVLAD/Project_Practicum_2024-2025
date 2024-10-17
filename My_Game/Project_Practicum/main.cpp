@@ -16,7 +16,13 @@ sf::Vector2f normalizeEllipse(const sf::Vector2f& vector, const sf::Vector2f& ra
 	return { 0, 0 };
 }
 
-void updateEye(const sf::Vector2f& mousePosition, sf::ConvexShape& pupil, const sf::ConvexShape& eye) {
+void updateEye
+(
+	const sf::Vector2f& mousePosition,
+	sf::ConvexShape& pupil,
+	const sf::ConvexShape& eye
+)
+{
 	sf::Vector2f delta = mousePosition - eye.getPosition();
 
 	sf::Vector2f normalizedDelta = normalizeEllipse(delta, eyeRadius);
@@ -61,7 +67,14 @@ void pollEvents(sf::RenderWindow& window, sf::Vector2f& mousePosition)
 }
 
 // Отрисовка кадра
-void drawFrame(sf::RenderWindow& window, const sf::ConvexShape& leftEye, const sf::ConvexShape& leftPupil, const sf::ConvexShape& rightEye, const sf::ConvexShape& rightPupil)
+void drawFrame
+(
+	sf::RenderWindow& window,
+	const sf::ConvexShape& leftEye,
+	const sf::ConvexShape& leftPupil,
+	const sf::ConvexShape& rightEye,
+	const sf::ConvexShape& rightPupil
+)
 {
 	window.clear();
 	window.draw(leftEye);
@@ -71,7 +84,13 @@ void drawFrame(sf::RenderWindow& window, const sf::ConvexShape& leftEye, const s
 	window.display();
 }
 
-sf::ConvexShape createEllipse(sf::Vector2f pos, sf::Vector2f radius, sf::Color color, int pointCount)
+sf::ConvexShape createEllipse
+(
+	sf::Vector2f pos,
+	sf::Vector2f radius,
+	sf::Color color,
+	int pointCount
+)
 {
 	sf::ConvexShape ellipse;
 	ellipse.setPointCount(pointCount);
