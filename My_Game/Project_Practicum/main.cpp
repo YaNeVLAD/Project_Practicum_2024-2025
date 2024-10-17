@@ -23,9 +23,9 @@ sf::Vector2f normalizeEllipse(const sf::Vector2f& vector, const sf::Vector2f& ra
 
 void updateEye
 (
-	sf::ConvexShape& pupil,
+	const sf::Vector2f& mousePosition,
 	const sf::ConvexShape& eye,
-	const sf::Vector2f& mousePosition
+	sf::ConvexShape& pupil
 )
 {
 	sf::Vector2f delta = mousePosition - eye.getPosition();
@@ -33,7 +33,7 @@ void updateEye
 	sf::Vector2f normalizedDelta = normalizeEllipse(delta, eyeRadius);
 
 	sf::Vector2f maxOffset = 
-	{
+	{	
 		(eyeRadius.x - pupilRadius.x),
 		(eyeRadius.y - pupilRadius.y)
 	};
@@ -139,8 +139,8 @@ int main()
 	while (window.isOpen())
 	{
 		pollEvents(window, mousePosition);
-		updateEye(mousePosition, leftPupil, leftEye);
-		updateEye(mousePosition, rightPupil, rightEye);
+		updateEye(mousePosition, leftEye, leftPupil);
+		updateEye(mousePosition, rightEye, rightPupil);
 		drawFrame(window, leftEye, leftPupil, rightEye, rightPupil);
 	}
 }
