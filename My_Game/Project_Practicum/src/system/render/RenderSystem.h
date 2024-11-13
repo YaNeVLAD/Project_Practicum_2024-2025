@@ -1,9 +1,6 @@
 #pragma once
 
-namespace Systems
-{
-	class RenderSystem;
-}
+#include "../System.h"
 
 class RenderSystem : public System
 {

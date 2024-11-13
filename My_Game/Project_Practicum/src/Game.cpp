@@ -21,7 +21,6 @@ void Game::InitPlayer()
 {
 	auto& player = mEntityManager.CreateEntity();
 	player.AddComponent<TransformComponent>(0.0f, 0.0f, 0.0f, 0.0f);
-	player.AddComponent<DrawableComponent>(128, 128, sf::Color::White);
 	player.AddComponent<InputComponent>();
 	player.AddComponent<CameraComponent>();
 	player.AddComponent<WeaponComponent>();
@@ -31,6 +30,7 @@ void Game::InitPlayer()
 	std::vector<sf::Texture> frames = SpriteSheet::LoadTextures("assets/character/walk.png", 128, 128);
 	std::cout << frames.size();
 	player.AddComponent<AnimationComponent>(frames, 0.2f, true, -1.0f);
+	player.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(1.5f, 1.5f));
 }
 
 void Game::InitEnemy()
@@ -59,9 +59,9 @@ void Game::Run()
 
 		mWindow.clear();
 
-		for (auto& system : mSystemManager.GetSystems())
+		if (auto renderSystem = mSystemManager.GetSystem<RenderSystem>())
 		{
-			system->Update(mEntityManager, deltaTime);
+			renderSystem->Update(mEntityManager, deltaTime);
 		}
 
 		mWindow.display();
