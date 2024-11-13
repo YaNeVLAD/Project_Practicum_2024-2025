@@ -10,8 +10,12 @@ void RenderSystem::Update(EntityManager& entityManager, float deltaTime)
 
 		if (transform && drawable)
 		{
+			sf::Vector2f scale = drawable->sprite.getScale();
+			scale.x *= std::copysign(1.0f, transform->lastDirection.x);
+			drawable->sprite.setScale(scale);
+			
 			drawable->sprite.setPosition(transform->x, transform->y);
-
+			
 			if (animation && !animation->isAnimating && !animation->frames.empty())
 			{
 				drawable->sprite.setTexture(animation->frames[0]);

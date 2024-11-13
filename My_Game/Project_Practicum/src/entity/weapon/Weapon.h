@@ -8,6 +8,7 @@ class Weapon
 public:
 	virtual ~Weapon() = default;
 	virtual void Attack(Entity& projectile, const TransformComponent& transform) = 0;
+	float projectileSpeed = 0.0f;
 	float fireRate = 0.0f;
 	float cooldown = 0.0f;
 };

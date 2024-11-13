@@ -17,6 +17,19 @@ public:
 		mSystems.push_back(std::make_unique<SystemType>(std::forward<Args>(args)...));
 	}
 
+    template<typename SystemType>
+    SystemType* GetSystem()
+    {
+        for (auto& system : mSystems)
+        {
+            if (auto* castedSystem = dynamic_cast<SystemType*>(system.get()))
+            {
+                return castedSystem;
+            }
+        }
+        return nullptr;
+    }
+
 	std::vector<std::unique_ptr<System>>& GetSystems();
 
 private:
