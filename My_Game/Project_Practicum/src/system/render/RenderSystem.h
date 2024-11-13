@@ -1,6 +1,9 @@
 #pragma once
 
-#include "../System.h"
+namespace Systems
+{
+	class RenderSystem;
+}
 
 class RenderSystem : public System
 {
