@@ -13,29 +13,80 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Исходные файлы\Entity">
-      <UniqueIdentifier>{cdaecb6e-b6d6-47dd-ba5f-35983cea87a8}</UniqueIdentifier>
+    <Filter Include="Исходные файлы\src">
+      <UniqueIdentifier>{86fc394b-5c98-43c8-928f-e3a79e56e516}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\src\Components">
+      <UniqueIdentifier>{9e08ffc7-ceb3-4995-ad36-60f2005fd2f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\src\Systems">
+      <UniqueIdentifier>{31309f4c-76b8-4dc7-9132-f69d69e1194b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\src\Entity">
+      <UniqueIdentifier>{756316b0-c935-4e97-aae8-509a96020248}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\src\Managers">
+      <UniqueIdentifier>{c7e659c1-75ff-4f07-a9ac-9c8d675d5ed0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="GameConstants.hpp">
-      <Filter>Файлы заголовков</Filter>
+    <ClCompile Include="Components.cpp">
+      <Filter>Исходные файлы\src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Исходные файлы\Entity</Filter>
+    <ClCompile Include="Game.cpp">
+      <Filter>Исходные файлы\src</Filter>
     </ClCompile>
-    <ClCompile Include="lab2.cpp">
-      <Filter>Исходные файлы</Filter>
+    <ClCompile Include="MovementSystem.cpp">
+      <Filter>Исходные файлы\src\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Исходные файлы\src\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderSystem.cpp">
+      <Filter>Исходные файлы\src\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="InputSystem.cpp">
+      <Filter>Исходные файлы\src\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraSystem.cpp">
+      <Filter>Исходные файлы\src\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Исходные файлы\src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemManager.cpp">
+      <Filter>Исходные файлы\src\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="Entity.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="lab2.h">
+    <ClInclude Include="EntityManager.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="System.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementSystem.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="InputSystem.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraSystem.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemManager.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

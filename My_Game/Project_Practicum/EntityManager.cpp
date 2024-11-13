@@ -1,28 +1,12 @@
 #include "EntityManager.h"
-#include "EntityExceptions.h"
 
-Entity EntityManager::createEntity()
+std::vector<Entity>& EntityManager::GetEntities()
 {
-	Entity entity;
-	if (mFreeEntities.empty())
-	{
-		entity = mFreeEntities.front();
-		mFreeEntities.pop();
-	}
-	else
-	{
-		entity = mNextEntity++;
-	}
-
-	mActiveEntities.insert(entity);
-	return entity;
+	return mEntities;
 }
 
-void EntityManager::destroyEntity(Entity entity)
+Entity& EntityManager::CreateEntity()
 {
-	if (mActiveEntities.find(entity) == mActiveEntities.end())
-		throw EntityOutOfBoundsException(entity);
-
-	mFreeEntities.push(entity);
-	mActiveEntities.erase(entity);
+	mEntities.emplace_back(mNexEntityId++);
+	return mEntities.back();
 }
