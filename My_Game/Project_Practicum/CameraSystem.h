@@ -17,4 +17,3 @@ private:
 	sf::RenderWindow& mWindow;
 	sf::View mView;
 };
-
