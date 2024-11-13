@@ -5,6 +5,8 @@
 #include "RenderSystem.h"
 #include "InputSystem.h"
 #include "CameraSystem.h"
+#include "WeaponSystem.h"
+#include "ProjectileSystem.h"
 
 class SystemManager
 {

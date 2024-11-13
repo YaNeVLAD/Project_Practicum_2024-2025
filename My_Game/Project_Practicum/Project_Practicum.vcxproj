@@ -138,16 +138,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bow.cpp" />
     <ClCompile Include="CameraSystem.cpp" />
+    <ClCompile Include="Components.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
+    <ClCompile Include="ProjectileSystem.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="SystemManager.cpp" />
+    <ClCompile Include="WeaponSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bow.h" />
     <ClInclude Include="CameraSystem.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="Entity.h" />
@@ -155,9 +160,12 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="MovementSystem.h" />
+    <ClInclude Include="ProjectileSystem.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="SystemManager.h" />
+    <ClInclude Include="Weapon.h" />
+    <ClInclude Include="WeaponSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

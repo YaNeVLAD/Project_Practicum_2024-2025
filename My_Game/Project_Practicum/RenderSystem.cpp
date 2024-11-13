@@ -5,12 +5,12 @@ void RenderSystem::Update(EntityManager& entityManager, float deltaTime)
 {
 	for (auto& entity : entityManager.GetEntities())
 	{
-		auto position = entity.GetComponent<PositionComponent>();
+		auto transform = entity.GetComponent<TransformComponent>();
 		auto drawable = entity.GetComponent<DrawableComponent>();
 
-		if (position && drawable)
+		if (transform && drawable)
 		{
-			drawable->shape.setPosition(position->x, position->y);
+			drawable->shape.setPosition(transform->x, transform->y);
 			mWindow.draw(drawable->shape);
 		}
 	}

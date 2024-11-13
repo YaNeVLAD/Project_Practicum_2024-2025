@@ -1,22 +1,34 @@
 #include "Game.h"
+#include "Bow.h"
 
-Game::Game() : mWindow(sf::VideoMode::getDesktopMode(), "Game")
+Game::Game() : mWindow(sf::VideoMode::getDesktopMode(), "Game") {}
+
+void Game::initSystems()
 {
 	mSystemManager.AddSystem<RenderSystem>(mWindow);
 	mSystemManager.AddSystem<MovementSystem>();
 	mSystemManager.AddSystem<InputSystem>();
 	mSystemManager.AddSystem<CameraSystem>(mWindow);
+	mSystemManager.AddSystem<WeaponSystem>();
+	mSystemManager.AddSystem<ProjectileSystem>();
+}
 
+void Game::initPlayer()
+{
 	auto& player = mEntityManager.CreateEntity();
-	player.AddComponent<PositionComponent>(0, 0);
-	player.AddComponent<VelocityComponent>(0, 0);
+	player.AddComponent<TransformComponent>(0, 0, 0, 0);
 	player.AddComponent<DrawableComponent>(50, sf::Color::Red);
 	player.AddComponent<InputComponent>();
 	player.AddComponent<CameraComponent>();
+	player.AddComponent<WeaponComponent>();
+	auto weapons = player.GetComponent<WeaponComponent>();
+	weapons->AddWeapon(std::make_unique<Bow>());
+}
 
+void Game::initEnemy()
+{
 	auto& enemy = mEntityManager.CreateEntity();
-	enemy.AddComponent<PositionComponent>(100, 100);
-	enemy.AddComponent<VelocityComponent>(0, 0);
+	enemy.AddComponent<TransformComponent>(100, 100, 0, 0);
 	enemy.AddComponent<DrawableComponent>(40, sf::Color::Green);
 }
 
