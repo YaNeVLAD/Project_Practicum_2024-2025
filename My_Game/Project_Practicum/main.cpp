@@ -1,5 +1,5 @@
 #include <cstdlib>
-#include "Game.h"
+#include "src/Game.h"
 
 int main()
 {
