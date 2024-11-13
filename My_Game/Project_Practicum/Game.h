@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
-#include "System.h"
 #include "SystemManager.h"
 #include "EntityManager.h"
 

@@ -1,6 +1,5 @@
 #include "Game.h"
 
-
 Game::Game() : mWindow(sf::VideoMode::getDesktopMode(), "Game")
 {
 	mSystemManager.AddSystem<RenderSystem>(mWindow);
@@ -8,12 +7,12 @@ Game::Game() : mWindow(sf::VideoMode::getDesktopMode(), "Game")
 	mSystemManager.AddSystem<InputSystem>();
 	mSystemManager.AddSystem<CameraSystem>(mWindow);
 
-	auto& entity = mEntityManager.CreateEntity();
-	entity.AddComponent<PositionComponent>(0, 0);
-	entity.AddComponent<VelocityComponent>(0, 0);
-	entity.AddComponent<DrawableComponent>(50, sf::Color::Red);
-	entity.AddComponent<InputComponent>();
-	entity.AddComponent<CameraComponent>();
+	auto& player = mEntityManager.CreateEntity();
+	player.AddComponent<PositionComponent>(0, 0);
+	player.AddComponent<VelocityComponent>(0, 0);
+	player.AddComponent<DrawableComponent>(50, sf::Color::Red);
+	player.AddComponent<InputComponent>();
+	player.AddComponent<CameraComponent>();
 
 	auto& enemy = mEntityManager.CreateEntity();
 	enemy.AddComponent<PositionComponent>(100, 100);

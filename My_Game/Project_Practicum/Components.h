@@ -1,3 +1,5 @@
+#pragma once
+
 #include "SFML/Graphics.hpp"
 
 struct Component
@@ -24,9 +26,14 @@ struct VelocityComponent : public Component
 struct DrawableComponent : public Component
 {
 	sf::CircleShape shape;
-	DrawableComponent(float radius, sf::Color color) 
+	DrawableComponent(float radius, sf::Color color)
 	{
 		shape.setRadius(radius);
 		shape.setFillColor(color);
 	}
+};
+
+struct ProjectileComponent : public Component
+{
+
 };

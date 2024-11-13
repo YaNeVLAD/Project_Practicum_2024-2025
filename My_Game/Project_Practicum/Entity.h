@@ -4,7 +4,8 @@
 #include <unordered_map>
 #include <typeindex>
 #include <memory>
-#include "Components.cpp"
+
+#include "Components.h"
 
 class Entity {
 public:
