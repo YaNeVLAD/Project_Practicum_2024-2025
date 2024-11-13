@@ -4,13 +4,12 @@ void MovementSystem::Update(EntityManager& entityManager, float deltaTime)
 {
 	for (auto& entity : entityManager.GetEntities())
 	{
-		auto position = entity.GetComponent<PositionComponent>();
-		auto velocity = entity.GetComponent<VelocityComponent>();
+		auto transform = entity.GetComponent<TransformComponent>();
 
-		if (position && velocity)
+		if (transform)
 		{
-			position->x += velocity->vx * deltaTime;
-			position->y += velocity->vy * deltaTime;
+			transform->x += transform->vx * deltaTime;
+			transform->y += transform->vy * deltaTime;
 		}
 	}
 }

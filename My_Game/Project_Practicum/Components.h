@@ -2,6 +2,8 @@
 
 #include "SFML/Graphics.hpp"
 
+class Weapon;
+
 struct Component
 {
 	virtual ~Component() = default;
@@ -11,16 +13,11 @@ struct InputComponent : public Component {};
 
 struct CameraComponent : public Component {};
 
-struct PositionComponent : public Component
+struct TransformComponent : public Component
 {
-	float x, y;
-	PositionComponent(float x = 0, float y = 0) : x(x), y(y) {}
-};
-
-struct VelocityComponent : public Component
-{
-	float vx, vy;
-	VelocityComponent(float vx = 0, float vy = 0) : vx(vx), vy(vy) {}
+	float x = 0, y = 0;
+	float vx = 0, vy = 0;
+	TransformComponent(float x, float y, float vx, float vy) : x(x), y(y), vx(vx), vy(vy) {}
 };
 
 struct DrawableComponent : public Component
@@ -33,7 +30,14 @@ struct DrawableComponent : public Component
 	}
 };
 
-struct ProjectileComponent : public Component
+struct WeaponComponent : public Component
 {
+	std::vector<std::unique_ptr<Weapon>> weapons;
 
+	void AddWeapon(std::unique_ptr<Weapon> weapon);
+};
+
+struct ProjectileComponent : public Component 
+{
+	float startX = 0, startY = 0;
 };

@@ -5,24 +5,24 @@ void InputSystem::Update(EntityManager& entityManager, float deltaTime)
 	for (auto& entity : entityManager.GetEntities())
 	{
 		auto input = entity.GetComponent<InputComponent>();
-		auto velocity = entity.GetComponent<VelocityComponent>();
+		auto transform = entity.GetComponent<TransformComponent>();
 
-		if (input && velocity)
+		if (input && transform)
 		{
-			velocity->vx = 0;
-			velocity->vy = 0;
+			transform->vx = 0;
+			transform->vy = 0;
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-				velocity->vy = -100;  // Движение вверх
+				transform->vy = -100;  // Движение вверх
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-				velocity->vy = 100;   // Движение вниз
+				transform->vy = 100;   // Движение вниз
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-				velocity->vx = -100;  // Движение влево
+				transform->vx = -100;  // Движение влево
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-				velocity->vx = 100;   // Движение вправо
+				transform->vx = 100;   // Движение вправо
 			}
 		}
 	}
