@@ -12,7 +12,7 @@ void Book::Attack(EntityManager& entityManager, TransformComponent* parentTransf
 		parentTransform->x, parentTransform->y, 0.0f, 0.0f
 	);
 	projectile.AddComponent<OrbitalProjectileComponent>(100.0f, 2.0f, parentTransform);
-	projectile.AddComponent<ProjectileComponent>(4.0f);
+	projectile.AddComponent<LifetimeComponent>(4.0f);
 }
 
 void Book::LoadTextures()

@@ -2,7 +2,7 @@
 
 void OrbitalProjectileSystem::Update(EntityManager& entityManager, float deltaTime)
 {
-	for (auto& entity : entityManager.GetEntitiesWithComponents<TransformComponent, OrbitalProjectileComponent, ProjectileComponent>())
+	for (auto& entity : entityManager.GetEntitiesWithComponents<TransformComponent, OrbitalProjectileComponent, LifetimeComponent>())
 	{
 		auto transform = entity->GetComponent<TransformComponent>();
 		auto orbitComponent = entity->GetComponent<OrbitalProjectileComponent>();

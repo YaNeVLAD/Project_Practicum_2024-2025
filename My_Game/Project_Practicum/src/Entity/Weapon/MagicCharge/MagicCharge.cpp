@@ -11,7 +11,7 @@ void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* paren
 		parentTransform->lastDirection.x * projectileSpeed,
 		parentTransform->lastDirection.y * projectileSpeed
 	);
-	projectile.AddComponent<ProjectileComponent>(3.0f);
+	projectile.AddComponent<LifetimeComponent>(3.0f);
 	projectile.AddComponent<DrawableComponent>(mFrames[0], sf::Vector2f(1.5, 1.5));
 	projectile.AddComponent<AnimationComponent>(mFrames, 0.2f, true, -1.0f, true);
 }
