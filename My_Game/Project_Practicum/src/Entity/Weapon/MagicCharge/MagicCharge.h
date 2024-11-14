@@ -10,7 +10,7 @@ public:
 	MagicCharge() 
 	{
 		fireRate = 1.0f; 
-		projectileSpeed = 150.0f; 
+		projectileSpeed = 250.0f; 
 		LoadTextures(); 
 	}
 
