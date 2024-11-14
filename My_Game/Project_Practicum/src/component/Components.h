@@ -98,19 +98,18 @@ struct WeaponComponent : public Component
 };
 
 /**
-* @brief  омпонент обозначает что сущность €вл€етс€ снар€дом
+* @brief  омпонент обозначает что сущность имеет врем€ жизни и будет удалена по его окончанию
 */
-struct ProjectileComponent : public Component
+struct LifetimeComponent : public Component
 {
 	float lifetime = 0.0f;
 	float maxLifeTime = 0.0f;
 
 	/**
 	* @brief ќсновной конструктор
-	* @param float maxDistance - максимальна€ дистанци€ после которой снар€д будет удалЄн
-	* @param float speed - фиксированна€ скорость снар€да
+	* @param float maxLifetime - максимальное врем€ жизни, по истечению которого сущность будет удалена
 	*/
-	ProjectileComponent(float maxLifeTime) : maxLifeTime(maxLifeTime), lifetime(maxLifeTime) {}
+	LifetimeComponent(float maxLifeTime) : maxLifeTime(maxLifeTime), lifetime(maxLifeTime) {}
 };
 
 struct OrbitalProjectileComponent : public Component

@@ -63,7 +63,7 @@
     <ClCompile Include="src\System\Render\RenderSystem.cpp">
       <Filter>Исходные файлы\src\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="src\System\Projectile\ProjectileSystem.cpp">
+    <ClCompile Include="src\System\Projectile\LifetimeSystem.cpp">
       <Filter>Исходные файлы\src\Systems</Filter>
     </ClCompile>
     <ClCompile Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.cpp">
@@ -122,7 +122,7 @@
     <ClInclude Include="src\System\Weapon\WeaponSystem.h">
       <Filter>Файлы заголовков\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="src\System\Projectile\ProjectileSystem.h">
+    <ClInclude Include="src\System\Projectile\LifetimeSystem.h">
       <Filter>Файлы заголовков\Systems</Filter>
     </ClInclude>
     <ClInclude Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.h">

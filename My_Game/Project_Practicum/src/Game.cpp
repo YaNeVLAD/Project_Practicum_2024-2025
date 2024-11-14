@@ -15,7 +15,7 @@ void Game::InitSystems()
 	mSystemManager.AddSystem<InputSystem>();
 	mSystemManager.AddSystem<CameraSystem>(mCamera);
 	mSystemManager.AddSystem<WeaponSystem>();
-	mSystemManager.AddSystem<ProjectileSystem>(mCamera);
+	mSystemManager.AddSystem<LifetimeSystem>(mCamera);
 	mSystemManager.AddSystem<OrbitalProjectileSystem>();
 }
 
