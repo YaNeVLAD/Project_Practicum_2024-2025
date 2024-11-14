@@ -138,36 +138,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\entity\weapon\bow\Bow.cpp" />
-    <ClCompile Include="src\system\camera\CameraSystem.cpp" />
-    <ClCompile Include="src\component\Components.cpp" />
-    <ClCompile Include="src\manager\entity\EntityManager.cpp" />
+    <ClCompile Include="src\Entity\Weapon\MagicCharge\MagicCharge.cpp" />
+    <ClCompile Include="src\System\Camera\CameraSystem.cpp" />
+    <ClCompile Include="src\Component\Components.cpp" />
+    <ClCompile Include="src\Manager\Entity\EntityManager.cpp" />
     <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\system\input\InputSystem.cpp" />
+    <ClCompile Include="src\System\Input\InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\system\movement\MovementSystem.cpp" />
-    <ClCompile Include="src\system\projectile\ProjectileSystem.cpp" />
-    <ClCompile Include="src\system\render\RenderSystem.cpp" />
+    <ClCompile Include="src\System\Movement\MovementSystem.cpp" />
+    <ClCompile Include="src\System\Projectile\ProjectileSystem.cpp" />
+    <ClCompile Include="src\System\Render\RenderSystem.cpp" />
     <ClCompile Include="utils\SpriteSheet.cpp" />
-    <ClCompile Include="src\manager\system\SystemManager.cpp" />
-    <ClCompile Include="src\system\weapon\WeaponSystem.cpp" />
+    <ClCompile Include="src\Manager\System\SystemManager.cpp" />
+    <ClCompile Include="src\System\Weapon\WeaponSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\entity\weapon\bow\Bow.h" />
-    <ClInclude Include="src\system\camera\CameraSystem.h" />
-    <ClInclude Include="src\component\Components.h" />
-    <ClInclude Include="src\entity\Entity.h" />
-    <ClInclude Include="src\manager\entity\EntityManager.h" />
+    <ClInclude Include="src\Entity\Weapon\MagicCharge\MagicCharge.h" />
+    <ClInclude Include="src\System\Camera\CameraSystem.h" />
+    <ClInclude Include="src\Component\Components.h" />
+    <ClInclude Include="src\Entity\Entity.h" />
+    <ClInclude Include="src\Manager\Entity\EntityManager.h" />
     <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\system\input\InputSystem.h" />
-    <ClInclude Include="src\system\movement\MovementSystem.h" />
-    <ClInclude Include="src\system\projectile\ProjectileSystem.h" />
-    <ClInclude Include="src\system\render\RenderSystem.h" />
+    <ClInclude Include="src\System\Input\InputSystem.h" />
+    <ClInclude Include="src\System\Movement\MovementSystem.h" />
+    <ClInclude Include="src\System\Projectile\ProjectileSystem.h" />
+    <ClInclude Include="src\System\Render\RenderSystem.h" />
     <ClInclude Include="utils\SpriteSheet.h" />
-    <ClInclude Include="src\system\System.h" />
-    <ClInclude Include="src\manager\system\SystemManager.h" />
-    <ClInclude Include="src\entity\weapon\Weapon.h" />
-    <ClInclude Include="src\system\weapon\WeaponSystem.h" />
+    <ClInclude Include="src\System\System.h" />
+    <ClInclude Include="src\Manager\System\SystemManager.h" />
+    <ClInclude Include="src\Entity\Weapon\Weapon.h" />
+    <ClInclude Include="src\System\Weapon\WeaponSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

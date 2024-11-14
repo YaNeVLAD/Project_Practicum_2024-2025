@@ -1,8 +1,8 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
-#include "manager/system/SystemManager.h"
-#include "manager/entity/EntityManager.h"
+#include "Manager/System/SystemManager.h"
+#include "Manager/Entity/EntityManager.h"
 
 class Game
 {
