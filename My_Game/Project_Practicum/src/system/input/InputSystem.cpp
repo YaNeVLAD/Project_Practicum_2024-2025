@@ -14,16 +14,16 @@ void InputSystem::Update(EntityManager& entityManager, float deltaTime)
 			transform->vy = 0;
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-				transform->vy = -100;
+				transform->vy = -200;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-				transform->vy = 100;
+				transform->vy = 200;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-				transform->vx = -100;
+				transform->vx = -200;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-				transform->vx = 100;
+				transform->vx = 200;
 			}
 
 			if (animation)

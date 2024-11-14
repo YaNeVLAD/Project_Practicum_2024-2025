@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../manager/entity/EntityManager.h"
+#include "../Manager/Entity/EntityManager.h"
 #include "SFML/Graphics.hpp"
 
 class System

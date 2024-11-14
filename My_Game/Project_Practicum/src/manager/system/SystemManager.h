@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../../system/System.h"
-#include "../../system/movement/MovementSystem.h"
-#include "../../system/render/RenderSystem.h"
-#include "../../system/input/InputSystem.h"
-#include "../../system/camera/CameraSystem.h"
-#include "../../system/weapon/WeaponSystem.h"
-#include "../../system/projectile/ProjectileSystem.h"
+#include "../../System/System.h"
+#include "../../System/Movement/MovementSystem.h"
+#include "../../System/Render/RenderSystem.h"
+#include "../../System/Input/InputSystem.h"
+#include "../../System/Camera/CameraSystem.h"
+#include "../../System/Weapon/WeaponSystem.h"
+#include "../../System/Projectile/ProjectileSystem.h"
 
 class SystemManager
 {

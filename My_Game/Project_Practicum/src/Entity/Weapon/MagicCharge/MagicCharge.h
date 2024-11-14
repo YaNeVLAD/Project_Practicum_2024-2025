@@ -4,10 +4,16 @@
 #include "SFML/Graphics.hpp"
 #include "../Weapon.h"
 
-class Bow : public Weapon
+class MagicCharge : public Weapon
 {
 public:
-	Bow() { fireRate = 1.0f; projectileSpeed = 150.0f; }
+	MagicCharge() 
+	{
+		fireRate = 1.0f; 
+		projectileSpeed = 150.0f; 
+		LoadTextures(); 
+	}
+
 	void Attack(Entity& projectile, const TransformComponent& startPosition) override;
 
 private:

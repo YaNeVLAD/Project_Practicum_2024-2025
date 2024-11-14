@@ -7,7 +7,7 @@ std::vector<sf::Texture> SpriteSheet::LoadTextures(const std::string& filePath, 
 	sf::Texture texture;
 	if (!texture.loadFromFile(filePath))
 	{
-		std::cerr << "Ошибка при загрузке файла " << filePath << std::endl;
+		std::cerr << "Failed to load file " << filePath << std::endl;
 		return textures;
 	}
 

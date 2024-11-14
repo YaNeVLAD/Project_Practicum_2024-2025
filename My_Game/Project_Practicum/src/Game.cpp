@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "entity/weapon/bow/Bow.h"
+#include "Entity/Weapon/MagicCharge/MagicCharge.h"
 #include "../utils/SpriteSheet.h"
 
 Game::Game() : mWindow(sf::VideoMode::getDesktopMode(), "Game")
@@ -25,11 +25,10 @@ void Game::InitPlayer()
 	player.AddComponent<CameraComponent>();
 	player.AddComponent<WeaponComponent>();
 	auto weapons = player.GetComponent<WeaponComponent>();
-	weapons->AddWeapon(std::make_unique<Bow>());
+	weapons->AddWeapon(std::make_unique<MagicCharge>());
 
 	std::vector<sf::Texture> frames = SpriteSheet::LoadTextures("assets/character/walk.png", 128, 128);
-	std::cout << frames.size();
-	player.AddComponent<AnimationComponent>(frames, 0.2f, true, -1.0f);
+	player.AddComponent<AnimationComponent>(frames, 0.2f, true, -1.0f, false);
 	player.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(1.5f, 1.5f));
 }
 
