@@ -11,7 +11,22 @@ public:
 
 	void RemoveEntity(Entity::IdType id);
 
+    template<typename... ComponentTypes>
+    std::vector<Entity*> GetEntitiesWithComponents()
+    {
+        std::vector<Entity*> result;
+        for (Entity& entity : mEntities)
+        {
+            if ((entity.GetComponent<ComponentTypes>() && ...))
+            {
+                result.push_back(&entity);
+            }
+        }
+
+        return result;
+    }
+
 private:
 	std::vector<Entity> mEntities;
-	Entity::IdType mNexEntityId = 0;
+	Entity::IdType mNextEntityId = 0;
 };

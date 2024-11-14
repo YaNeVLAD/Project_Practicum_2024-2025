@@ -4,14 +4,6 @@
 #include <iostream>
 #include <optional>
 
-enum Direction
-{
-	Left = -1,
-	Right = 1,
-	Top = 2,
-	Bottom = 3,
-};
-
 class Weapon;
 
 /**
@@ -110,15 +102,26 @@ struct WeaponComponent : public Component
 */
 struct ProjectileComponent : public Component
 {
-	float travelledDistance = 0.0f;
-	float maxDistance = 0.0f;
+	float lifetime = 0.0f;
+	float maxLifeTime = 0.0f;
 
 	/**
 	* @brief Основной конструктор
 	* @param float maxDistance - максимальная дистанция после которой снаряд будет удалён
 	* @param float speed - фиксированная скорость снаряда
 	*/
-	ProjectileComponent(float maxDistance) : maxDistance(maxDistance) {}
+	ProjectileComponent(float maxLifeTime) : maxLifeTime(maxLifeTime), lifetime(maxLifeTime) {}
+};
+
+struct OrbitalProjectileComponent : public Component
+{
+	float orbitRadius = 0.0f;
+	float orbitSpeed = 0.0f;
+	float angle = 0.0f;
+	TransformComponent* parentTransform;
+
+	OrbitalProjectileComponent(float radius, float speed, TransformComponent* parent)
+		: orbitRadius(radius), orbitSpeed(speed), parentTransform(parent) {}
 };
 
 /**

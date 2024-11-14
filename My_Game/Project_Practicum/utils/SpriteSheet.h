@@ -10,4 +10,3 @@ public:
 		const std::string& filePath, int frameWidth, int frameHeight
 	);
 };
-

@@ -2,15 +2,12 @@
 
 void CameraSystem::Update(EntityManager& entityManager, float deltaTime)
 {
-	for (auto& entity : entityManager.GetEntities())
+	for (auto& entity : entityManager.GetEntitiesWithComponents<CameraComponent, TransformComponent>())
 	{
-		auto camera = entity.GetComponent<CameraComponent>();
-		auto transform = entity.GetComponent<TransformComponent>();
+		auto camera = entity->GetComponent<CameraComponent>();
+		auto transform = entity->GetComponent<TransformComponent>();
 
-		if (camera && transform)
-		{
-			mView.setCenter(transform->x, transform->y);
-			break;
-		}
+		mView.setCenter(transform->x, transform->y);
+		break;
 	}
 }

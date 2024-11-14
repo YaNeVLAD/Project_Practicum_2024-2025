@@ -2,52 +2,44 @@
 
 void RenderSystem::Update(EntityManager& entityManager, float deltaTime)
 {
-	for (auto& entity : entityManager.GetEntities())
+	for (auto& entity : entityManager.GetEntitiesWithComponents<TransformComponent, DrawableComponent>())
 	{
-		auto transform = entity.GetComponent<TransformComponent>();
-		auto drawable = entity.GetComponent<DrawableComponent>();
-		auto animation = entity.GetComponent<AnimationComponent>();
+		auto transform = entity->GetComponent<TransformComponent>();
+		auto drawable = entity->GetComponent<DrawableComponent>();
+		auto animation = entity->GetComponent<AnimationComponent>();
 
-		if (transform && drawable)
+		sf::Vector2f scale = drawable->sprite.getScale();
+		scale.x *= std::copysign(1.0f, transform->lastDirection.x);
+		drawable->sprite.setScale(scale);
+
+		drawable->sprite.setPosition(transform->x, transform->y);
+
+		if (animation && !animation->isAnimating && !animation->frames.empty())
 		{
-			sf::Vector2f scale = drawable->sprite.getScale();
-			scale.x *= std::copysign(1.0f, transform->lastDirection.x);
-			drawable->sprite.setScale(scale);
-			
-			drawable->sprite.setPosition(transform->x, transform->y);
-			
-			if (animation && !animation->isAnimating && !animation->frames.empty())
+			drawable->sprite.setTexture(animation->frames[0]);
+		}
+
+		mWindow.draw(drawable->sprite);
+
+		if (animation && animation->isAnimating)
+		{
+			animation->elapsedTime += deltaTime;
+
+			if (animation->elapsedTime >= animation->frameTime)
 			{
-				drawable->sprite.setTexture(animation->frames[0]);
-			}
+				animation->elapsedTime = 0.0f;
+				animation->currentFrameIndex++;
 
-			mWindow.draw(drawable->sprite);
-
-			if (animation && animation->isAnimating)
-			{
-				animation->elapsedTime += deltaTime;
-
-				if (animation->elapsedTime >= animation->frameTime)
+				if (animation->currentFrameIndex >= animation->frames.size())
 				{
-					animation->elapsedTime = 0.0f;
-					animation->currentFrameIndex++;
-
-					if (animation->currentFrameIndex >= animation->frames.size())
+					if (animation->loop)
 					{
-						if (animation->loop)
-						{
-							animation->currentFrameIndex = 0;
-						}
-						else
-						{
-							entityManager.RemoveEntity(entity.GetId());
-							continue;
-						}
+						animation->currentFrameIndex = 0;
 					}
 				}
-
-				drawable->sprite.setTexture(animation->frames[animation->currentFrameIndex]);
 			}
+
+			drawable->sprite.setTexture(animation->frames[animation->currentFrameIndex]);
 		}
 	}
 }

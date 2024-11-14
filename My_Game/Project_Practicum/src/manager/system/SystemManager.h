@@ -7,6 +7,7 @@
 #include "../../System/Camera/CameraSystem.h"
 #include "../../System/Weapon/WeaponSystem.h"
 #include "../../System/Projectile/ProjectileSystem.h"
+#include "../../System/OrbitalProjectile/OrbitalProjectileSystem.h"
 
 class SystemManager
 {

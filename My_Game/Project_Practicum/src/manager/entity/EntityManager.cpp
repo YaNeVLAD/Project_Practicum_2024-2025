@@ -18,6 +18,6 @@ void EntityManager::RemoveEntity(Entity::IdType id)
 
 Entity& EntityManager::CreateEntity()
 {
-	mEntities.emplace_back(mNexEntityId++);
+	mEntities.emplace_back(mNextEntityId++);
 	return mEntities.back();
 }

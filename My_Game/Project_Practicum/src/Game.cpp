@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Entity/Weapon/MagicCharge/MagicCharge.h"
 #include "../utils/SpriteSheet.h"
+#include "Entity/Weapon/Book/Book.h"
 
 Game::Game() : mWindow(sf::VideoMode::getDesktopMode(), "Game")
 {
@@ -15,6 +16,7 @@ void Game::InitSystems()
 	mSystemManager.AddSystem<CameraSystem>(mCamera);
 	mSystemManager.AddSystem<WeaponSystem>();
 	mSystemManager.AddSystem<ProjectileSystem>(mCamera);
+	mSystemManager.AddSystem<OrbitalProjectileSystem>();
 }
 
 void Game::InitPlayer()
@@ -26,8 +28,9 @@ void Game::InitPlayer()
 	player.AddComponent<WeaponComponent>();
 	auto weapons = player.GetComponent<WeaponComponent>();
 	weapons->AddWeapon(std::make_unique<MagicCharge>());
+	weapons->AddWeapon(std::make_unique<Book>());
 
-	std::vector<sf::Texture> frames = SpriteSheet::LoadTextures("assets/character/walk.png", 128, 128);
+	std::vector<sf::Texture> frames = SpriteSheet::LoadTextures("assets/character/Walk.png", 128, 128);
 	player.AddComponent<AnimationComponent>(frames, 0.2f, true, -1.0f, false);
 	player.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(1.5f, 1.5f));
 }

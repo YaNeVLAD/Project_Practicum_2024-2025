@@ -4,16 +4,15 @@
 #include <vector>
 #include "SFML/Graphics.hpp"
 
-class MagicCharge : public Weapon
+class Book : public Weapon
 {
 public:
-	MagicCharge() 
+	Book()
 	{
-		fireRate = 1.0f; 
-		projectileSpeed = 150.0f; 
-		LoadTextures(); 
+		fireRate = 5.0f;
+		projectileSpeed = 150.0f;
+		LoadTextures();
 	}
-
 	void Attack(EntityManager& entityManager, TransformComponent* parentTransform) override;
 
 private:
