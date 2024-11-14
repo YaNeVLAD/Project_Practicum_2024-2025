@@ -28,66 +28,126 @@
     <Filter Include="Исходные файлы\src\Managers">
       <UniqueIdentifier>{c7e659c1-75ff-4f07-a9ac-9c8d675d5ed0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\utils">
+      <UniqueIdentifier>{ea1bc0fc-0ddc-47d3-b216-311cd42346f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Components">
+      <UniqueIdentifier>{2e648ea4-8a4a-4ad3-9938-8d02155fc739}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Entity">
+      <UniqueIdentifier>{f269a144-5c8e-4488-b20c-b66ef73a5e13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Entity\Weapon">
+      <UniqueIdentifier>{58ca22bc-2a40-473f-9603-cfa51845a499}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Systems">
+      <UniqueIdentifier>{46c19a0f-24d5-40e8-a035-940e3239c9da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Managers">
+      <UniqueIdentifier>{7d2e3cb6-9c1a-4b8d-97ff-1e2563d19b37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Utils">
+      <UniqueIdentifier>{aa10680d-0a71-4cff-a9ed-fc9176e51816}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Components.cpp">
+    <ClCompile Include="src\Component\Components.cpp">
       <Filter>Исходные файлы\src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Исходные файлы\src</Filter>
-    </ClCompile>
-    <ClCompile Include="MovementSystem.cpp">
+    <ClCompile Include="src\System\Weapon\WeaponSystem.cpp">
       <Filter>Исходные файлы\src\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
+    <ClCompile Include="src\System\Render\RenderSystem.cpp">
+      <Filter>Исходные файлы\src\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Projectile\ProjectileSystem.cpp">
+      <Filter>Исходные файлы\src\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.cpp">
+      <Filter>Исходные файлы\src\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Movement\MovementSystem.cpp">
+      <Filter>Исходные файлы\src\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Input\InputSystem.cpp">
+      <Filter>Исходные файлы\src\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Camera\CameraSystem.cpp">
+      <Filter>Исходные файлы\src\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity\Weapon\Book\Book.cpp">
       <Filter>Исходные файлы\src\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="RenderSystem.cpp">
-      <Filter>Исходные файлы\src\Systems</Filter>
+    <ClCompile Include="src\Game.cpp">
+      <Filter>Исходные файлы\src</Filter>
     </ClCompile>
-    <ClCompile Include="InputSystem.cpp">
-      <Filter>Исходные файлы\src\Systems</Filter>
+    <ClCompile Include="src\Entity\Weapon\MagicCharge\MagicCharge.cpp">
+      <Filter>Исходные файлы\src\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="CameraSystem.cpp">
-      <Filter>Исходные файлы\src\Systems</Filter>
+    <ClCompile Include="utils\SpriteSheet.cpp">
+      <Filter>Исходные файлы\utils</Filter>
     </ClCompile>
-    <ClCompile Include="EntityManager.cpp">
+    <ClCompile Include="src\Manager\System\SystemManager.cpp">
       <Filter>Исходные файлы\src\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="SystemManager.cpp">
+    <ClCompile Include="src\Manager\Entity\EntityManager.cpp">
       <Filter>Исходные файлы\src\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entity.h">
+    <ClInclude Include="src\Game.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="EntityManager.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\Component\Components.h">
+      <Filter>Файлы заголовков\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\Entity\Entity.h">
+      <Filter>Файлы заголовков\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="System.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\Entity\Weapon\Weapon.h">
+      <Filter>Файлы заголовков\Entity\Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="MovementSystem.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\Entity\Weapon\Book\Book.h">
+      <Filter>Файлы заголовков\Entity\Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="RenderSystem.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\Entity\Weapon\MagicCharge\MagicCharge.h">
+      <Filter>Файлы заголовков\Entity\Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="InputSystem.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\System\Render\RenderSystem.h">
+      <Filter>Файлы заголовков\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="CameraSystem.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\System\Weapon\WeaponSystem.h">
+      <Filter>Файлы заголовков\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="SystemManager.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\System\Projectile\ProjectileSystem.h">
+      <Filter>Файлы заголовков\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.h">
+      <Filter>Файлы заголовков\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Movement\MovementSystem.h">
+      <Filter>Файлы заголовков\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Input\InputSystem.h">
+      <Filter>Файлы заголовков\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Camera\CameraSystem.h">
+      <Filter>Файлы заголовков\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Manager\Entity\EntityManager.h">
+      <Filter>Файлы заголовков\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Manager\System\SystemManager.h">
+      <Filter>Файлы заголовков\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\System.h">
+      <Filter>Файлы заголовков\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\SpriteSheet.h">
+      <Filter>Файлы заголовков\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
