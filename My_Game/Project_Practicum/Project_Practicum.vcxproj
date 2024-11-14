@@ -138,6 +138,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.cpp" />
+    <ClCompile Include="src\Entity\Weapon\Book\Book.cpp" />
     <ClCompile Include="src\Entity\Weapon\MagicCharge\MagicCharge.cpp" />
     <ClCompile Include="src\System\Camera\CameraSystem.cpp" />
     <ClCompile Include="src\Component\Components.cpp" />
@@ -153,6 +155,8 @@
     <ClCompile Include="src\System\Weapon\WeaponSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.h" />
+    <ClInclude Include="src\Entity\Weapon\Book\Book.h" />
     <ClInclude Include="src\Entity\Weapon\MagicCharge\MagicCharge.h" />
     <ClInclude Include="src\System\Camera\CameraSystem.h" />
     <ClInclude Include="src\Component\Components.h" />

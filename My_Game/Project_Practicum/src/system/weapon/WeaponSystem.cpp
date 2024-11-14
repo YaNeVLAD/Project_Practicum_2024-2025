@@ -3,15 +3,18 @@
 
 void WeaponSystem::Update(EntityManager& entityManager, float deltaTime)
 {
-    std::vector<Entity*> entitiesToAttack;
+    std::vector<Weapon*> weaponsToAttack;
+    TransformComponent* entityTransform = nullptr;
 
-    for (auto& entity : entityManager.GetEntities())
+    for (auto& entity : entityManager.GetEntitiesWithComponents<WeaponComponent, TransformComponent>())
     {
-        auto weaponComponent = entity.GetComponent<WeaponComponent>();
-        auto transform = entity.GetComponent<TransformComponent>();
+        auto weaponComponent = entity->GetComponent<WeaponComponent>();
+        auto transform = entity->GetComponent<TransformComponent>();
 
         if (weaponComponent && transform)
         {
+            entityTransform = transform;
+
             if (weaponComponent->weapons.empty())
             {
                 continue;
@@ -27,24 +30,14 @@ void WeaponSystem::Update(EntityManager& entityManager, float deltaTime)
                 if (weapon->cooldown <= 0)
                 {
                     weapon->cooldown = weapon->fireRate;
-                    entitiesToAttack.push_back(&entity);
+                    weaponsToAttack.push_back(weapon.get());
                 }
             }
         }
     }
 
-    for (auto& entity : entitiesToAttack)
+    for (auto& weapon : weaponsToAttack)
     {
-        auto transform = entity->GetComponent<TransformComponent>();
-        auto weaponComponent = entity->GetComponent<WeaponComponent>();
-
-        if (transform && weaponComponent)
-        {
-            for (auto& weapon : weaponComponent->weapons)
-            {
-                auto& projectile = entityManager.CreateEntity();
-                weapon->Attack(projectile, *transform);
-            }
-        }
+        weapon->Attack(entityManager, entityTransform);
     }
 }

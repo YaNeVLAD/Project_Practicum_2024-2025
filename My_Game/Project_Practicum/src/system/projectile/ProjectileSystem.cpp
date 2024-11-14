@@ -4,24 +4,21 @@ void ProjectileSystem::Update(EntityManager& entityManager, float deltaTime)
 {
     std::vector<Entity*> projectilesToDelete;
 
-    for (auto& entity : entityManager.GetEntities()) 
+    for (auto& entity : entityManager.GetEntitiesWithComponents<TransformComponent, ProjectileComponent>())
     {
-        auto transform = entity.GetComponent<TransformComponent>();
-        auto projectile = entity.GetComponent<ProjectileComponent>();
+        auto projectile = entity->GetComponent<ProjectileComponent>();
+        auto transform = entity->GetComponent<TransformComponent>();
 
-        if (transform && projectile)
+        projectile->lifetime -= deltaTime;
+
+        if (projectile->lifetime <= 0.0f) {
+            projectilesToDelete.push_back(entity);
+            continue;
+        }
+
+        if (IsOutOfBound(transform->x, transform->y))
         {
-            projectile->travelledDistance += sqrt(transform->vx * transform->vx + transform->vy * transform->vy) * deltaTime;
-
-            if (projectile->travelledDistance >= projectile->maxDistance) {
-                projectilesToDelete.push_back(&entity);
-                continue;
-            }
-
-            if (IsOutOfBound(transform->x, transform->y)) 
-            {
-                projectilesToDelete.push_back(&entity);
-            }
+            projectilesToDelete.push_back(entity);
         }
     }
 
