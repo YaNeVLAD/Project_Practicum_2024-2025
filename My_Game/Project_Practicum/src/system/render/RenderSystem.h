@@ -10,5 +10,6 @@ public:
 	void Update(EntityManager& entityManager, float deltaTime) override;
 
 private:
+	void RenderAnimatedEntity(DrawableComponent* drawable, AnimationComponent* animation);
 	sf::RenderWindow& mWindow;
 };

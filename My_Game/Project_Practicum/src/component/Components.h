@@ -44,6 +44,48 @@ struct TransformComponent : public Component
 };
 
 /**
+* @brief Компонент хранит угол наклона сущности
+*/
+
+struct RotationComponent : public Component
+{
+	float angle;
+
+	/**
+	* @brief Основной конструктор
+	* @param float angle - угол наклона сущности
+	*/
+	RotationComponent(float angle) : angle(angle) {}
+};
+
+/**
+* @brief Компонент хранит коллизионную фигуру сущности
+*/
+struct CollisionComponent : public Component
+{
+	std::unique_ptr<sf::Shape> shape;
+	sf::Vector2f offset;
+
+	sf::FloatRect getRect(float x, float y) const
+	{
+		return shape->getGlobalBounds();
+	}
+
+	void UpdatePosition(float x, float y) const
+	{
+		shape->setPosition(x + offset.x, y + offset.y);
+	}
+
+	/**
+	* @brief Основной конструктор
+	* @param std::unique_ptr<sf::Shape> shape - указатель на фигуру коллизии
+	* @param sf::Vector2f offset - смещение относительно центра сущности
+	*/
+	CollisionComponent(std::unique_ptr<sf::Shape> shape, sf::Vector2f offset = sf::Vector2f(0.0f, 0.0f)) 
+		: shape(std::move(shape)), offset(offset) {}
+};
+
+/**
 * @brief Компонент отвечает за вид объекта на сцене
 * @brief Может быть создан без текстуры, в таком случае необходимо задать размер и цвет прямоугольника
 */
@@ -120,7 +162,8 @@ struct OrbitalProjectileComponent : public Component
 	TransformComponent* parentTransform;
 
 	OrbitalProjectileComponent(float radius, float speed, TransformComponent* parent)
-		: orbitRadius(radius), orbitSpeed(speed), parentTransform(parent) {}
+		: orbitRadius(radius), orbitSpeed(speed), parentTransform(parent) {
+	}
 };
 
 /**
@@ -148,5 +191,6 @@ struct AnimationComponent : public Component
 		bool loop = true,
 		float duration = -1.0f,
 		bool isAnimating = false
-		) : frames(std::move(frames)), frameTime(frameTime), loop(loop), duration(duration), isAnimating(isAnimating) {}
+	) : frames(std::move(frames)), frameTime(frameTime), loop(loop), duration(duration), isAnimating(isAnimating) {
+	}
 };
