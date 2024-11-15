@@ -1,4 +1,5 @@
 #include "Game.h"
+
 #include "Factory/PlayerFactory/PlayerFactory.h"
 #include "Factory/EnemyFactory/EnemyFactory.h"
 #include "Factory/SystemFactory/SystemFactory.h"
@@ -41,7 +42,7 @@ void Game::Run()
 			system->Update(mEntityManager, deltaTime);
 		}
 
-		mWindow.clear(sf::Color::White);
+		mWindow.clear();
 
 		if (auto renderSystem = mSystemManager.GetSystem<RenderSystem>())
 		{

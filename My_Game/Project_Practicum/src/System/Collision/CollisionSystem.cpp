@@ -9,7 +9,6 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 
 	std::vector<CollisionEvent> events;
 
-	// Создаем события
 	for (auto& entity : entities)
 	{
 		auto collision = entity->GetComponent<CollisionComponent>();
@@ -19,18 +18,14 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 		events.push_back(CollisionEvent(rect.left + rect.width, -1, entity, rect));
 	}
 
-	// Сортируем события
 	std::sort(events.begin(), events.end());
 
-	// Активные прямоугольники по оси Y
 	std::set<std::pair<float, Entity*>> active;
 
-	// Обработка событий
 	for (const auto& event : events)
 	{
 		if (event.type == 1) 
-		{ // Открытие
-			// Проверяем пересечения с активными
+		{
 			for (const auto& activeRect : active)
 			{
 				const auto& otherEntity = activeRect.second;
@@ -45,7 +40,7 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 			active.insert(std::pair(event.rect.top, event.entity));
 		}
 		else 
-		{ // Закрытие
+		{
 			active.erase(std::pair(event.rect.top, event.entity));
 		}
 	}
@@ -67,7 +62,7 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 
 	if ((firstType & Player && secondType & Enemy) || (firstType & Enemy && secondType & Player)) 
 	{
-		std::cout << "Player collided with Enemy\n";
+		//std::cout << "Player collided with Enemy\n";
 
 		if (firstType & Player)
 		{
@@ -80,7 +75,7 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 	}
 	else if ((firstType & Projectile && secondType & Enemy) || (firstType & Enemy && secondType & Projectile)) 
 	{
-		std::cout << "Projectile collided with Enemy\n";
+		//std::cout << "Projectile collided with Enemy\n";
 
 		if (firstType & Projectile)
 		{
@@ -93,6 +88,28 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 	}
 	else if (firstType & Enemy && secondType & Enemy)
 	{
-		std::cout << "Enemy collided with Enemy\n";
+		//std::cout << "Enemy collided with Enemy\n";
+
+		HandlePushAway(first, second);
 	}
+}
+
+void CollisionSystem::HandlePushAway(Entity* first, Entity* second)
+{
+	auto firstTransform = first->GetComponent<TransformComponent>();
+	auto secondTransform = second->GetComponent<TransformComponent>();
+
+	sf::Vector2f direction = sf::Vector2f(firstTransform->x, firstTransform->y) - sf::Vector2f(secondTransform->x, secondTransform->y);
+	float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+	if (distance < 1.0f) return;
+
+	direction /= distance;
+	
+	float pushStrength = 1.0f;
+	float pushX = direction.x * pushStrength;
+	float pushY = direction.y * pushStrength;
+
+	firstTransform->x += pushX;
+	firstTransform->y += pushY;
 }
