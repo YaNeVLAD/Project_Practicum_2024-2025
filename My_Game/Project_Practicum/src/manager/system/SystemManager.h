@@ -6,7 +6,7 @@
 #include "../../System/Input/InputSystem.h"
 #include "../../System/Camera/CameraSystem.h"
 #include "../../System/Weapon/WeaponSystem.h"
-#include "../../System/Projectile/LifetimeSystem.h"
+#include "../../System/Lifetime/LifetimeSystem.h"
 #include "../../System/Collision/CollisionSystem.h"
 #include "../../System/OrbitalProjectile/OrbitalProjectileSystem.h"
 

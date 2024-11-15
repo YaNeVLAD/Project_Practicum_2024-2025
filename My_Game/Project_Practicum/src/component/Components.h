@@ -27,10 +27,6 @@ struct CameraComponent : public Component {};
 */
 struct TransformComponent : public Component
 {
-	float x, y;
-	float vx, vy;
-	sf::Vector2f lastDirection = { 1.0f, 0.0f };
-
 	/**
 	* @brief Основной конструктор
 	* @param float x - координата
@@ -39,6 +35,10 @@ struct TransformComponent : public Component
 	* @param float vy - скорость по оси y
 	*/
 	TransformComponent(float x = 0, float y = 0, float vx = 0, float vy = 0) : x(x), y(y), vx(vx), vy(vy) {}
+
+	float x, y;
+	float vx, vy;
+	sf::Vector2f lastDirection = { 1.0f, 0.0f };
 };
 
 /**
@@ -47,13 +47,13 @@ struct TransformComponent : public Component
 
 struct RotationComponent : public Component
 {
-	float angle;
-
 	/**
 	* @brief Основной конструктор
 	* @param float angle - угол наклона сущности
 	*/
 	RotationComponent(float angle) : angle(angle) {}
+	
+	float angle;
 };
 
 /**
@@ -61,8 +61,20 @@ struct RotationComponent : public Component
 */
 struct CollisionComponent : public Component
 {
+	/**
+	* @brief Основной конструктор
+	* @param std::unique_ptr<sf::Shape> shape - указатель на фигуру коллизии
+	* @param sf::Vector2f offset - смещение относительно центра сущности
+	* @param float cooldown - перезарядка коллизии
+	*/
+	CollisionComponent(std::unique_ptr<sf::RectangleShape> shape, sf::Vector2f offset = sf::Vector2f(0.0f, 0.0f), float cooldown = 0.0f)
+		: shape(std::move(shape)), offset(offset), cooldown(cooldown) {
+	}
+
 	std::unique_ptr<sf::RectangleShape> shape;
 	sf::Vector2f offset;
+	float elapsedTime = 0.0f;
+	float cooldown;
 
 	/**
 	* @brief Метод для получения размеров зоны коллизии
@@ -81,14 +93,6 @@ struct CollisionComponent : public Component
 	{
 		shape->setPosition(x + offset.x, y + offset.y);
 	}
-
-	/**
-	* @brief Основной конструктор
-	* @param std::unique_ptr<sf::Shape> shape - указатель на фигуру коллизии
-	* @param sf::Vector2f offset - смещение относительно центра сущности
-	*/
-	CollisionComponent(std::unique_ptr<sf::RectangleShape> shape, sf::Vector2f offset = sf::Vector2f(0.0f, 0.0f)) 
-		: shape(std::move(shape)), offset(offset) {}
 };
 
 /**
@@ -97,8 +101,17 @@ struct CollisionComponent : public Component
 */
 struct DrawableComponent : public Component
 {
-	sf::Sprite sprite;
-	sf::Texture texture;
+	/**
+	* @brief Конструктор для текстуры
+	* @param const sf::Texture& texture - опциональный, компонент будет отображать переданную текстуру
+	* @param sf::Vector2f scale - масштаб объекта
+	*/
+	DrawableComponent(const sf::Texture& texture, sf::Vector2f scale) : texture(texture)
+	{
+		sprite.setTexture(texture);
+		sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
+		sprite.setScale(scale.x, scale.y);
+	}
 
 	/**
 	* @brief Конструктор для цветного прямоугольника
@@ -118,17 +131,8 @@ struct DrawableComponent : public Component
 		}
 	}
 
-	/**
-	* @brief Конструктор для текстуры
-	* @param const sf::Texture& texture - опциональный, компонент будет отображать переданную текстуру
-	* @param sf::Vector2f scale - масштаб объекта
-	*/
-	DrawableComponent(const sf::Texture& texture, sf::Vector2f scale) : texture(texture)
-	{
-		sprite.setTexture(texture);
-		sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
-		sprite.setScale(scale.x, scale.y);
-	}
+	sf::Sprite sprite;
+	sf::Texture texture;
 };
 
 /**
@@ -136,12 +140,11 @@ struct DrawableComponent : public Component
 */
 struct WeaponComponent : public Component
 {
-	std::vector<std::unique_ptr<Weapon>> weapons;
-
 	/**
 	* @brief Функция добавляет оружие в список оружия сущности
 	*/
 	void AddWeapon(std::unique_ptr<Weapon> weapon);
+	std::vector<std::unique_ptr<Weapon>> weapons;
 };
 
 /**
@@ -149,14 +152,14 @@ struct WeaponComponent : public Component
 */
 struct LifetimeComponent : public Component
 {
-	float lifetime = 0.0f;
-	float maxLifeTime = 0.0f;
-
 	/**
 	* @brief Основной конструктор
 	* @param float maxLifetime - максимальное время жизни, по истечению которого сущность будет удалена
 	*/
-	LifetimeComponent(float maxLifeTime) : maxLifeTime(maxLifeTime), lifetime(maxLifeTime) {}
+	LifetimeComponent(float maxLifeTime) : maxLifeTime(maxLifeTime), time(maxLifeTime) {}
+
+	float time = 0.0f;
+	float maxLifeTime = 0.0f;
 };
 
 /**
@@ -164,11 +167,6 @@ struct LifetimeComponent : public Component
 */
 struct OrbitalComponent : public Component
 {
-	float orbitRadius = 0.0f;
-	float orbitSpeed = 0.0f;
-	float angle = 0.0f;
-	TransformComponent* parentTransform;
-
 	/**
 	* @brief Основной конструктов
 	* @param float radius - радиус орбиты
@@ -178,6 +176,11 @@ struct OrbitalComponent : public Component
 	OrbitalComponent(float radius, float speed, TransformComponent* parent)
 		: orbitRadius(radius), orbitSpeed(speed), parentTransform(parent) {
 	}
+
+	float orbitRadius = 0.0f;
+	float orbitSpeed = 0.0f;
+	float angle = 0.0f;
+	TransformComponent* parentTransform;
 };
 
 /**
@@ -185,14 +188,6 @@ struct OrbitalComponent : public Component
 */
 struct AnimationComponent : public Component
 {
-	std::vector<sf::Texture> frames;
-	float frameTime = 0.0f;
-	float elapsedTime = 0.0f;
-	int currentFrameIndex = 0;
-	bool loop = true;
-	float duration = -1.0f;
-	bool isAnimating = false;
-
 	/**
 	* @brief Основной конструктор
 	* @param std::vector<sf::Texture> frames - набор картинок для покадровой анимации
@@ -206,5 +201,76 @@ struct AnimationComponent : public Component
 		bool loop = true,
 		float duration = -1.0f,
 		bool isAnimating = false
-	) : frames(std::move(frames)), frameTime(frameTime), loop(loop), duration(duration), isAnimating(isAnimating) {}
+	) : frames(std::move(frames)), frameTime(frameTime), loop(loop), duration(duration), isAnimating(isAnimating) {
+	}
+
+	std::vector<sf::Texture> frames;
+	float frameTime = 0.0f;
+	float elapsedTime = 0.0f;
+	int currentFrameIndex = 0;
+	bool loop = true;
+	float duration = -1.0f;
+	bool isAnimating = false;
+};
+
+/**
+* @brief Компонент хранит данные, необходимые для получения урона по здоровью
+*/
+struct HealthComponent : public Component
+{
+	/**
+	* @brief Основной конструктов
+	* @param int maxHealth - максимальное здоровье сущности
+	* @param float damageCooldown - перезарядка для получения урона
+	*/
+	HealthComponent(int maxHealth, float damageCooldown)
+		: maxHealth(maxHealth), currentHealth(maxHealth), damageCooldown(damageCooldown) {
+	}
+
+	int maxHealth;
+	int currentHealth;
+	float damageCooldown;
+	float cooldownTimer = 0.0f;
+
+	void TryTakeDamage(int damage)
+	{
+		if (cooldownTimer <= 0.0f)
+		{
+			currentHealth -= damage;
+			cooldownTimer = damageCooldown;
+			if (currentHealth < 0) 
+			{
+				currentHealth = 0;
+			}
+		}
+	}
+
+	void UpdateCooldown(float deltaTime)
+	{
+		if (cooldownTimer > 0.0f)
+		{
+			cooldownTimer -= deltaTime;
+		}
+	}
+
+	bool IsAlive() const
+	{
+		return currentHealth > 0;
+	}
+};
+
+struct PlayerHealthComponent : public HealthComponent 
+{
+	PlayerHealthComponent(int maxHealth, float damageCooldown)
+		: HealthComponent(maxHealth, damageCooldown) {}
+
+	void TryTakeDamage(int damage)
+	{
+		if (cooldownTimer <= 0.0f) 
+		{
+			currentHealth -= damage;
+			cooldownTimer = damageCooldown;
+			if (currentHealth < 0) currentHealth = 1;
+		}
+	}
 };

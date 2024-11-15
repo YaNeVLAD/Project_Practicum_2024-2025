@@ -138,6 +138,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Factory\EnemyFactory\EnemyFactory.cpp" />
+    <ClCompile Include="src\Factory\PlayerFactory\PlayerFactory.cpp" />
     <ClCompile Include="src\System\Collision\CollisionSystem.cpp" />
     <ClCompile Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.cpp" />
     <ClCompile Include="src\Entity\Weapon\Book\Book.cpp" />
@@ -149,13 +151,16 @@
     <ClCompile Include="src\System\Input\InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\System\Movement\MovementSystem.cpp" />
-    <ClCompile Include="src\System\Projectile\LifetimeSystem.cpp" />
+    <ClCompile Include="src\System\Lifetime\LifetimeSystem.cpp" />
     <ClCompile Include="src\System\Render\RenderSystem.cpp" />
+    <ClCompile Include="src\Factory\SystemFactory\SystemFactory.cpp" />
     <ClCompile Include="utils\SpriteSheet.cpp" />
     <ClCompile Include="src\Manager\System\SystemManager.cpp" />
     <ClCompile Include="src\System\Weapon\WeaponSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Factory\EnemyFactory\EnemyFactory.h" />
+    <ClInclude Include="src\Factory\PlayerFactory\PlayerFactory.h" />
     <ClInclude Include="src\System\Collision\CollisionSystem.h" />
     <ClInclude Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.h" />
     <ClInclude Include="src\Entity\Weapon\Book\Book.h" />
@@ -167,8 +172,9 @@
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\System\Input\InputSystem.h" />
     <ClInclude Include="src\System\Movement\MovementSystem.h" />
-    <ClInclude Include="src\System\Projectile\LifetimeSystem.h" />
+    <ClInclude Include="src\System\Lifetime\LifetimeSystem.h" />
     <ClInclude Include="src\System\Render\RenderSystem.h" />
+    <ClInclude Include="src\Factory\SystemFactory\SystemFactory.h" />
     <ClInclude Include="utils\SpriteSheet.h" />
     <ClInclude Include="src\System\System.h" />
     <ClInclude Include="src\Manager\System\SystemManager.h" />
