@@ -7,11 +7,20 @@
 
 #include "../component/Components.h"
 
-class Entity {
+enum EntityType
+{
+    Player = 1 << 0,
+    Enemy = 1 << 1,
+    Projectile = 1 << 2,
+};
+
+class Entity 
+{
 public:
     using IdType = std::size_t;
+    
 
-    explicit Entity(IdType id) : mId(id) {}
+    explicit Entity(IdType id, EntityType type) : mId(id), mType(type) {}
 
     // Запрещаем копирование
     Entity(const Entity&) = delete;
@@ -35,8 +44,10 @@ public:
     }
 
     IdType GetId() const { return mId; }
+    EntityType GetType() const { return mType; }
 
 private:
     IdType mId;
+    EntityType mType;
     std::unordered_map<std::type_index, std::unique_ptr<Component>> mComponents;
 };

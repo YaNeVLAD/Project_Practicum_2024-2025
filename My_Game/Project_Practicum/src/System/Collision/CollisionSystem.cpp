@@ -1,4 +1,5 @@
 #include "CollisionSystem.h"
+#include <iostream>
 #include <set>
 
 void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)

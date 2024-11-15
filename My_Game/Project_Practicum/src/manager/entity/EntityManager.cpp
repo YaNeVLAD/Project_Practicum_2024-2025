@@ -16,8 +16,8 @@ void EntityManager::RemoveEntity(Entity::IdType id)
 	}
 }
 
-Entity& EntityManager::CreateEntity()
+Entity& EntityManager::CreateEntity(EntityType type)
 {
-	mEntities.emplace_back(mNextEntityId++);
+	mEntities.emplace_back(mNextEntityId++, type);
 	return mEntities.back();
 }

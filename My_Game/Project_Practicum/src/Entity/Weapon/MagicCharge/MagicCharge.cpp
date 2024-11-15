@@ -5,7 +5,7 @@
 
 void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* parentTransform)
 {
-	Entity& projectile = entityManager.CreateEntity();
+	Entity& projectile = entityManager.CreateEntity(EntityType::Projectile);
 	projectile.AddComponent<TransformComponent>(
 		parentTransform->x + 16, parentTransform->y + 32,
 		parentTransform->lastDirection.x * projectileSpeed,
