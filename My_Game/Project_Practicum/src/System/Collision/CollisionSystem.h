@@ -26,4 +26,5 @@ public:
 private:
     void ApplyDamage(Entity* entity, int damage);
 	void HandleCollision(Entity* first, Entity* second);
+    void HandlePushAway(Entity* first, Entity* second);
 };

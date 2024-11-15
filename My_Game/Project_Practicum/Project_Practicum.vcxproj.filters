@@ -114,6 +114,9 @@
     <ClCompile Include="src\Factory\SystemFactory\SystemFactory.cpp">
       <Filter>Исходные файлы\src\Factories</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\Spawn\SpawnSystem.cpp">
+      <Filter>Исходные файлы\src\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="src\Factory\SystemFactory\SystemFactory.h">
       <Filter>Файлы заголовков\Factories</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Spawn\SpawnSystem.h">
+      <Filter>Файлы заголовков\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

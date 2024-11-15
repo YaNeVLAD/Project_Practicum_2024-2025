@@ -13,4 +13,5 @@ void SystemFactory::InitSystems(SystemManager& systemManager, sf::RenderWindow& 
     systemManager.AddSystem<LifetimeSystem>(camera);
     systemManager.AddSystem<OrbitalProjectileSystem>();
     systemManager.AddSystem<CollisionSystem>();
+    systemManager.AddSystem<SpawnSystem>(camera, 1.0f);
 }
