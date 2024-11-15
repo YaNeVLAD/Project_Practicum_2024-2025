@@ -4,10 +4,10 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 {
     std::vector<Entity*> entitiesToDelete;
 
-    for (auto& entity : entityManager.GetEntitiesWithComponents<TransformComponent, LifetimeComponent>())
+    for (auto& entity : entityManager.GetEntitiesWithComponents<LifetimeComponent>())
     {
         auto lifetime = entity->GetComponent<LifetimeComponent>();
-        auto transform = entity->GetComponent<TransformComponent>();
+        //auto transform = entity->GetComponent<TransformComponent>();
 
         lifetime->lifetime -= deltaTime;
 
@@ -22,9 +22,9 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
         //}
     }
 
-    for (auto& projectile : entitiesToDelete)
+    for (auto& entity : entitiesToDelete)
     {
-        entityManager.RemoveEntity(projectile->GetId());
+        entityManager.RemoveEntity(entity->GetId());
     }
 }
 

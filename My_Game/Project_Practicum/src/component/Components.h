@@ -63,14 +63,22 @@ struct RotationComponent : public Component
 */
 struct CollisionComponent : public Component
 {
-	std::unique_ptr<sf::Shape> shape;
+	std::unique_ptr<sf::RectangleShape> shape;
 	sf::Vector2f offset;
 
-	sf::FloatRect getRect(float x, float y) const
+	/**
+	* @brief Метод для получения размеров зоны коллизии
+	*/
+	sf::FloatRect getRect() const
 	{
 		return shape->getGlobalBounds();
 	}
 
+	/**
+	* @brief Метод для обновления позиции зоны коллизии
+	* @param float x - координата x
+	* @param float y - координата y
+	*/
 	void UpdatePosition(float x, float y) const
 	{
 		shape->setPosition(x + offset.x, y + offset.y);
@@ -81,7 +89,7 @@ struct CollisionComponent : public Component
 	* @param std::unique_ptr<sf::Shape> shape - указатель на фигуру коллизии
 	* @param sf::Vector2f offset - смещение относительно центра сущности
 	*/
-	CollisionComponent(std::unique_ptr<sf::Shape> shape, sf::Vector2f offset = sf::Vector2f(0.0f, 0.0f)) 
+	CollisionComponent(std::unique_ptr<sf::RectangleShape> shape, sf::Vector2f offset = sf::Vector2f(0.0f, 0.0f)) 
 		: shape(std::move(shape)), offset(offset) {}
 };
 

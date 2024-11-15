@@ -14,7 +14,6 @@ void RenderSystem::Update(EntityManager& entityManager, float deltaTime)
 
 		if (collision)
 		{
-			collision->UpdatePosition(transform->x, transform->y);
 			auto& shape = collision->shape;
 			shape->setOutlineColor(sf::Color::Green);
 			shape->setOutlineThickness(1.0f);
