@@ -2,7 +2,7 @@
 
 #include "../System.h"
 
-class SpawnSystem : public System
+class SpawnSystem : public IUpdateSystem
 {
 public:
 	SpawnSystem(sf::View& camera, float spawnInterval) : mCamera(camera), mSpawnInterval(spawnInterval) {}

@@ -2,7 +2,7 @@
 
 #include "../System.h"
 
-class LifetimeSystem : public System
+class LifetimeSystem : public IUpdateSystem
 {
 public:
 	LifetimeSystem(sf::View& camera) : mCamera(camera) {}

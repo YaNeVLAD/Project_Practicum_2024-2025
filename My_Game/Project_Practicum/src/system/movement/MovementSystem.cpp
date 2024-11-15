@@ -18,7 +18,7 @@ void MovementSystem::Update(EntityManager& entityManager, float deltaTime)
 
 		if (entity->GetType() & EntityType::Enemy)
 		{
-			MoveTowardsTarget(*transform, playerPosition, 100.0f, deltaTime); // Скорость врага 100
+			MoveTowardsTarget(*transform, playerPosition, 100.0f, deltaTime);
 		}
 
 		if (collision)
@@ -52,17 +52,24 @@ void MovementSystem::MoveTowardsTarget(TransformComponent& transform, const sf::
 
 void MovementSystem::UpdateDirectionAndRotation(TransformComponent& transform, RotationComponent* rotation, CollisionComponent* collision)
 {
-	float speedVectorLen = std::sqrt(transform.vx * transform.vx + transform.vy * transform.vy);
-	transform.lastDirection = sf::Vector2f(transform.vx / speedVectorLen, transform.vy / speedVectorLen);
+	sf::Vector2f newDirection = sf::Vector2f(
+		std::copysign(1.0f, transform.vx),
+		std::copysign(1.0f, transform.vy)
+	);
 
-	if (rotation)
+	if (transform.lastDirection != newDirection)
 	{
-		float angle = std::atan2(transform.lastDirection.y, transform.lastDirection.x) * (180.0f / 3.14159f);
-		rotation->angle = angle;
+		transform.lastDirection = newDirection;
 
-		if (collision)
+		if (rotation)
 		{
-			collision->shape->setRotation(angle);
+			float angle = std::atan2(transform.lastDirection.y, transform.lastDirection.x) * (180.0f / 3.14159f);
+			rotation->angle = angle;
+
+			if (collision)
+			{
+				collision->shape->setRotation(angle);
+			}
 		}
 	}
 }

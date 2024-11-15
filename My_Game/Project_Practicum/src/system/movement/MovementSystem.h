@@ -2,7 +2,7 @@
 
 #include "../System.h"
 
-class MovementSystem : public System
+class MovementSystem : public IUpdateSystem
 {
 public:
 	void Update(EntityManager& entityManager, float deltaTime) override;

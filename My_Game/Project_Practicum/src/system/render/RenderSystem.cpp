@@ -1,6 +1,6 @@
 #include "RenderSystem.h"
 
-void RenderSystem::Update(EntityManager& entityManager, float deltaTime)
+void RenderSystem::Render(EntityManager& entityManager, float deltaTime)
 {
 	for (auto& entity : entityManager.GetEntitiesWithComponents<TransformComponent, DrawableComponent>())
 	{
@@ -29,11 +29,15 @@ void RenderSystem::Update(EntityManager& entityManager, float deltaTime)
 		}
 		else
 		{
-			sf::Vector2f scale = drawable->sprite.getScale();
-			scale.x *= std::copysign(1.0f, transform->lastDirection.x);
-			drawable->sprite.setScale(scale);
-		}
+			float currentScaleX = drawable->sprite.getScale().x;
+			float newScaleX = std::copysign(1.0f, transform->lastDirection.x) * std::abs(currentScaleX);
 
+			if (currentScaleX != newScaleX)
+			{
+				drawable->sprite.setScale(newScaleX, drawable->sprite.getScale().y);
+			}
+		}
+		
 		if (animation && !animation->isAnimating && !animation->frames.empty())
 		{
 			drawable->sprite.setTexture(animation->frames[0]);

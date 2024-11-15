@@ -2,12 +2,12 @@
 
 #include "../System.h"
 
-class RenderSystem : public System
+class RenderSystem : public IRenderSystem
 {
 public:
 	RenderSystem(sf::RenderWindow& window) : mWindow(window) {}
 
-	void Update(EntityManager& entityManager, float deltaTime) override;
+	void Render(EntityManager& entityManager, float deltaTime) override;
 
 private:
 	void RenderAnimatedEntity(DrawableComponent* drawable, AnimationComponent* animation);

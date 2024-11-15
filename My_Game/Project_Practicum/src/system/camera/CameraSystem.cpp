@@ -1,6 +1,6 @@
 #include "CameraSystem.h"
 
-void CameraSystem::Update(EntityManager& entityManager, float deltaTime)
+void CameraSystem::Render(EntityManager& entityManager, float deltaTime)
 {
 	for (auto& entity : entityManager.GetEntitiesWithComponents<CameraComponent, TransformComponent>())
 	{

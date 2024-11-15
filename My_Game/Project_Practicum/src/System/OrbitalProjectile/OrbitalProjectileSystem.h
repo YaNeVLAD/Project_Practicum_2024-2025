@@ -2,7 +2,7 @@
 
 #include "../System.h"
 
-class OrbitalProjectileSystem : public System
+class OrbitalProjectileSystem : public IUpdateSystem
 {
 public:
 	void Update(EntityManager& entityManager, float deltaTime) override;

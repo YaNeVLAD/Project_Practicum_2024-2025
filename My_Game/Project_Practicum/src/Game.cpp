@@ -37,16 +37,16 @@ void Game::Run()
 
 		float deltaTime = clock.restart().asSeconds();
 
-		for (auto& system : mSystemManager.GetSystems())
+		for (auto& system : mSystemManager.GetUpdateSystems())
 		{
 			system->Update(mEntityManager, deltaTime);
 		}
 
 		mWindow.clear();
 
-		if (auto renderSystem = mSystemManager.GetSystem<RenderSystem>())
+		for (auto& system : mSystemManager.GetRenderSystems())
 		{
-			renderSystem->Update(mEntityManager, deltaTime);
+			system->Render(mEntityManager, deltaTime);
 		}
 
 		mWindow.display();
