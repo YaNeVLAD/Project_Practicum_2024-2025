@@ -2,7 +2,7 @@
 
 #include "../System.h"
 
-class WeaponSystem : public System
+class WeaponSystem : public IUpdateSystem
 {
 public:
 	void Update(EntityManager& entityManager, float deltaTime) override;

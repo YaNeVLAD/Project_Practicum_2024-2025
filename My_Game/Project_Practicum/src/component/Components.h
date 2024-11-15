@@ -51,7 +51,7 @@ struct RotationComponent : public Component
 	* @brief Основной конструктор
 	* @param float angle - угол наклона сущности
 	*/
-	RotationComponent(float angle) : angle(angle) {}
+	RotationComponent(float angle = 0.0f) : angle(angle) {}
 	
 	float angle;
 };

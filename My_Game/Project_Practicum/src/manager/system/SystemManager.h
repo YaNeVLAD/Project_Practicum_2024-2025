@@ -17,7 +17,18 @@ public:
 	template<typename SystemType, typename... Args>
 	void AddSystem(Args&&... args)
 	{
-		mSystems.push_back(std::make_unique<SystemType>(std::forward<Args>(args)...));
+		auto system = std::make_unique<SystemType>(std::forward<Args>(args)...);
+
+        if constexpr (std::is_base_of_v<IRenderSystem, SystemType>)
+        {
+            mRenderSystems.push_back(std::move(system));
+        }
+        else if constexpr (std::is_base_of_v<IUpdateSystem, SystemType>)
+        {
+            mUpdateSystems.push_back(std::move(system));
+        }
+
+        mSystems.push_back(std::move(system));
 	}
 
     template<typename SystemType>
@@ -33,8 +44,14 @@ public:
         return nullptr;
     }
 
-	std::vector<std::unique_ptr<System>>& GetSystems();
+	std::vector<std::unique_ptr<System>>& GetAllSystems();
+
+    std::vector<std::unique_ptr<IUpdateSystem>>& GetUpdateSystems();
+
+    std::vector<std::unique_ptr<IRenderSystem>>& GetRenderSystems();
 
 private:
 	std::vector<std::unique_ptr<System>> mSystems;
+    std::vector<std::unique_ptr<IUpdateSystem>> mUpdateSystems;
+    std::vector<std::unique_ptr<IRenderSystem>> mRenderSystems;
 };

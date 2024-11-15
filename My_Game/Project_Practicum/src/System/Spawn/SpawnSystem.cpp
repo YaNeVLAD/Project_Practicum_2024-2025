@@ -1,4 +1,5 @@
 #include "SpawnSystem.h"
+
 #include "../../Factory/EnemyFactory/EnemyFactory.h"
 #include <iostream>
 

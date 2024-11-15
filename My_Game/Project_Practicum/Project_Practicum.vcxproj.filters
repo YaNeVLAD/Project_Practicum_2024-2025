@@ -55,6 +55,18 @@
     <Filter Include="Файлы заголовков\Factories">
       <UniqueIdentifier>{f3d22525-3e4c-4072-85d7-36ae4ad91a99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\src\Systems\Update">
+      <UniqueIdentifier>{4bfc431b-3d9c-4712-8ebb-dc5f950faa52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\src\Systems\Render">
+      <UniqueIdentifier>{b74fc8ad-bcfc-4d18-9784-41eda1e29ddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Systems\Update">
+      <UniqueIdentifier>{eb44afa9-0bf5-4e4c-8b70-2ab83c6da848}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Systems\Render">
+      <UniqueIdentifier>{0d245500-9822-4f46-817f-660108e5a783}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -64,24 +76,6 @@
       <Filter>Исходные файлы\src\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\System\Weapon\WeaponSystem.cpp">
-      <Filter>Исходные файлы\src\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\System\Render\RenderSystem.cpp">
-      <Filter>Исходные файлы\src\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\System\Lifetime\LifetimeSystem.cpp">
-      <Filter>Исходные файлы\src\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.cpp">
-      <Filter>Исходные файлы\src\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\System\Movement\MovementSystem.cpp">
-      <Filter>Исходные файлы\src\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\System\Input\InputSystem.cpp">
-      <Filter>Исходные файлы\src\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\System\Camera\CameraSystem.cpp">
       <Filter>Исходные файлы\src\Systems</Filter>
     </ClCompile>
     <ClCompile Include="src\Entity\Weapon\Book\Book.cpp">
@@ -102,9 +96,6 @@
     <ClCompile Include="src\Manager\Entity\EntityManager.cpp">
       <Filter>Исходные файлы\src\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="src\System\Collision\CollisionSystem.cpp">
-      <Filter>Исходные файлы\src\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="src\Factory\PlayerFactory\PlayerFactory.cpp">
       <Filter>Исходные файлы\src\Factories</Filter>
     </ClCompile>
@@ -114,8 +105,29 @@
     <ClCompile Include="src\Factory\SystemFactory\SystemFactory.cpp">
       <Filter>Исходные файлы\src\Factories</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\Camera\CameraSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Collision\CollisionSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Update</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Input\InputSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Update</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Lifetime\LifetimeSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Update</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Movement\MovementSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Update</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Update</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Render\RenderSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Render</Filter>
+    </ClCompile>
     <ClCompile Include="src\System\Spawn\SpawnSystem.cpp">
-      <Filter>Исходные файлы\src\Systems</Filter>
+      <Filter>Исходные файлы\src\Systems\Update</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,27 +149,6 @@
     <ClInclude Include="src\Entity\Weapon\MagicCharge\MagicCharge.h">
       <Filter>Файлы заголовков\Entity\Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="src\System\Render\RenderSystem.h">
-      <Filter>Файлы заголовков\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\System\Weapon\WeaponSystem.h">
-      <Filter>Файлы заголовков\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\System\Lifetime\LifetimeSystem.h">
-      <Filter>Файлы заголовков\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.h">
-      <Filter>Файлы заголовков\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\System\Movement\MovementSystem.h">
-      <Filter>Файлы заголовков\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\System\Input\InputSystem.h">
-      <Filter>Файлы заголовков\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\System\Camera\CameraSystem.h">
-      <Filter>Файлы заголовков\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="src\Manager\Entity\EntityManager.h">
       <Filter>Файлы заголовков\Managers</Filter>
     </ClInclude>
@@ -170,9 +161,6 @@
     <ClInclude Include="utils\SpriteSheet.h">
       <Filter>Файлы заголовков\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\System\Collision\CollisionSystem.h">
-      <Filter>Файлы заголовков\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="src\Factory\PlayerFactory\PlayerFactory.h">
       <Filter>Файлы заголовков\Factories</Filter>
     </ClInclude>
@@ -182,8 +170,32 @@
     <ClInclude Include="src\Factory\SystemFactory\SystemFactory.h">
       <Filter>Файлы заголовков\Factories</Filter>
     </ClInclude>
+    <ClInclude Include="src\System\Camera\CameraSystem.h">
+      <Filter>Файлы заголовков\Systems\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Render\RenderSystem.h">
+      <Filter>Файлы заголовков\Systems\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Weapon\WeaponSystem.h">
+      <Filter>Файлы заголовков\Systems\Update</Filter>
+    </ClInclude>
     <ClInclude Include="src\System\Spawn\SpawnSystem.h">
-      <Filter>Файлы заголовков\Systems</Filter>
+      <Filter>Файлы заголовков\Systems\Update</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.h">
+      <Filter>Файлы заголовков\Systems\Update</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Movement\MovementSystem.h">
+      <Filter>Файлы заголовков\Systems\Update</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Lifetime\LifetimeSystem.h">
+      <Filter>Файлы заголовков\Systems\Update</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Input\InputSystem.h">
+      <Filter>Файлы заголовков\Systems\Update</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Collision\CollisionSystem.h">
+      <Filter>Файлы заголовков\Systems\Update</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 #include "WeaponSystem.h"
+
 #include "../../entity/weapon/Weapon.h"
 
 void WeaponSystem::Update(EntityManager& entityManager, float deltaTime)

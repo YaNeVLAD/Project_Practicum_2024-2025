@@ -18,7 +18,7 @@ struct CollisionEvent {
         : x(x), type(type), entity(entity), rect(rect) {}
 };
 
-class CollisionSystem : public System
+class CollisionSystem : public IUpdateSystem
 {
 public:
 	void Update(EntityManager& entityManager, float deltaTime) override;
