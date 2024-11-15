@@ -96,6 +96,9 @@
     <ClCompile Include="src\Manager\Entity\EntityManager.cpp">
       <Filter>Исходные файлы\src\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\Collision\CollisionSystem.cpp">
+      <Filter>Исходные файлы\src\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -149,5 +152,11 @@
     <ClInclude Include="utils\SpriteSheet.h">
       <Filter>Файлы заголовков\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\System\Collision\CollisionSystem.h">
+      <Filter>Файлы заголовков\Systems</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

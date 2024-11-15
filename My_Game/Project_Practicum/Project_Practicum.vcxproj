@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\System\Collision\CollisionSystem.cpp" />
     <ClCompile Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.cpp" />
     <ClCompile Include="src\Entity\Weapon\Book\Book.cpp" />
     <ClCompile Include="src\Entity\Weapon\MagicCharge\MagicCharge.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="src\System\Weapon\WeaponSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\System\Collision\CollisionSystem.h" />
     <ClInclude Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.h" />
     <ClInclude Include="src\Entity\Weapon\Book\Book.h" />
     <ClInclude Include="src\Entity\Weapon\MagicCharge\MagicCharge.h" />
@@ -172,6 +174,9 @@
     <ClInclude Include="src\Manager\System\SystemManager.h" />
     <ClInclude Include="src\Entity\Weapon\Weapon.h" />
     <ClInclude Include="src\System\Weapon\WeaponSystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

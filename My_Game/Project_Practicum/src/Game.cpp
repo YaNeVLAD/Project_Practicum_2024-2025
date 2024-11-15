@@ -17,6 +17,7 @@ void Game::InitSystems()
 	mSystemManager.AddSystem<WeaponSystem>();
 	mSystemManager.AddSystem<LifetimeSystem>(mCamera);
 	mSystemManager.AddSystem<OrbitalProjectileSystem>();
+	mSystemManager.AddSystem<CollisionSystem>();
 }
 
 void Game::InitPlayer()
@@ -26,9 +27,14 @@ void Game::InitPlayer()
 	player.AddComponent<InputComponent>();
 	player.AddComponent<CameraComponent>();
 	player.AddComponent<WeaponComponent>();
+
 	auto weapons = player.GetComponent<WeaponComponent>();
 	weapons->AddWeapon(std::make_unique<MagicCharge>());
 	weapons->AddWeapon(std::make_unique<Book>());
+	
+	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(100.0f, 128.0f));
+	collisionShape->setOrigin(50.0f, 64.0f);
+	player.AddComponent<CollisionComponent>(std::move(collisionShape), sf::Vector2f(0.0f, 35.0f));
 
 	std::vector<sf::Texture> frames = SpriteSheet::LoadTextures("assets/character/Walk.png", 128, 128);
 	player.AddComponent<AnimationComponent>(frames, 0.2f, true, -1.0f, false);
@@ -39,7 +45,11 @@ void Game::InitEnemy()
 {
 	auto& enemy = mEntityManager.CreateEntity();
 	enemy.AddComponent<TransformComponent>(100.0f, 100.0f, 0.0f, 0.0f);
-	enemy.AddComponent<DrawableComponent>(40, 40, sf::Color::Green);
+	enemy.AddComponent<DrawableComponent>(40, 40, sf::Color::Red);
+
+	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(40, 40));
+	collisionShape->setOrigin(20.0f, 20.0f);
+	enemy.AddComponent<CollisionComponent>(std::move(collisionShape));
 }
 
 void Game::Run()
