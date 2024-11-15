@@ -4,16 +4,30 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 {
     std::vector<Entity*> entitiesToDelete;
 
-    for (auto& entity : entityManager.GetEntitiesWithComponents<LifetimeComponent>())
+    for (auto& entity : entityManager.GetEntities())
     {
-        auto lifetime = entity->GetComponent<LifetimeComponent>();
+        auto lifetime = entity.GetComponent<LifetimeComponent>();
+        auto health = entity.GetComponent<HealthComponent>();
         //auto transform = entity->GetComponent<TransformComponent>();
 
-        lifetime->lifetime -= deltaTime;
+        if (health)
+        {
+            health->UpdateCooldown(deltaTime);
 
-        if (lifetime->lifetime <= 0.0f) {
-            entitiesToDelete.push_back(entity);
-            continue;
+            if (!health->IsAlive())
+            {
+                entitiesToDelete.push_back(&entity);
+            }
+        }
+        
+        if (lifetime)
+        {
+            lifetime->time -= deltaTime;
+
+            if (lifetime->time <= 0.0f) {
+                entitiesToDelete.push_back(&entity);
+                continue;
+            }
         }
 
         //if (IsOutOfBound(transform->x, transform->y))

@@ -49,6 +49,12 @@
     <Filter Include="Файлы заголовков\Utils">
       <UniqueIdentifier>{aa10680d-0a71-4cff-a9ed-fc9176e51816}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\src\Factories">
+      <UniqueIdentifier>{1206e6e7-6a77-4a2d-88da-fb498ed95633}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Factories">
+      <UniqueIdentifier>{f3d22525-3e4c-4072-85d7-36ae4ad91a99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,7 +69,7 @@
     <ClCompile Include="src\System\Render\RenderSystem.cpp">
       <Filter>Исходные файлы\src\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="src\System\Projectile\LifetimeSystem.cpp">
+    <ClCompile Include="src\System\Lifetime\LifetimeSystem.cpp">
       <Filter>Исходные файлы\src\Systems</Filter>
     </ClCompile>
     <ClCompile Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.cpp">
@@ -99,6 +105,15 @@
     <ClCompile Include="src\System\Collision\CollisionSystem.cpp">
       <Filter>Исходные файлы\src\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="src\Factory\PlayerFactory\PlayerFactory.cpp">
+      <Filter>Исходные файлы\src\Factories</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Factory\EnemyFactory\EnemyFactory.cpp">
+      <Filter>Исходные файлы\src\Factories</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Factory\SystemFactory\SystemFactory.cpp">
+      <Filter>Исходные файлы\src\Factories</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -125,7 +140,7 @@
     <ClInclude Include="src\System\Weapon\WeaponSystem.h">
       <Filter>Файлы заголовков\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="src\System\Projectile\LifetimeSystem.h">
+    <ClInclude Include="src\System\Lifetime\LifetimeSystem.h">
       <Filter>Файлы заголовков\Systems</Filter>
     </ClInclude>
     <ClInclude Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.h">
@@ -154,6 +169,15 @@
     </ClInclude>
     <ClInclude Include="src\System\Collision\CollisionSystem.h">
       <Filter>Файлы заголовков\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Factory\PlayerFactory\PlayerFactory.h">
+      <Filter>Файлы заголовков\Factories</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Factory\EnemyFactory\EnemyFactory.h">
+      <Filter>Файлы заголовков\Factories</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Factory\SystemFactory\SystemFactory.h">
+      <Filter>Файлы заголовков\Factories</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
