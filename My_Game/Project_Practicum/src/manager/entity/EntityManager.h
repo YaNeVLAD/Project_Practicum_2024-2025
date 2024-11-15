@@ -5,7 +5,7 @@
 class EntityManager
 {
 public:
-	Entity& CreateEntity();
+	Entity& CreateEntity(EntityType type);
 
 	std::vector<Entity>& GetEntities();
 

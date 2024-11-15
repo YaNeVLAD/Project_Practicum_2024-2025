@@ -1,8 +1,6 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
-#include <iostream>
-#include <optional>
 
 class Weapon;
 
@@ -118,10 +116,6 @@ struct DrawableComponent : public Component
 			sprite.setTexture(texture);
 			sprite.setOrigin(width / 2.0f, height / 2.0f);
 		}
-		else
-		{
-			std::cerr << "Не удалось создать текстуру" << std::endl;
-		}
 	}
 
 	/**
@@ -144,6 +138,9 @@ struct WeaponComponent : public Component
 {
 	std::vector<std::unique_ptr<Weapon>> weapons;
 
+	/**
+	* @brief Функция добавляет оружие в список оружия сущности
+	*/
 	void AddWeapon(std::unique_ptr<Weapon> weapon);
 };
 
@@ -162,14 +159,23 @@ struct LifetimeComponent : public Component
 	LifetimeComponent(float maxLifeTime) : maxLifeTime(maxLifeTime), lifetime(maxLifeTime) {}
 };
 
-struct OrbitalProjectileComponent : public Component
+/**
+* @brief Компонент обозначает что сущность будет вращаться по орбите вокруг другой сущности
+*/
+struct OrbitalComponent : public Component
 {
 	float orbitRadius = 0.0f;
 	float orbitSpeed = 0.0f;
 	float angle = 0.0f;
 	TransformComponent* parentTransform;
 
-	OrbitalProjectileComponent(float radius, float speed, TransformComponent* parent)
+	/**
+	* @brief Основной конструктов
+	* @param float radius - радиус орбиты
+	* @param float speed - угловая скорость
+	* @param TransformComponent* parent - указатель на TransformComponent родителя
+	*/
+	OrbitalComponent(float radius, float speed, TransformComponent* parent)
 		: orbitRadius(radius), orbitSpeed(speed), parentTransform(parent) {
 	}
 };
@@ -186,6 +192,7 @@ struct AnimationComponent : public Component
 	bool loop = true;
 	float duration = -1.0f;
 	bool isAnimating = false;
+
 	/**
 	* @brief Основной конструктор
 	* @param std::vector<sf::Texture> frames - набор картинок для покадровой анимации
@@ -199,6 +206,5 @@ struct AnimationComponent : public Component
 		bool loop = true,
 		float duration = -1.0f,
 		bool isAnimating = false
-	) : frames(std::move(frames)), frameTime(frameTime), loop(loop), duration(duration), isAnimating(isAnimating) {
-	}
+	) : frames(std::move(frames)), frameTime(frameTime), loop(loop), duration(duration), isAnimating(isAnimating) {}
 };
