@@ -3,7 +3,7 @@
 
 void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 {
-	auto entities = entityManager.GetEntitiesWithComponents<CollisionComponent, TransformComponent>();
+	auto entities = entityManager.GetEntitiesWithComponents<CollisionComponent>();
 	if (entities.empty()) return;
 
 	std::vector<CollisionEvent> events;
@@ -12,8 +12,7 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 	for (auto& entity : entities)
 	{
 		auto collision = entity->GetComponent<CollisionComponent>();
-		auto transform = entity->GetComponent<TransformComponent>();
-		sf::FloatRect rect = collision->getRect(transform->x, transform->y);
+		sf::FloatRect rect = collision->getRect();
 
 		events.push_back(CollisionEvent(rect.left, 1, entity, rect));
 		events.push_back(CollisionEvent(rect.left + rect.width, -1, entity, rect));
@@ -34,8 +33,7 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 			{
 				const auto& otherEntity = activeRect.second;
 				auto otherCollision = otherEntity->GetComponent<CollisionComponent>();
-				auto otherTransform = otherEntity->GetComponent<TransformComponent>();
-				sf::FloatRect otherRect = otherCollision->getRect(otherTransform->x, otherTransform->y);
+				sf::FloatRect otherRect = otherCollision->getRect();
 
 				if (event.rect.intersects(otherRect))
 				{

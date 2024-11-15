@@ -32,13 +32,13 @@ void Game::InitPlayer()
 	weapons->AddWeapon(std::make_unique<MagicCharge>());
 	weapons->AddWeapon(std::make_unique<Book>());
 	
-	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(100.0f, 128.0f));
-	collisionShape->setOrigin(50.0f, 64.0f);
-	player.AddComponent<CollisionComponent>(std::move(collisionShape), sf::Vector2f(0.0f, 35.0f));
+	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(45, 75));
+	collisionShape->setOrigin(22.5, 37.5);
+	player.AddComponent<CollisionComponent>(std::move(collisionShape), sf::Vector2f(0, 35));
 
 	std::vector<sf::Texture> frames = SpriteSheet::LoadTextures("assets/character/Walk.png", 128, 128);
 	player.AddComponent<AnimationComponent>(frames, 0.2f, true, -1.0f, false);
-	player.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(1.5f, 1.5f));
+	player.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(1.1, 1.1));
 }
 
 void Game::InitEnemy()
@@ -69,7 +69,7 @@ void Game::Run()
 			system->Update(mEntityManager, deltaTime);
 		}
 
-		mWindow.clear();
+		mWindow.clear(sf::Color::White);
 
 		if (auto renderSystem = mSystemManager.GetSystem<RenderSystem>())
 		{
