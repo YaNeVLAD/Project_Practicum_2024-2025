@@ -132,6 +132,9 @@
     <ClCompile Include="src\System\HomingProjectile\HomingProjectileSystem.cpp">
       <Filter>Исходные файлы\src\Systems\Update</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\Interface\InterfaceSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="src\System\HomingProjectile\HomingProjectileSystem.h">
       <Filter>Файлы заголовков\Systems\Update</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Interface\InterfaceSystem.h">
+      <Filter>Файлы заголовков\Systems\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

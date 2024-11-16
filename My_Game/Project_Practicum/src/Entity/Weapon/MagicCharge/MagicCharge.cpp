@@ -15,8 +15,8 @@ void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* paren
 	projectile.AddComponent<AnimationComponent>(mFrames, 0.3f, true, -1.0f, true);
 	projectile.AddComponent<RotationComponent>();
 
-	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(64, 32));
-	collisionShape->setOrigin(32, 16);
+	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
+	collisionShape->setOrigin(16, 16);
 	projectile.AddComponent<CollisionComponent>(std::move(collisionShape));
 
 	projectile.AddComponent<HomingProjectileComponent>(projectileSpeed);
@@ -24,5 +24,5 @@ void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* paren
 
 void MagicCharge::LoadTextures()
 {
-	mFrames = SpriteSheet::LoadTextures("assets/weapon/Charge.png", 64, 128);
+	mFrames = SpriteSheet::LoadTextures("assets/weapon/Charge.png", 64, 64);
 }

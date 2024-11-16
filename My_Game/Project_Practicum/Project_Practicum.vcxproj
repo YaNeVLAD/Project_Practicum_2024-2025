@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\System\Interface\InterfaceSystem.cpp" />
     <ClCompile Include="src\System\HomingProjectile\HomingProjectileSystem.cpp" />
     <ClCompile Include="src\System\Spawn\SpawnSystem.cpp" />
     <ClCompile Include="src\Factory\EnemyFactory\EnemyFactory.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="src\System\Weapon\WeaponSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\System\Interface\InterfaceSystem.h" />
     <ClInclude Include="src\System\HomingProjectile\HomingProjectileSystem.h" />
     <ClInclude Include="src\System\Spawn\SpawnSystem.h" />
     <ClInclude Include="src\Factory\EnemyFactory\EnemyFactory.h" />

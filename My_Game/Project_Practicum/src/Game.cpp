@@ -21,8 +21,6 @@ void Game::InitPlayer()
 
 void Game::InitEnemy()
 {
-	EnemyFactory::Create(mEntityManager, 100, 100);
-	EnemyFactory::Create(mEntityManager, 200, 200);
 }
 
 void Game::Run()
