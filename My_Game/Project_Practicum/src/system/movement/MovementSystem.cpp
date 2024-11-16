@@ -12,6 +12,7 @@ void MovementSystem::Update(EntityManager& entityManager, float deltaTime)
 	for (auto& entity : entityManager.GetEntitiesWithComponents<TransformComponent>())
 	{
 		auto transform = entity->GetComponent<TransformComponent>();
+
 		auto rotation = entity->GetComponent<RotationComponent>();
 
 		auto collision = entity->GetComponent<CollisionComponent>();

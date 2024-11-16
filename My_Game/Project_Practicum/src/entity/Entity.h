@@ -43,6 +43,12 @@ public:
         return it != mComponents.end() ? static_cast<ComponentType*>(it->second.get()) : nullptr;
     }
 
+    template<typename ComponentType>
+    bool HasComponent()
+    {
+        return mComponents.find(std::type_index(typeid(ComponentType))) != mComponents.end();
+    }
+
     IdType GetId() const { return mId; }
     EntityType GetType() const { return mType; }
 

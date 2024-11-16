@@ -2,6 +2,7 @@
 
 #include "SFML/Graphics.hpp"
 
+class Entity;
 class Weapon;
 
 /**
@@ -106,7 +107,7 @@ struct DrawableComponent : public Component
 	* @param const sf::Texture& texture - опциональный, компонент будет отображать переданную текстуру
 	* @param sf::Vector2f scale - масштаб объекта
 	*/
-	DrawableComponent(const sf::Texture& texture, sf::Vector2f scale) : texture(texture)
+	DrawableComponent(const sf::Texture& texture, sf::Vector2f scale = { 1, 1 }) : texture(texture)
 	{
 		sprite.setTexture(texture);
 		sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
@@ -162,10 +163,18 @@ struct LifetimeComponent : public Component
 	float maxLifeTime = 0.0f;
 };
 
+struct HomingProjectileComponent : public Component
+{
+	HomingProjectileComponent(float speed)
+		: speed(speed) {}
+	
+	float speed;
+};
+
 /**
 * @brief Компонент обозначает что сущность будет вращаться по орбите вокруг другой сущности
 */
-struct OrbitalComponent : public Component
+struct OrbitalProjectileComponent : public Component
 {
 	/**
 	* @brief Основной конструктов
@@ -173,7 +182,7 @@ struct OrbitalComponent : public Component
 	* @param float speed - угловая скорость
 	* @param TransformComponent* parent - указатель на TransformComponent родителя
 	*/
-	OrbitalComponent(float radius, float speed, TransformComponent* parent)
+	OrbitalProjectileComponent(float radius, float speed, TransformComponent* parent)
 		: orbitRadius(radius), orbitSpeed(speed), parentTransform(parent) {
 	}
 

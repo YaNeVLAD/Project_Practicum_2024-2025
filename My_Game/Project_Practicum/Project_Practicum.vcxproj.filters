@@ -129,6 +129,9 @@
     <ClCompile Include="src\System\Spawn\SpawnSystem.cpp">
       <Filter>Исходные файлы\src\Systems\Update</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\HomingProjectile\HomingProjectileSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Update</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -195,6 +198,9 @@
       <Filter>Файлы заголовков\Systems\Update</Filter>
     </ClInclude>
     <ClInclude Include="src\System\Collision\CollisionSystem.h">
+      <Filter>Файлы заголовков\Systems\Update</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\HomingProjectile\HomingProjectileSystem.h">
       <Filter>Файлы заголовков\Systems\Update</Filter>
     </ClInclude>
   </ItemGroup>

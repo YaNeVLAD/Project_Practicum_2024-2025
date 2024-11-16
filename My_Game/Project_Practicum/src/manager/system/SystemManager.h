@@ -9,6 +9,7 @@
 #include "../../System/Movement/MovementSystem.h"
 #include "../../System/Lifetime/LifetimeSystem.h"
 #include "../../System/Collision/CollisionSystem.h"
+#include "../../System/HomingProjectile/HomingProjectileSystem.h"
 #include "../../System/OrbitalProjectile/OrbitalProjectileSystem.h"
 
 class SystemManager
