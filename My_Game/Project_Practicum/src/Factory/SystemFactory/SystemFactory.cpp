@@ -16,4 +16,5 @@ void SystemFactory::InitSystems(SystemManager& systemManager, sf::RenderWindow& 
     
     systemManager.AddSystem<CameraSystem>(camera);
     systemManager.AddSystem<RenderSystem>(window);
+    systemManager.AddSystem<InterfaceSystem>(window);
 }

@@ -12,14 +12,14 @@ void RenderSystem::Render(EntityManager& entityManager, float deltaTime)
  
 		auto collision = entity->GetComponent<CollisionComponent>();
 
-		if (collision)
-		{
-			auto& shape = collision->shape;
-			shape->setOutlineColor(sf::Color::Green);
-			shape->setOutlineThickness(1.0f);
-			shape->setFillColor(sf::Color(0, 0, 0, 0)); // Прозрачный
-			mWindow.draw(*shape);
-		}
+		//if (collision)
+		//{
+		//	auto& shape = collision->shape;
+		//	shape->setOutlineColor(sf::Color::Green);
+		//	shape->setOutlineThickness(1.0f);
+		//	shape->setFillColor(sf::Color::Transparent);
+		//	mWindow.draw(*shape);
+		//}
 
 		drawable->sprite.setPosition(transform->x, transform->y);
 
