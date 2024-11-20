@@ -53,7 +53,7 @@ struct RotationComponent : public Component
 	* @param float angle - угол наклона сущности
 	*/
 	RotationComponent(float angle = 0.0f) : angle(angle) {}
-	
+
 	float angle;
 };
 
@@ -166,8 +166,9 @@ struct LifetimeComponent : public Component
 struct HomingProjectileComponent : public Component
 {
 	HomingProjectileComponent(float speed)
-		: speed(speed) {}
-	
+		: speed(speed) {
+	}
+
 	float speed;
 };
 
@@ -247,7 +248,7 @@ struct HealthComponent : public Component
 		{
 			currentHealth -= damage;
 			cooldownTimer = damageCooldown;
-			if (currentHealth < 0) 
+			if (currentHealth < 0)
 			{
 				currentHealth = 0;
 			}
@@ -271,7 +272,7 @@ struct HealthComponent : public Component
 /**
 * @brief Компонент хранит данные, необходимые для получения урона по здоровью игрока
 */
-struct PlayerHealthComponent : public HealthComponent 
+struct PlayerHealthComponent : public HealthComponent
 {
 	/**
 	* @brief Основной конструктов
@@ -279,15 +280,64 @@ struct PlayerHealthComponent : public HealthComponent
 	* @param float damageCooldown - перезарядка для получения урона
 	*/
 	PlayerHealthComponent(int maxHealth, float damageCooldown)
-		: HealthComponent(maxHealth, damageCooldown) {}
+		: HealthComponent(maxHealth, damageCooldown) {
+	}
 
+	/**
+	* @brief Функция получения урона
+	* @param int damage - количество полученного урона
+	*/
 	void TryTakeDamage(int damage)
 	{
-		if (cooldownTimer <= 0.0f) 
+		if (cooldownTimer <= 0.0f)
 		{
 			currentHealth -= damage;
 			cooldownTimer = damageCooldown;
 			if (currentHealth < 0) currentHealth = 1;
 		}
+	}
+};
+
+/**
+* @brief Компонент хранит данные, необходимые для получения опыта сущности
+*/
+struct ExperienceComponent : public Component
+{
+	/**
+	* @brief Основной конструктов
+	* @param int maxExperience - максимальное количество опыта на первом уровне
+	*/
+	ExperienceComponent(int maxExperience)
+		: maxExperience(maxExperience) {
+	}
+
+	const float XP_PER_LVL_MULT = 1.5f;
+
+	int maxExperience = 0;
+	int currentExperience = 0;
+	int level = 1;
+
+	/**
+	* @brief Функция добавления опыта
+	* @param int xpAmount - количество полученного опыта
+	*/
+	void GainExperience(int xpAmount)
+	{
+		currentExperience += xpAmount;
+		if (currentExperience >= maxExperience)
+		{
+			currentExperience = 0;
+			LevelUp();
+		}
+
+	}
+
+	/**
+	* @brief Функция повышения уровня
+	*/
+	void LevelUp()
+	{
+		level++;
+		maxExperience = static_cast<int>(maxExperience * XP_PER_LVL_MULT);
 	}
 };

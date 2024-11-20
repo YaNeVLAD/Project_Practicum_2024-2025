@@ -10,7 +10,7 @@ void RenderSystem::Render(EntityManager& entityManager, float deltaTime)
 		auto animation = entity->GetComponent<AnimationComponent>();
 		auto rotation = entity->GetComponent<RotationComponent>();
  
-		auto collision = entity->GetComponent<CollisionComponent>();
+		//auto collision = entity->GetComponent<CollisionComponent>();
 
 		//if (collision)
 		//{

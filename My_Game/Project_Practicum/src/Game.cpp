@@ -3,10 +3,13 @@
 #include "Factory/PlayerFactory/PlayerFactory.h"
 #include "Factory/EnemyFactory/EnemyFactory.h"
 #include "Factory/SystemFactory/SystemFactory.h"
+#include <iostream>
 
 Game::Game() : mWindow(sf::VideoMode::getDesktopMode(), "Game")
 {
 	mCamera = mWindow.getView();
+	mWindow.setVerticalSyncEnabled(true);
+	mWindow.setFramerateLimit(60);
 }
 
 void Game::InitSystems()
@@ -26,6 +29,10 @@ void Game::InitEnemy()
 void Game::Run()
 {
 	sf::Clock clock;
+
+	float fps = 0.0f;
+	int frames = 0;
+	sf::Clock fpsClock;
 
 	while (mWindow.isOpen())
 	{
@@ -48,6 +55,17 @@ void Game::Run()
 		}
 
 		mWindow.display();
+
+		frames++;
+		if (fpsClock.getElapsedTime().asSeconds() >= 1.0f)
+		{
+			fps = frames / fpsClock.getElapsedTime().asSeconds();
+			fpsClock.restart();
+			frames = 0;
+
+			// Вывод FPS в консоль
+			std::cout << "FPS: " << fps << "\n";
+		}
 	}
 }
 

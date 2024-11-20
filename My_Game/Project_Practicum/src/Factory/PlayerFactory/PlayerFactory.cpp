@@ -26,4 +26,6 @@ void PlayerFactory::Create(EntityManager& entityManager)
 	player.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(1.1f, 1.1f));
 
 	player.AddComponent<PlayerHealthComponent>(100, 0.5f);
+
+	player.AddComponent<ExperienceComponent>(100);
 }

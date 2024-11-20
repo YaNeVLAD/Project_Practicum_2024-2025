@@ -1,4 +1,5 @@
 #include "CollisionSystem.h"
+
 #include <iostream>
 #include <set>
 
@@ -24,7 +25,7 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 
 	for (const auto& event : events)
 	{
-		if (event.type == 1) 
+		if (event.type == 1)
 		{
 			for (const auto& activeRect : active)
 			{
