@@ -2,44 +2,54 @@
 
 void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 {
-    std::vector<Entity*> entitiesToDelete;
+	std::vector<Entity*> entitiesToDelete;
 
-    for (auto& entity : entityManager.GetEntities())
-    {
-        auto lifetime = entity.GetComponent<LifetimeComponent>();
-        auto health = entity.GetComponent<HealthComponent>();
-        //auto transform = entity->GetComponent<TransformComponent>();
+	auto player = entityManager.GetEntitiesWithComponents<PlayerHealthComponent, ExperienceComponent>();
 
-        if (health)
-        {
-            health->UpdateCooldown(deltaTime);
+	for (auto& entity : entityManager.GetEntities())
+	{
+		auto lifetime = entity.GetComponent<LifetimeComponent>();
+		auto health = entity.GetComponent<HealthComponent>();
+		//auto transform = entity->GetComponent<TransformComponent>();
 
-            if (!health->IsAlive())
-            {
-                entitiesToDelete.push_back(&entity);
-            }
-        }
-        
-        if (lifetime)
-        {
-            lifetime->time -= deltaTime;
+		if (health)
+		{
+			health->UpdateCooldown(deltaTime);
 
-            if (lifetime->time <= 0.0f) {
-                entitiesToDelete.push_back(&entity);
-                continue;
-            }
-        }
+			if (!health->IsAlive())
+			{
+				if (entity.GetType() & Enemy && player.size())
+				{
+					auto experience = player.front()->GetComponent<ExperienceComponent>();
+					if (experience)
+					{
+						experience->GainExperience(50);
+					}
+				}
+				entitiesToDelete.push_back(&entity);
+			}
+		}
 
-        //if (IsOutOfBound(transform->x, transform->y))
-        //{
-        //    entitiesToDelete.push_back(entity);
-        //}
-    }
+		if (lifetime)
+		{
+			lifetime->time -= deltaTime;
 
-    for (auto& entity : entitiesToDelete)
-    {
-        entityManager.RemoveEntity(entity->GetId());
-    }
+			if (lifetime->time <= 0.0f) {
+				entitiesToDelete.push_back(&entity);
+				continue;
+			}
+		}
+
+		//if (IsOutOfBound(transform->x, transform->y))
+		//{
+		//    entitiesToDelete.push_back(entity);
+		//}
+	}
+
+	for (auto& entity : entitiesToDelete)
+	{
+		entityManager.RemoveEntity(entity->GetId());
+	}
 }
 
 //bool LifetimeSystem::IsOutOfBound(float x, float y)

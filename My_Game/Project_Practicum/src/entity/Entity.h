@@ -18,7 +18,6 @@ class Entity
 {
 public:
     using IdType = std::size_t;
-    
 
     explicit Entity(IdType id, EntityType type) : mId(id), mType(type) {}
 

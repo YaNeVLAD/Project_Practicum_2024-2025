@@ -7,7 +7,10 @@ void CameraSystem::Render(EntityManager& entityManager, float deltaTime)
 		auto camera = entity->GetComponent<CameraComponent>();
 		auto transform = entity->GetComponent<TransformComponent>();
 
-		mView.setCenter(transform->x, transform->y);
+		sf::Vector2f targetPosition = { transform->x, transform->y };
+
+		mView.setCenter(mView.getCenter() + (targetPosition - mView.getCenter()) * 0.1f);
+
 		break;
 	}
 }
