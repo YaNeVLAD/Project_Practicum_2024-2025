@@ -24,5 +24,5 @@ void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* paren
 
 void MagicCharge::LoadTextures()
 {
-	mFrames = TextureManager::GetTextures("assets/weapon/Book.png", 64, 64);
+	mFrames = TextureManager::GetTextures("assets/weapon/Charge.png", 64, 64);
 }
