@@ -1,8 +1,8 @@
 #include "Book.h"
 
+#include "../../../Manager/Texture/TextureManager.h"
 #include "../../../Manager/Entity/EntityManager.h"
 #include "../../../component/Components.h"
-#include "../../../../utils/SpriteSheet.h"
 
 void Book::Attack(EntityManager& entityManager, TransformComponent* parentTransform)
 {
@@ -23,5 +23,5 @@ void Book::Attack(EntityManager& entityManager, TransformComponent* parentTransf
 	
 void Book::LoadTextures()
 {
-	mFrames = SpriteSheet::LoadTextures("assets/weapon/Book.png", 95, 128);
+	mFrames = TextureManager::GetTextures("assets/weapon/Book.png", 95, 128);
 }

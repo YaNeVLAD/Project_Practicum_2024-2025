@@ -1,13 +1,8 @@
-#include <cstdlib>
-#include "src/Game.h"
+#include "App.h"
 
 int main()
 {
-	Game game;
-	
-	game.init();
-
-	game.Run();
-
+	App app;
+	app.Run();
 	return EXIT_SUCCESS;
 }

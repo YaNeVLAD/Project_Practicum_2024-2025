@@ -2,13 +2,14 @@
 
 #include "../../Factory/EnemyFactory/EnemyFactory.h"
 #include <iostream>
+#include <random>
 
 void SpawnSystem::Update(EntityManager& entityManager, float deltaTime)
 {
 	mTimeSinceLastSpawn += deltaTime;
 
     auto enemies = entityManager.GetEntitiesWithType(Enemy);
-    
+       
 	if (mTimeSinceLastSpawn >= mSpawnInterval && enemies.size() < MAX_ENTITES_ON_SCREEN)
 	{
 		sf::Vector2f position = SelectSpawnPosition();
@@ -19,8 +20,7 @@ void SpawnSystem::Update(EntityManager& entityManager, float deltaTime)
 
 sf::Vector2f SpawnSystem::SelectSpawnPosition()
 {
-    // Получаем размеры окна и параметры камеры
-    sf::FloatRect cameraBounds = mCamera.getViewport();
+    // Предварительные расчёты
     sf::Vector2f cameraCenter = mCamera.getCenter();
     sf::Vector2f cameraSize = mCamera.getSize();
 
@@ -30,33 +30,40 @@ sf::Vector2f SpawnSystem::SelectSpawnPosition()
         return sf::Vector2f(0, 0);
     }
 
-    // Размеры экрана
-    float screenWidth = cameraSize.x;
-    float screenHeight = cameraSize.y;
+    float leftBound = cameraCenter.x - cameraSize.x / 2.0f;
+    float rightBound = cameraCenter.x + cameraSize.x / 2.0f;
+    float topBound = cameraCenter.y - cameraSize.y / 2.0f;
+    float bottomBound = cameraCenter.y + cameraSize.y / 2.0f;
 
-    int side = rand() % 4;
+    static std::random_device rd;
+    static std::mt19937 generator(rd());
+    std::uniform_int_distribution<int> sideDist(0, 3);
+    std::uniform_real_distribution<float> horizontalDist(leftBound, rightBound);
+    std::uniform_real_distribution<float> verticalDist(topBound, bottomBound);
 
+    int side = sideDist(generator);
     float spawnX = 0.0f, spawnY = 0.0f;
 
     switch (side)
     {
-    case 0:
-        spawnX = rand() % static_cast<int>(screenWidth + cameraCenter.x - screenWidth / 2.0f);
-        spawnY = cameraCenter.y - screenHeight / 2.0f - 40;
+    case 0: // Верх
+        spawnX = horizontalDist(generator);
+        spawnY = topBound - 40;
         break;
-    case 1:
-        spawnX = rand() % static_cast<int>(screenWidth + cameraCenter.x - screenWidth / 2.0f);
-        spawnY = cameraCenter.y + screenHeight / 2.0f + 40;
+    case 1: // Низ
+        spawnX = horizontalDist(generator);
+        spawnY = bottomBound + 40;
         break;
-    case 2:
-        spawnX = cameraCenter.x - screenWidth / 2.0f - 40;
-        spawnY = rand() % static_cast<int>(screenHeight + cameraCenter.y - screenHeight / 2.0f);
+    case 2: // Лево
+        spawnX = leftBound - 40;
+        spawnY = verticalDist(generator);
         break;
-    case 3:
-        spawnX = cameraCenter.x + screenWidth / 2.0f + 40;
-        spawnY = rand() % static_cast<int>(screenHeight + cameraCenter.y - screenHeight / 2.0f);
+    case 3: // Право
+        spawnX = rightBound + 40;
+        spawnY = verticalDist(generator);
         break;
     }
 
     return sf::Vector2f(spawnX, spawnY);
 }
+

@@ -68,7 +68,6 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 
 	if ((firstType & Player && secondType & Enemy) || (firstType & Enemy && secondType & Player)) 
 	{
-		HandlePushAway(first, second);
 		if (firstType & Player)
 		{
 			ApplyDamage(first, 10);
