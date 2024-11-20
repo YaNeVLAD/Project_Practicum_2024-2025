@@ -7,7 +7,9 @@ void SpawnSystem::Update(EntityManager& entityManager, float deltaTime)
 {
 	mTimeSinceLastSpawn += deltaTime;
 
-	if (mTimeSinceLastSpawn >= mSpawnInterval)
+    auto enemies = entityManager.GetEntitiesWithType(Enemy);
+    
+	if (mTimeSinceLastSpawn >= mSpawnInterval && enemies.size() < MAX_ENTITES_ON_SCREEN)
 	{
 		sf::Vector2f position = SelectSpawnPosition();
 		EnemyFactory::Create(entityManager, position.x, position.y);

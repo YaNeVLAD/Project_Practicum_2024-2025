@@ -13,6 +13,8 @@ private:
 	sf::View& mCamera;
 	float mSpawnInterval;
 	float mTimeSinceLastSpawn = 0.0f;
+	
+	const int MAX_ENTITES_ON_SCREEN = 30;
 
 	sf::Vector2f SelectSpawnPosition();
 };

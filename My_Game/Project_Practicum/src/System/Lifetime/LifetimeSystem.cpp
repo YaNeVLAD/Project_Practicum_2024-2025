@@ -5,11 +5,14 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 	std::vector<Entity*> entitiesToDelete;
 
 	auto player = entityManager.GetEntitiesWithComponents<PlayerHealthComponent, ExperienceComponent>();
+	auto playerHealth = player.front()->GetComponent<PlayerHealthComponent>();
+	playerHealth->UpdateCooldown(deltaTime);
 
 	for (auto& entity : entityManager.GetEntities())
 	{
 		auto lifetime = entity.GetComponent<LifetimeComponent>();
 		auto health = entity.GetComponent<HealthComponent>();
+
 		//auto transform = entity->GetComponent<TransformComponent>();
 
 		if (health)
@@ -18,14 +21,8 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 
 			if (!health->IsAlive())
 			{
-				if (entity.GetType() & Enemy && player.size())
-				{
-					auto experience = player.front()->GetComponent<ExperienceComponent>();
-					if (experience)
-					{
-						experience->GainExperience(50);
-					}
-				}
+				GainPlayerExperience(entity, *player.front());
+
 				entitiesToDelete.push_back(&entity);
 			}
 		}
@@ -49,6 +46,25 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 	for (auto& entity : entitiesToDelete)
 	{
 		entityManager.RemoveEntity(entity->GetId());
+	}
+}
+
+void LifetimeSystem::GainPlayerExperience(Entity& enemy, Entity& player)
+{
+	if (enemy.GetType() & Enemy && player.GetType())
+	{
+		auto experience = player.GetComponent<ExperienceComponent>();
+		auto playerHealth = player.GetComponent<PlayerHealthComponent>();
+
+		if (experience && playerHealth)
+		{
+			experience->GainExperience(50);
+
+			if (experience->CheckLevelUp())
+			{
+				playerHealth->LevelUp(10);
+			}
+		}
 	}
 }
 

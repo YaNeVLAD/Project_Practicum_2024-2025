@@ -9,6 +9,8 @@ public:
 
 	std::vector<Entity>& GetEntities();
 
+    std::vector<Entity*> GetEntitiesWithType(EntityType type);
+
 	void RemoveEntity(Entity::IdType id);
 
     template<typename... ComponentTypes>

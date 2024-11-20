@@ -267,6 +267,13 @@ struct HealthComponent : public Component
 	{
 		return currentHealth > 0;
 	}
+
+	void LevelUp(int additionalHealth)
+	{
+		float healthRatio = static_cast<float>(currentHealth) / maxHealth;
+		maxHealth += additionalHealth;
+		currentHealth = static_cast<int>(maxHealth * healthRatio);
+	}
 };
 
 /**
@@ -281,20 +288,6 @@ struct PlayerHealthComponent : public HealthComponent
 	*/
 	PlayerHealthComponent(int maxHealth, float damageCooldown)
 		: HealthComponent(maxHealth, damageCooldown) {
-	}
-
-	/**
-	* @brief Функция получения урона
-	* @param int damage - количество полученного урона
-	*/
-	void TryTakeDamage(int damage)
-	{
-		if (cooldownTimer <= 0.0f)
-		{
-			currentHealth -= damage;
-			cooldownTimer = damageCooldown;
-			if (currentHealth < 0) currentHealth = 1;
-		}
 	}
 };
 
@@ -324,20 +317,20 @@ struct ExperienceComponent : public Component
 	void GainExperience(int xpAmount)
 	{
 		currentExperience += xpAmount;
-		if (currentExperience >= maxExperience)
-		{
-			currentExperience = 0;
-			LevelUp();
-		}
-
 	}
-
+	
 	/**
 	* @brief Функция повышения уровня
 	*/
-	void LevelUp()
+	bool CheckLevelUp()
 	{
-		level++;
-		maxExperience = static_cast<int>(maxExperience * XP_PER_LVL_MULT);
+		if (currentExperience >= maxExperience)
+		{
+			currentExperience = 0;
+			maxExperience = static_cast<int>(maxExperience * XP_PER_LVL_MULT);
+			level++;
+			return true;
+		}
+		return false;
 	}
 };

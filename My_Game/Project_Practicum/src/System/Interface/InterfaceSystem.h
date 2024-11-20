@@ -15,6 +15,7 @@ private:
 	sf::View& mCamera;
 
 	void RenderHealth(EntityManager& em);
+	void RenderPlayerHealth(EntityManager& em);
 	void RenderXPBar(EntityManager& em);
 };
 
