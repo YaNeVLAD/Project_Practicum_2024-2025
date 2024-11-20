@@ -13,7 +13,6 @@ public:
 	{
 		InitSystems();
 		InitPlayer();
-		InitEnemy();
 	}
 
 	void Run();
@@ -21,7 +20,6 @@ public:
 private:
 	void InitSystems();
 	void InitPlayer();
-	void InitEnemy();
 	void ProcessEvents();
 
 	sf::View mCamera;

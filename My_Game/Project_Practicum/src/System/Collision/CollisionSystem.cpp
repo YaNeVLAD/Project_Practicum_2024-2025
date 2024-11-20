@@ -40,7 +40,7 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 			}
 			active.insert(std::pair(event.rect.top, event.entity));
 		}
-		else 
+		else
 		{
 			active.erase(std::pair(event.rect.top, event.entity));
 		}
@@ -50,9 +50,14 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 void CollisionSystem::ApplyDamage(Entity* entity, int damage)
 {
 	auto health = entity->GetComponent<HealthComponent>();
+	auto playerHealth = entity->GetComponent<PlayerHealthComponent>();
 	if (health)
 	{
-		health->TryTakeDamage(damage);
+ 		health->TryTakeDamage(damage);
+	}
+	if (playerHealth)
+	{
+		playerHealth->TryTakeDamage(damage);
 	}
 }	
 
@@ -63,8 +68,7 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 
 	if ((firstType & Player && secondType & Enemy) || (firstType & Enemy && secondType & Player)) 
 	{
-		//std::cout << "Player collided with Enemy\n";
-
+		HandlePushAway(first, second);
 		if (firstType & Player)
 		{
 			ApplyDamage(first, 10);
@@ -76,8 +80,6 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 	}
 	else if ((firstType & Projectile && secondType & Enemy) || (firstType & Enemy && secondType & Projectile)) 
 	{
-		//std::cout << "Projectile collided with Enemy\n";
-
 		if (firstType & Projectile)
 		{
 			ApplyDamage(second, 10);
@@ -89,8 +91,6 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 	}
 	else if (firstType & Enemy && secondType & Enemy)
 	{
-		//std::cout << "Enemy collided with Enemy\n";
-
 		HandlePushAway(first, second);
 	}
 }

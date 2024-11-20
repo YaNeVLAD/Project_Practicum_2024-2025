@@ -1,9 +1,9 @@
 #include "Game.h"
 
+#include <iostream>
 #include "Factory/PlayerFactory/PlayerFactory.h"
 #include "Factory/EnemyFactory/EnemyFactory.h"
 #include "Factory/SystemFactory/SystemFactory.h"
-#include <iostream>
 
 Game::Game() : mWindow(sf::VideoMode::getDesktopMode(), "Game")
 {
@@ -20,10 +20,6 @@ void Game::InitSystems()
 void Game::InitPlayer()
 {
 	PlayerFactory::Create(mEntityManager);
-}
-
-void Game::InitEnemy()
-{
 }
 
 void Game::Run()
