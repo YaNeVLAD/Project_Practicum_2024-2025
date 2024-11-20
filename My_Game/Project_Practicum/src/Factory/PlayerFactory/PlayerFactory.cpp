@@ -1,9 +1,9 @@
 #include "PlayerFactory.h"
 
 #include "../../Entity/Weapon/MagicCharge/MagicCharge.h"
+#include "../../Manager/Texture/TextureManager.h"
 #include "../../Manager/Entity/EntityManager.h"
 #include "../../Entity/Weapon/Book/Book.h"
-#include "../../../utils/SpriteSheet.h"
 
 void PlayerFactory::Create(EntityManager& entityManager)
 {
@@ -21,7 +21,7 @@ void PlayerFactory::Create(EntityManager& entityManager)
 	collisionShape->setOrigin(20, 20); 
 	player.AddComponent<CollisionComponent>(std::move(collisionShape), sf::Vector2f(0, 35));
 
-	std::vector<sf::Texture> frames = SpriteSheet::LoadTextures("assets/character/Walk.png", 128, 128);
+	std::vector<sf::Texture> frames = TextureManager::GetTextures("assets/character/Walk.png", 128, 128);
 	player.AddComponent<AnimationComponent>(frames, 0.2f, true, -1.0f, false);
 	player.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(1.1f, 1.1f));
 

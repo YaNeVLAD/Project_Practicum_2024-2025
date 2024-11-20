@@ -1,8 +1,8 @@
 #include "MagicCharge.h"
 
+#include "../../../Manager/Texture/TextureManager.h"
 #include "../../../Manager/Entity/EntityManager.h"
 #include "../../../component/Components.h"
-#include "../../../../utils/SpriteSheet.h"
 
 void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* parentTransform)
 {
@@ -24,5 +24,5 @@ void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* paren
 
 void MagicCharge::LoadTextures()
 {
-	mFrames = SpriteSheet::LoadTextures("assets/weapon/Charge.png", 64, 64);
+	mFrames = TextureManager::GetTextures("assets/weapon/Book.png", 64, 64);
 }

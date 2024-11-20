@@ -7,7 +7,8 @@
 class Game
 {
 public:
-	Game();
+	Game(sf::RenderWindow& window, sf::View& camera) 
+		: mWindow(window), mCamera(camera) {}
 
 	void init()
 	{
@@ -15,15 +16,18 @@ public:
 		InitPlayer();
 	}
 
-	void Run();
+	void Render(float deltaTime);
+	void RunFrame(float deltaTime);
+	bool IsPlayerDefeated();
 
+	void ProcessEvents();
+		
 private:
 	void InitSystems();
 	void InitPlayer();
-	void ProcessEvents();
 
-	sf::View mCamera;
-	sf::RenderWindow mWindow;
+	sf::View& mCamera;
+	sf::RenderWindow& mWindow;
 	SystemManager mSystemManager;
 	EntityManager mEntityManager;
 };

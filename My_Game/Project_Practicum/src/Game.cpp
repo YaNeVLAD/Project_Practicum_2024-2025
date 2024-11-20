@@ -1,16 +1,8 @@
 #include "Game.h"
 
-#include <iostream>
 #include "Factory/PlayerFactory/PlayerFactory.h"
 #include "Factory/EnemyFactory/EnemyFactory.h"
 #include "Factory/SystemFactory/SystemFactory.h"
-
-Game::Game() : mWindow(sf::VideoMode::getDesktopMode(), "Game")
-{
-	mCamera = mWindow.getView();
-	mWindow.setVerticalSyncEnabled(true);
-	mWindow.setFramerateLimit(60);
-}
 
 void Game::InitSystems()
 {
@@ -22,47 +14,32 @@ void Game::InitPlayer()
 	PlayerFactory::Create(mEntityManager);
 }
 
-void Game::Run()
+void Game::RunFrame(float deltaTime)
 {
-	sf::Clock clock;
-
-	float fps = 0.0f;
-	int frames = 0;
-	sf::Clock fpsClock;
-
-	while (mWindow.isOpen())
+	for (auto& system : mSystemManager.GetUpdateSystems())
 	{
-		ProcessEvents();
-
-		mWindow.setView(mCamera);
-
-		float deltaTime = clock.restart().asSeconds();
-
-		for (auto& system : mSystemManager.GetUpdateSystems())
-		{
-			system->Update(mEntityManager, deltaTime);
-		}
-
-		mWindow.clear();
-
-		for (auto& system : mSystemManager.GetRenderSystems())
-		{
-			system->Render(mEntityManager, deltaTime);
-		}
-
-		mWindow.display();
-
-		frames++;
-		if (fpsClock.getElapsedTime().asSeconds() >= 1.0f)
-		{
-			fps = frames / fpsClock.getElapsedTime().asSeconds();
-			fpsClock.restart();
-			frames = 0;
-
-			// Вывод FPS в консоль
-			std::cout << "FPS: " << fps << "\n";
-		}
+		system->Update(mEntityManager, deltaTime);
 	}
+}
+
+void Game::Render(float deltaTime)
+{
+	mWindow.setView(mCamera);
+	for (auto& system : mSystemManager.GetRenderSystems())
+	{
+		system->Render(mEntityManager, deltaTime);
+	}
+}
+
+bool Game::IsPlayerDefeated()
+{
+	auto player = mEntityManager.GetEntitiesWithComponents<PlayerHealthComponent>();
+	if (player.size())
+	{
+		auto health = player.front()->GetComponent<PlayerHealthComponent>();
+		return !health->IsAlive();
+	}
+	return true;
 }
 
 void Game::ProcessEvents()
@@ -70,9 +47,9 @@ void Game::ProcessEvents()
 	sf::Event event;
 	while (mWindow.pollEvent(event))
 	{
-		switch (event.type)
+		if (event.type == sf::Event::Closed)
 		{
-		case sf::Event::Closed: mWindow.close(); break;
+			mWindow.close();
 		}
 	}
 }
