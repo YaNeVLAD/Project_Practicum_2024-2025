@@ -25,6 +25,7 @@ private:
 		MainMenu,
 		Playing,
 		Defeat,
+		WeaponUpgrade
 	};
 
 	sf::RenderWindow mWindow;
@@ -38,13 +39,22 @@ private:
 	sf::Text mDefeatText;
 	sf::RectangleShape mExitButton;
 
+	sf::Font mFont;
+	std::vector<sf::Text> mButtonTexts;
+	std::vector<sf::RectangleShape> mWeaponUpgradeButtons;
+	sf::Text mUpgradePrompt;
+
 	void ProcessEvents();
 	void Update(float deltaTime);
 	void Render(float deltaTime);
 
 	void HandleMainMenuEvents(const sf::Event& event);
+	void HandleWeaponUpgradeEvents(const sf::Event& event);
 	void HandleDefeatScreenEvents(const sf::Event& event);
+
+	void InitUpgradeScreen();
 
 	void RenderMainMenu();
 	void RenderDefeatScreen();
+	void RenderWeaponUpgradeScreen();
 };

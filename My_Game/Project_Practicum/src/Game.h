@@ -18,16 +18,26 @@ public:
 
 	void Render(float deltaTime);
 	void RunFrame(float deltaTime);
-	bool IsPlayerDefeated();
 
+	void PauseGame();
+	void ResumeGame();
+
+	bool IsPlayerDefeated();
+	bool HasPlayerLeveledUp();
+
+	std::vector<std::string> GetAvailableWeapons();
+	void UpgradeWeapon(size_t index);
+		
 	void ProcessEvents();
 		
 private:
-	void InitSystems();
-	void InitPlayer();
+	bool mIsPaused = false;
 
 	sf::View& mCamera;
 	sf::RenderWindow& mWindow;
 	SystemManager mSystemManager;
 	EntityManager mEntityManager;
+
+	void InitSystems();
+	void InitPlayer();
 };

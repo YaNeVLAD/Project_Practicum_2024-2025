@@ -105,7 +105,7 @@ void InterfaceSystem::RenderXPBar(EntityManager& em)
 			fill.setFillColor(sf::Color(100, 200, 100));
 
 			sf::Font font;
-			if (!font.loadFromFile("assets/font/Roboto-bold.ttf"))
+			if (!font.loadFromFile("assets/font/Roboto-Bold.ttf"))
 			{
 				// TODO: Добавить обработку ошибки загрузки шрифта
 			}

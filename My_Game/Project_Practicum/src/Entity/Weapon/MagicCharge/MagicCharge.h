@@ -14,9 +14,13 @@ public:
 		LoadTextures(); 
 	}
 
+	std::string GetName() { return WEAPON_NAME; }
+	void Upgrade(int level) override;
 	void Attack(EntityManager& entityManager, TransformComponent* parentTransform) override;
 
 private:
+	const std::string WEAPON_NAME = "Magic Charge";
+
 	void LoadTextures();
 	std::vector<sf::Texture> mFrames;
 };

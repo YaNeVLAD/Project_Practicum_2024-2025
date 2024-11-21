@@ -309,6 +309,7 @@ struct ExperienceComponent : public Component
 	int maxExperience = 0;
 	int currentExperience = 0;
 	int level = 1;
+	bool levelUpFlag = false;
 
 	/**
 	* @brief Функция добавления опыта
@@ -329,6 +330,7 @@ struct ExperienceComponent : public Component
 			currentExperience = 0;
 			maxExperience = static_cast<int>(maxExperience * XP_PER_LVL_MULT);
 			level++;
+			levelUpFlag = true;
 			return true;
 		}
 		return false;

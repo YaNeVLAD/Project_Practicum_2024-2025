@@ -3,6 +3,8 @@
 #include "Factory/PlayerFactory/PlayerFactory.h"
 #include "Factory/EnemyFactory/EnemyFactory.h"
 #include "Factory/SystemFactory/SystemFactory.h"
+#include "Entity/Weapon/Weapon.h"
+#include <random>
 
 void Game::InitSystems()
 {
@@ -16,10 +18,25 @@ void Game::InitPlayer()
 
 void Game::RunFrame(float deltaTime)
 {
+	if (mIsPaused)
+	{
+		return;
+	}
+
 	for (auto& system : mSystemManager.GetUpdateSystems())
 	{
 		system->Update(mEntityManager, deltaTime);
 	}
+}
+
+void Game::PauseGame()
+{
+	mIsPaused = true;
+}
+
+void Game::ResumeGame()
+{
+	mIsPaused = false;
 }
 
 void Game::Render(float deltaTime)
@@ -28,6 +45,18 @@ void Game::Render(float deltaTime)
 	for (auto& system : mSystemManager.GetRenderSystems())
 	{
 		system->Render(mEntityManager, deltaTime);
+	}
+}
+
+void Game::ProcessEvents()
+{
+	sf::Event event;
+	while (mWindow.pollEvent(event))
+	{
+		if (event.type == sf::Event::Closed)
+		{
+			mWindow.close();
+		}
 	}
 }
 
@@ -42,14 +71,64 @@ bool Game::IsPlayerDefeated()
 	return true;
 }
 
-void Game::ProcessEvents()
+bool Game::HasPlayerLeveledUp()
 {
-	sf::Event event;
-	while (mWindow.pollEvent(event))
+	auto player = mEntityManager.GetEntitiesWithComponents<ExperienceComponent>();
+	if (player.size())
 	{
-		if (event.type == sf::Event::Closed)
+		auto experience = player.front()->GetComponent<ExperienceComponent>();
+		if (experience->levelUpFlag)
 		{
-			mWindow.close();
+			experience->levelUpFlag = false;
+			return true;
+		}
+	}
+	return false;
+}
+
+std::vector<std::string> Game::GetAvailableWeapons()
+{
+	auto player = mEntityManager.GetEntitiesWithComponents<WeaponComponent>();
+
+	if (player.size())
+	{
+		auto weaponComponent = player.front()->GetComponent<WeaponComponent>();
+		std::vector<std::string> weaponNames;
+
+		for (auto& weapon : weaponComponent->weapons)
+		{
+			weaponNames.push_back(weapon->GetName());
+		}
+
+		if (weaponNames.size() <= 3)
+		{
+			return weaponNames;
+		}
+
+		std::random_device rd;
+		std::mt19937 g(rd());
+		std::shuffle(weaponNames.begin(), weaponNames.end(), g);
+
+		return weaponNames;
+	}
+
+	return {};
+}
+
+void Game::UpgradeWeapon(size_t index)
+{
+	auto player = mEntityManager.GetEntitiesWithComponents<WeaponComponent, ExperienceComponent>();
+	if (player.size())
+	{
+		auto weaponComponent = player.front()->GetComponent<WeaponComponent>();
+		auto experience = player.front()->GetComponent<ExperienceComponent>();
+
+		if (index < weaponComponent->weapons.size())
+		{
+			weaponComponent->weapons[index]->Upgrade(experience->level);
+		}
+		else
+		{
 		}
 	}
 }

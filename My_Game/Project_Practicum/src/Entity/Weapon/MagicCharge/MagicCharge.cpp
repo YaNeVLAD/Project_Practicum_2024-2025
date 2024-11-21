@@ -4,6 +4,11 @@
 #include "../../../Manager/Entity/EntityManager.h"
 #include "../../../component/Components.h"
 
+void MagicCharge::Upgrade(int level)
+{
+
+}
+
 void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* parentTransform)
 {
 	Entity& projectile = entityManager.CreateEntity(EntityType::Projectile);

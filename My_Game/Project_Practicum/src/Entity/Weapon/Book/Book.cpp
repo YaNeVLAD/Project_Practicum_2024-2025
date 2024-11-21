@@ -4,6 +4,11 @@
 #include "../../../Manager/Entity/EntityManager.h"
 #include "../../../component/Components.h"
 
+void Book::Upgrade(int level)
+{
+
+}
+
 void Book::Attack(EntityManager& entityManager, TransformComponent* parentTransform)
 {
 	Entity& projectile = entityManager.CreateEntity(EntityType::Projectile);
