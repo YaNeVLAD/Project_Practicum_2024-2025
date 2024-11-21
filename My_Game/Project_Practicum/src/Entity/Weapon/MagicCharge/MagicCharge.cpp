@@ -3,10 +3,15 @@
 #include "../../../Manager/Texture/TextureManager.h"
 #include "../../../Manager/Entity/EntityManager.h"
 #include "../../../component/Components.h"
+#include <iostream>
 
 void MagicCharge::Upgrade(int level)
 {
-
+	if (mLevel + 1 <= MAX_LEVELS)
+	{
+		mLevel++;
+		std::cout << WEAPON_NAME << " " << "upgraded to level" << " " << mLevel << std::endl;
+	}
 }
 
 void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* parentTransform)
@@ -25,6 +30,8 @@ void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* paren
 	projectile.AddComponent<CollisionComponent>(std::move(collisionShape));
 
 	projectile.AddComponent<HomingProjectileComponent>(projectileSpeed);
+
+	projectile.AddComponent<DamageComponent>(5);
 }
 
 void MagicCharge::LoadTextures()

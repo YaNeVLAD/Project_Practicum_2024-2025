@@ -292,6 +292,20 @@ struct PlayerHealthComponent : public HealthComponent
 };
 
 /**
+* @brief Компонент показывает, сколько урона наносит сущность
+*/
+struct DamageComponent : public Component
+{
+	/**
+	* @brief Основной конструктов
+	* @param int amount - количество наносимого урона
+	*/
+	DamageComponent(int amount) : amount(amount) {}
+
+	int amount = 0;
+};
+
+/**
 * @brief Компонент хранит данные, необходимые для получения опыта сущности
 */
 struct ExperienceComponent : public Component

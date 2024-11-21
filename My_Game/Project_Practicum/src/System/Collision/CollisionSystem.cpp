@@ -53,39 +53,56 @@ void CollisionSystem::ApplyDamage(Entity* entity, int damage)
 	auto playerHealth = entity->GetComponent<PlayerHealthComponent>();
 	if (health)
 	{
- 		health->TryTakeDamage(damage);
+		health->TryTakeDamage(damage);
 	}
 	if (playerHealth)
 	{
 		playerHealth->TryTakeDamage(damage);
 	}
-}	
+}
 
 void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 {
 	auto firstType = first->GetType();
 	auto secondType = second->GetType();
 
-	if ((firstType & Player && secondType & Enemy) || (firstType & Enemy && secondType & Player)) 
+	if ((firstType & Player && secondType & Enemy) || (firstType & Enemy && secondType & Player))
 	{
 		if (firstType & Player)
 		{
-			ApplyDamage(first, 10);
+			auto damage = second->GetComponent<DamageComponent>();
+			if (damage)
+			{
+				ApplyDamage(first, damage->amount);
+			}
 		}
 		else
 		{
-			ApplyDamage(second, 10);
+			auto damage = first->GetComponent<DamageComponent>();
+			if (damage)
+			{
+				ApplyDamage(second, damage->amount);
+			}
 		}
+		HandlePushAway(first, second);
 	}
-	else if ((firstType & Projectile && secondType & Enemy) || (firstType & Enemy && secondType & Projectile)) 
+	else if ((firstType & Projectile && secondType & Enemy) || (firstType & Enemy && secondType & Projectile))
 	{
 		if (firstType & Projectile)
 		{
-			ApplyDamage(second, 10);
+			auto damage = first->GetComponent<DamageComponent>();
+			if (damage)
+			{
+				ApplyDamage(second, damage->amount);
+			}
 		}
 		else
 		{
-			ApplyDamage(first, 10);
+			auto damage = second->GetComponent<DamageComponent>();
+			if (damage)
+			{
+				ApplyDamage(first, damage->amount);
+			}
 		}
 	}
 	else if (firstType & Enemy && secondType & Enemy)
@@ -105,7 +122,7 @@ void CollisionSystem::HandlePushAway(Entity* first, Entity* second)
 	if (distance < 1.0f) return;
 
 	direction /= distance;
-	
+
 	float pushStrength = 1.0f;
 	float pushX = direction.x * pushStrength;
 	float pushY = direction.y * pushStrength;

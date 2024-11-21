@@ -26,8 +26,8 @@ public:
 	bool HasPlayerLeveledUp();
 
 	std::vector<std::string> GetAvailableWeapons();
-	void UpgradeWeapon(size_t index);
-		
+	void UpgradeWeapon(std::string name);
+
 	void ProcessEvents();
 		
 private:

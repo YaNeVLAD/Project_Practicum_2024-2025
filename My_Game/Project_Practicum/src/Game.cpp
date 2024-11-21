@@ -1,10 +1,12 @@
 #include "Game.h"
 
+#include <random>
+
+#include "Entity/Weapon/Weapon.h"
 #include "Factory/PlayerFactory/PlayerFactory.h"
 #include "Factory/EnemyFactory/EnemyFactory.h"
 #include "Factory/SystemFactory/SystemFactory.h"
-#include "Entity/Weapon/Weapon.h"
-#include <random>
+#include "Factory/WeaponFactory/WeaponFactory.h"
 
 void Game::InitSystems()
 {
@@ -88,34 +90,49 @@ bool Game::HasPlayerLeveledUp()
 
 std::vector<std::string> Game::GetAvailableWeapons()
 {
+	auto allWeapons = Weapon::GetAllWeapons();
+
 	auto player = mEntityManager.GetEntitiesWithComponents<WeaponComponent>();
+	if (player.empty())
+		return {};
 
-	if (player.size())
+	auto weaponComponent = player.front()->GetComponent<WeaponComponent>();
+
+	std::unordered_map<std::string, bool> playerWeapons;
+	for (const auto& weapon : weaponComponent->weapons)
 	{
-		auto weaponComponent = player.front()->GetComponent<WeaponComponent>();
-		std::vector<std::string> weaponNames;
-
-		for (auto& weapon : weaponComponent->weapons)
-		{
-			weaponNames.push_back(weapon->GetName());
-		}
-
-		if (weaponNames.size() <= 3)
-		{
-			return weaponNames;
-		}
-
-		std::random_device rd;
-		std::mt19937 g(rd());
-		std::shuffle(weaponNames.begin(), weaponNames.end(), g);
-
-		return weaponNames;
+		playerWeapons[weapon->GetName()] = !weapon->CanUpgrade();
 	}
 
-	return {};
+	// Фильтруем общий список оружий
+	allWeapons.erase(
+		std::remove_if(
+			allWeapons.begin(),
+			allWeapons.end(),
+			[&](const std::string& weaponName)
+			{
+				auto it = playerWeapons.find(weaponName);
+				if (it != playerWeapons.end())
+				{
+					return playerWeapons[weaponName];
+				}
+				return false;
+			}),
+		allWeapons.end());
+
+	std::random_device rd;
+	std::mt19937 g(rd());
+	std::shuffle(allWeapons.begin(), allWeapons.end(), g);
+
+	if (allWeapons.size() > 3)
+	{
+		allWeapons.resize(3);
+	}
+
+	return allWeapons;
 }
 
-void Game::UpgradeWeapon(size_t index)
+void Game::UpgradeWeapon(std::string name)
 {
 	auto player = mEntityManager.GetEntitiesWithComponents<WeaponComponent, ExperienceComponent>();
 	if (player.size())
@@ -123,12 +140,16 @@ void Game::UpgradeWeapon(size_t index)
 		auto weaponComponent = player.front()->GetComponent<WeaponComponent>();
 		auto experience = player.front()->GetComponent<ExperienceComponent>();
 
-		if (index < weaponComponent->weapons.size())
+		for (const auto& weapon : weaponComponent->weapons)
 		{
-			weaponComponent->weapons[index]->Upgrade(experience->level);
+			if (weapon->GetName() == name)
+			{
+				weapon->Upgrade(1);
+				return;
+			}
 		}
-		else
-		{
-		}
+
+		auto newWeapon = WeaponFactory::Create(name);
+		weaponComponent->AddWeapon(std::move(newWeapon));
 	}
 }

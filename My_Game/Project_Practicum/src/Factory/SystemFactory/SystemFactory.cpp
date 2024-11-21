@@ -3,6 +3,7 @@
 
 #include "../../Manager/System/SystemManager.h"
 
+//  сделать общую фабрику
 void SystemFactory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera)
 {
     systemManager.AddSystem<InputSystem>();
@@ -16,5 +17,5 @@ void SystemFactory::InitSystems(SystemManager& systemManager, sf::RenderWindow& 
     
     systemManager.AddSystem<RenderSystem>(window);
     systemManager.AddSystem<CameraSystem>(camera);
-    systemManager.AddSystem<InterfaceSystem>(window, camera);
+    systemManager.AddSystem<HUDSystem>(window, camera);
 }

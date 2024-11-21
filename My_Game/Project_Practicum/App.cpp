@@ -22,15 +22,15 @@ void App::ProcessEvents()
 		case sf::Event::Closed: mWindow.close(); break;
 		}
 
-		if (mCurrentState == App::MainMenu) 
+		if (mCurrentState == App::MainMenu)
 		{
 			HandleMainMenuEvents(event);
 		}
-		else if (mCurrentState == App::Playing) 
+		else if (mCurrentState == App::Playing)
 		{
 			mGame.ProcessEvents();
 		}
-		else if (mCurrentState == App::Defeat) 
+		else if (mCurrentState == App::Defeat)
 		{
 			HandleDefeatScreenEvents(event);
 		}
@@ -55,7 +55,6 @@ void App::Update(float deltaTime)
 		{
 			mCurrentState = WeaponUpgrade;
 			InitUpgradeScreen();
-			mGame.PauseGame();
 		}
 	}
 }
@@ -93,18 +92,21 @@ void App::HandleMainMenuEvents(const sf::Event& event)
 
 void App::HandleWeaponUpgradeEvents(const sf::Event& event)
 {
-	if (event.type == sf::Event::MouseButtonPressed)
+	if (event.type != sf::Event::MouseButtonPressed)
 	{
-		sf::Vector2f worldPos = mWindow.mapPixelToCoords(sf::Mouse::getPosition(mWindow), mCamera);
+		return;
+	}
 
-		for (size_t i = 0; i < mWeaponUpgradeButtons.size(); ++i)
+	sf::Vector2f worldPos = mWindow.mapPixelToCoords(sf::Mouse::getPosition(mWindow), mCamera);
+
+	for (size_t i = 0; i < mWeaponUpgradeButtons.size(); ++i)
+	{
+		if (mWeaponUpgradeButtons[i].getGlobalBounds().contains(worldPos))
 		{
-			if (mWeaponUpgradeButtons[i].getGlobalBounds().contains(worldPos))
-			{
-				mGame.UpgradeWeapon(i);
-				mCurrentState = Playing;
-				mGame.ResumeGame();
-			}
+			std::string name = mButtonTexts[i].getString();
+			mGame.UpgradeWeapon(name);
+			mCurrentState = Playing;
+			mGame.ResumeGame();
 		}
 	}
 }
@@ -113,23 +115,13 @@ void App::HandleDefeatScreenEvents(const sf::Event& event)
 {
 	if (event.type == sf::Event::MouseButtonPressed)
 	{
-		sf::Vector2i mousePos = sf::Mouse::getPosition(mWindow);
-
-		sf::Vector2f worldPos = mWindow.mapPixelToCoords(mousePos);
-		for (size_t i = 0; i < mWeaponUpgradeButtons.size(); ++i)
-		{
-			if (mWeaponUpgradeButtons[i].getGlobalBounds().contains(worldPos))
-			{
-				mGame.UpgradeWeapon(i);
-				mCurrentState = Playing;
-				mGame.ResumeGame();
-			}
-		}
+		mWindow.close();
 	}
 }
 
 void App::InitUpgradeScreen()
 {
+	mGame.PauseGame();
 	mWeaponUpgradeButtons.clear();
 	mButtonTexts.clear();
 
@@ -144,6 +136,13 @@ void App::InitUpgradeScreen()
 
 	auto availableWeapons = mGame.GetAvailableWeapons();
 
+	if (availableWeapons.empty())
+	{
+		mCurrentState = App::Playing;
+;		mGame.ResumeGame();
+		return;
+	}
+
 	float totalHeight = availableWeapons.size() * buttonSize.y + (availableWeapons.size() - 1) * spacing;
 
 	sf::Vector2f cameraCenter = mCamera.getCenter();
@@ -153,6 +152,7 @@ void App::InitUpgradeScreen()
 
 	for (size_t i = 0; i < availableWeapons.size(); ++i)
 	{
+		// метод длинный, вынести
 		sf::RectangleShape button(buttonSize);
 		button.setPosition(
 			cameraCenter.x - buttonSize.x / 2.0f,
@@ -175,7 +175,6 @@ void App::InitUpgradeScreen()
 		mButtonTexts.push_back(buttonText);
 	}
 }
-
 
 void App::RenderMainMenu()
 {

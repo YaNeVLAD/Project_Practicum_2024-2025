@@ -2,10 +2,10 @@
 
 #include "../System.h"
 
-class InterfaceSystem : public IRenderSystem
+class HUDSystem : public IRenderSystem
 {
 public:
-	InterfaceSystem(sf::RenderWindow& window, sf::View& camera) 
+	HUDSystem(sf::RenderWindow& window, sf::View& camera) 
 		: mWindow(window), mCamera(camera) {}
 
 	void Render(EntityManager& entityManager, float deltaTime) override;

@@ -15,7 +15,6 @@ void PlayerFactory::Create(EntityManager& entityManager)
 
 	auto weapons = player.GetComponent<WeaponComponent>();
 	weapons->AddWeapon(std::make_unique<MagicCharge>());
-	weapons->AddWeapon(std::make_unique<Book>());
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(40, 40));
 	collisionShape->setOrigin(20, 20); 

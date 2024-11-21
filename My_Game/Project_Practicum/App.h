@@ -14,7 +14,7 @@ public:
 		  mCurrentState(MainMenu)
 	{
 		mWindow.setVerticalSyncEnabled(true);
-		mWindow.setFramerateLimit(60);
+		mWindow.setFramerateLimit(120);
 	}
 
 	void Run();

@@ -1,8 +1,8 @@
-#include "InterfaceSystem.h"
+#include "HUDSystem.h"
 
 #include "../../Manager/Entity/EntityManager.h"
 
-void InterfaceSystem::Render(EntityManager& entityManager, float deltaTime)
+void HUDSystem::Render(EntityManager& entityManager, float deltaTime)
 {
 	for (auto& entity : entityManager.GetEntities())
 	{
@@ -12,7 +12,7 @@ void InterfaceSystem::Render(EntityManager& entityManager, float deltaTime)
 	}
 }
 
-void InterfaceSystem::RenderHealth(EntityManager& em)
+void HUDSystem::RenderHealth(EntityManager& em)
 {
 	for (auto& entity : em.GetEntitiesWithComponents<HealthComponent, TransformComponent>())
 	{
@@ -45,7 +45,7 @@ void InterfaceSystem::RenderHealth(EntityManager& em)
 	}
 }
 
-void InterfaceSystem::RenderPlayerHealth(EntityManager& em)
+void HUDSystem::RenderPlayerHealth(EntityManager& em)
 {
 	auto player = em.GetEntitiesWithComponents<PlayerHealthComponent>();
 
@@ -80,7 +80,7 @@ void InterfaceSystem::RenderPlayerHealth(EntityManager& em)
 	}
 }
 
-void InterfaceSystem::RenderXPBar(EntityManager& em)
+void HUDSystem::RenderXPBar(EntityManager& em)
 {
 	{
 		sf::Vector2f cameraCenter = mCamera.getCenter();

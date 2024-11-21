@@ -3,10 +3,15 @@
 #include "../../../Manager/Texture/TextureManager.h"
 #include "../../../Manager/Entity/EntityManager.h"
 #include "../../../component/Components.h"
+#include <iostream>
 
 void Book::Upgrade(int level)
 {
-
+	if (mLevel + 1 <= MAX_LEVELS)
+	{
+		mLevel++;
+		std::cout << WEAPON_NAME << " " << "upgraded to level" << " " << mLevel << std::endl;
+	}
 }
 
 void Book::Attack(EntityManager& entityManager, TransformComponent* parentTransform)
@@ -24,6 +29,8 @@ void Book::Attack(EntityManager& entityManager, TransformComponent* parentTransf
 	projectile.AddComponent<CollisionComponent>(std::move(collisionShape));
 
 	projectile.AddComponent<DrawableComponent>(mFrames[0], sf::Vector2f(0.375, 0.375));
+
+	projectile.AddComponent<DamageComponent>(15);
 }
 	
 void Book::LoadTextures()

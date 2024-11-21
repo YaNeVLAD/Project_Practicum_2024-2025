@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../System/System.h"
+#include "../../System/HUD/HUDSystem.h"
 #include "../../System/Spawn/SpawnSystem.h"
 #include "../../System/Input/InputSystem.h"
 #include "../../System/Render/RenderSystem.h"
@@ -9,7 +10,6 @@
 #include "../../System/Movement/MovementSystem.h"
 #include "../../System/Lifetime/LifetimeSystem.h"
 #include "../../System/Collision/CollisionSystem.h"
-#include "../../System/Interface/InterfaceSystem.h"
 #include "../../System/HomingProjectile/HomingProjectileSystem.h"
 #include "../../System/OrbitalProjectile/OrbitalProjectileSystem.h"
 

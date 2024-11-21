@@ -139,7 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
-    <ClCompile Include="src\System\Interface\InterfaceSystem.cpp" />
+    <ClCompile Include="src\System\HUD\HUDSystem.cpp" />
     <ClCompile Include="src\System\HomingProjectile\HomingProjectileSystem.cpp" />
     <ClCompile Include="src\System\Spawn\SpawnSystem.cpp" />
     <ClCompile Include="src\Factory\EnemyFactory\EnemyFactory.cpp" />
@@ -162,10 +162,11 @@
     <ClCompile Include="utils\SpriteSheet.cpp" />
     <ClCompile Include="src\Manager\System\SystemManager.cpp" />
     <ClCompile Include="src\System\Weapon\WeaponSystem.cpp" />
+    <ClCompile Include="src\Factory\WeaponFactory\WeaponFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
-    <ClInclude Include="src\System\Interface\InterfaceSystem.h" />
+    <ClInclude Include="src\System\HUD\HUDSystem.h" />
     <ClInclude Include="src\System\HomingProjectile\HomingProjectileSystem.h" />
     <ClInclude Include="src\System\Spawn\SpawnSystem.h" />
     <ClInclude Include="src\Factory\EnemyFactory\EnemyFactory.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="src\Manager\System\SystemManager.h" />
     <ClInclude Include="src\Entity\Weapon\Weapon.h" />
     <ClInclude Include="src\System\Weapon\WeaponSystem.h" />
+    <ClInclude Include="src\Factory\WeaponFactory\WeaponFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
