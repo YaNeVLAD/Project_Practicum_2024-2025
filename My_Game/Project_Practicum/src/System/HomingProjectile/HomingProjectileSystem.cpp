@@ -5,7 +5,7 @@
 void HomingProjectileSystem::Update(EntityManager& entityManager, float deltaTime)
 {
 	auto projectiles = entityManager.GetEntitiesWithComponents<HomingProjectileComponent, TransformComponent, CollisionComponent>();
-	auto enemies = entityManager.GetEntitiesWithComponents<TransformComponent, HealthComponent>();
+	auto enemies = entityManager.GetEntitiesWithType(Enemy);
 
 	for (auto& projectileEntity : projectiles)
 	{
@@ -49,6 +49,12 @@ Entity* HomingProjectileSystem::FindClosestTarget(TransformComponent* projectile
 	for (auto& enemy : enemies)
 	{
 		auto enemyTransform = enemy->GetComponent<TransformComponent>();
+
+		if (!enemyTransform)
+		{
+			return nullptr;
+		}
+
 		float dx = projectile->x - enemyTransform->x;
 		float dy = projectile->y - enemyTransform->y;
 		float distanceSquared = dx * dx + dy * dy; \

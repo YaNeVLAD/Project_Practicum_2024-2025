@@ -51,6 +51,7 @@ void CollisionSystem::ApplyDamage(Entity* entity, int damage)
 {
 	auto health = entity->GetComponent<HealthComponent>();
 	auto playerHealth = entity->GetComponent<PlayerHealthComponent>();
+	auto bossHealth = entity->GetComponent<BossHealthComponent>();
 	if (health)
 	{
 		health->TryTakeDamage(damage);
@@ -58,6 +59,10 @@ void CollisionSystem::ApplyDamage(Entity* entity, int damage)
 	if (playerHealth)
 	{
 		playerHealth->TryTakeDamage(damage);
+	}
+	if (bossHealth)
+	{
+		bossHealth->TryTakeDamage(damage);
 	}
 }
 
@@ -84,7 +89,6 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 				ApplyDamage(second, damage->amount);
 			}
 		}
-		HandlePushAway(first, second);
 	}
 	else if ((firstType & Projectile && secondType & Enemy) || (firstType & Enemy && secondType & Projectile))
 	{
@@ -123,7 +127,7 @@ void CollisionSystem::HandlePushAway(Entity* first, Entity* second)
 
 	direction /= distance;
 
-	float pushStrength = 1.0f;
+	float pushStrength = 2.0f;
 	float pushX = direction.x * pushStrength;
 	float pushY = direction.y * pushStrength;
 

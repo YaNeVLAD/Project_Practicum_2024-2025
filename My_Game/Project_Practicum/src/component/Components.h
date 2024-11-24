@@ -277,7 +277,7 @@ struct HealthComponent : public Component
 };
 
 /**
-* @brief Компонент хранит данные, необходимые для получения урона по здоровью игрока
+* @brief Компонент хранит данные, необходимые для получения урона по здоровью босса
 */
 struct PlayerHealthComponent : public HealthComponent
 {
@@ -287,6 +287,21 @@ struct PlayerHealthComponent : public HealthComponent
 	* @param float damageCooldown - перезарядка для получения урона
 	*/
 	PlayerHealthComponent(int maxHealth, float damageCooldown)
+		: HealthComponent(maxHealth, damageCooldown) {
+	}
+};
+
+/**
+* @brief Компонент хранит данные, необходимые для получения урона по здоровью игрока
+*/
+struct BossHealthComponent : public HealthComponent
+{
+	/**
+	* @brief Основной конструктов
+	* @param int maxHealth - максимальное здоровье сущности
+	* @param float damageCooldown - перезарядка для получения урона
+	*/
+	BossHealthComponent(int maxHealth, float damageCooldown)
 		: HealthComponent(maxHealth, damageCooldown) {
 	}
 };

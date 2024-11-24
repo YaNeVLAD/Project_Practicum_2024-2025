@@ -139,11 +139,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="src\Factory\Factory.cpp" />
     <ClCompile Include="src\System\HUD\HUDSystem.cpp" />
     <ClCompile Include="src\System\HomingProjectile\HomingProjectileSystem.cpp" />
     <ClCompile Include="src\System\Spawn\SpawnSystem.cpp" />
-    <ClCompile Include="src\Factory\EnemyFactory\EnemyFactory.cpp" />
-    <ClCompile Include="src\Factory\PlayerFactory\PlayerFactory.cpp" />
     <ClCompile Include="src\System\Collision\CollisionSystem.cpp" />
     <ClCompile Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.cpp" />
     <ClCompile Include="src\Entity\Weapon\Book\Book.cpp" />
@@ -157,20 +156,17 @@
     <ClCompile Include="src\System\Movement\MovementSystem.cpp" />
     <ClCompile Include="src\System\Lifetime\LifetimeSystem.cpp" />
     <ClCompile Include="src\System\Render\RenderSystem.cpp" />
-    <ClCompile Include="src\Factory\SystemFactory\SystemFactory.cpp" />
     <ClCompile Include="src\Manager\Texture\TextureManager.cpp" />
     <ClCompile Include="utils\SpriteSheet.cpp" />
     <ClCompile Include="src\Manager\System\SystemManager.cpp" />
     <ClCompile Include="src\System\Weapon\WeaponSystem.cpp" />
-    <ClCompile Include="src\Factory\WeaponFactory\WeaponFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="src\Factory\Factory.h" />
     <ClInclude Include="src\System\HUD\HUDSystem.h" />
     <ClInclude Include="src\System\HomingProjectile\HomingProjectileSystem.h" />
     <ClInclude Include="src\System\Spawn\SpawnSystem.h" />
-    <ClInclude Include="src\Factory\EnemyFactory\EnemyFactory.h" />
-    <ClInclude Include="src\Factory\PlayerFactory\PlayerFactory.h" />
     <ClInclude Include="src\System\Collision\CollisionSystem.h" />
     <ClInclude Include="src\System\OrbitalProjectile\OrbitalProjectileSystem.h" />
     <ClInclude Include="src\Entity\Weapon\Book\Book.h" />
@@ -184,14 +180,12 @@
     <ClInclude Include="src\System\Movement\MovementSystem.h" />
     <ClInclude Include="src\System\Lifetime\LifetimeSystem.h" />
     <ClInclude Include="src\System\Render\RenderSystem.h" />
-    <ClInclude Include="src\Factory\SystemFactory\SystemFactory.h" />
     <ClInclude Include="src\Manager\Texture\TextureManager.h" />
     <ClInclude Include="utils\SpriteSheet.h" />
     <ClInclude Include="src\System\System.h" />
     <ClInclude Include="src\Manager\System\SystemManager.h" />
     <ClInclude Include="src\Entity\Weapon\Weapon.h" />
     <ClInclude Include="src\System\Weapon\WeaponSystem.h" />
-    <ClInclude Include="src\Factory\WeaponFactory\WeaponFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

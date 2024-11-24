@@ -24,6 +24,7 @@ private:
 	{
 		MainMenu,
 		Playing,
+		Victory,
 		Defeat,
 		WeaponUpgrade
 	};
@@ -49,6 +50,7 @@ private:
 	void Render(float deltaTime);
 
 	void HandleMainMenuEvents(const sf::Event& event);
+	void HandleVictoryScreenEvents(const sf::Event& event);
 	void HandleWeaponUpgradeEvents(const sf::Event& event);
 	void HandleDefeatScreenEvents(const sf::Event& event);
 
@@ -56,5 +58,6 @@ private:
 
 	void RenderMainMenu();
 	void RenderDefeatScreen();
+	void RenderVictoryScreen();
 	void RenderWeaponUpgradeScreen();
 };

@@ -38,6 +38,10 @@ void App::ProcessEvents()
 		{
 			HandleWeaponUpgradeEvents(event);
 		}
+		else if (mCurrentState == App::Victory)
+		{
+			HandleVictoryScreenEvents(event);
+		}
 	}
 }
 
@@ -53,8 +57,13 @@ void App::Update(float deltaTime)
 
 		if (mGame.HasPlayerLeveledUp())
 		{
-			mCurrentState = WeaponUpgrade;
+			mCurrentState = App::WeaponUpgrade;
 			InitUpgradeScreen();
+		}
+
+		if (mGame.IsBossDefeated())
+		{
+			mCurrentState = App::Victory;
 		}
 	}
 }
@@ -71,6 +80,9 @@ void App::Render(float deltaTime)
 	case App::Playing:
 		mGame.Render(deltaTime);
 		break;
+	case Victory:
+		RenderVictoryScreen();
+		break;
 	case App::Defeat:
 		RenderDefeatScreen();
 		break;
@@ -84,9 +96,18 @@ void App::Render(float deltaTime)
 
 void App::HandleMainMenuEvents(const sf::Event& event)
 {
-	if (event.type == sf::Event::MouseButtonPressed) {
+	if (event.type == sf::Event::MouseButtonPressed) 
+	{
 		mCurrentState = App::Playing;
 		mGame.init();
+	}
+}
+
+void App::HandleVictoryScreenEvents(const sf::Event& event)
+{
+	if (event.type == sf::Event::MouseButtonPressed)
+	{
+		mWindow.close();
 	}
 }
 
@@ -182,6 +203,12 @@ void App::RenderMainMenu()
 }
 
 void App::RenderDefeatScreen()
+{
+	mWindow.draw(mDefeatText);
+	mWindow.draw(mExitButton);
+}
+
+void App::RenderVictoryScreen()
 {
 	mWindow.draw(mDefeatText);
 	mWindow.draw(mExitButton);

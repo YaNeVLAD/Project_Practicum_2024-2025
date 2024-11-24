@@ -1,32 +1,37 @@
 #include "SpawnSystem.h"
 
-#include "../../Factory/EnemyFactory/EnemyFactory.h"
-#include <iostream>
 #include <random>
+#include <iostream>
+#include "../../Factory/Factory.h"
 
 void SpawnSystem::Update(EntityManager& entityManager, float deltaTime)
 {
 	mTimeSinceLastSpawn += deltaTime;
+
+    mElapsedTime += deltaTime;
+
+    if (!mIsBossSpawned && mElapsedTime >= BOSS_SPAWN_TIME)
+    {
+        SpawnBoss(entityManager);
+    }
 
     auto enemies = entityManager.GetEntitiesWithType(Enemy);
        
 	if (mTimeSinceLastSpawn >= mSpawnInterval && enemies.size() < MAX_ENTITES_ON_SCREEN)
 	{
 		sf::Vector2f position = SelectSpawnPosition();
-		EnemyFactory::Create(entityManager, position.x, position.y);
+		Factory::CreateEnemy(entityManager, position.x, position.y);
 		mTimeSinceLastSpawn = 0.0f;
 	}
 }
 
 sf::Vector2f SpawnSystem::SelectSpawnPosition()
 {
-    // Предварительные расчёты
     sf::Vector2f cameraCenter = mCamera.getCenter();
     sf::Vector2f cameraSize = mCamera.getSize();
 
     if (cameraSize.x == 0.0f || cameraSize.y == 0.0f)
     {
-        std::cerr << "Error: Camera size is zero!" << std::endl;
         return sf::Vector2f(0, 0);
     }
 
@@ -46,19 +51,19 @@ sf::Vector2f SpawnSystem::SelectSpawnPosition()
 
     switch (side)
     {
-    case 0: // Верх
+    case 0:
         spawnX = horizontalDist(generator);
         spawnY = topBound - 40;
         break;
-    case 1: // Низ
+    case 1:
         spawnX = horizontalDist(generator);
         spawnY = bottomBound + 40;
         break;
-    case 2: // Лево
+    case 2:
         spawnX = leftBound - 40;
         spawnY = verticalDist(generator);
         break;
-    case 3: // Право
+    case 3:
         spawnX = rightBound + 40;
         spawnY = verticalDist(generator);
         break;
@@ -67,3 +72,9 @@ sf::Vector2f SpawnSystem::SelectSpawnPosition()
     return sf::Vector2f(spawnX, spawnY);
 }
 
+void SpawnSystem::SpawnBoss(EntityManager& em)
+{
+    sf::Vector2f pos = SelectSpawnPosition();
+    Factory::CreateBoss(em, pos.x, pos.y);
+    mIsBossSpawned = true;
+}

@@ -3,19 +3,16 @@
 #include <random>
 
 #include "Entity/Weapon/Weapon.h"
-#include "Factory/PlayerFactory/PlayerFactory.h"
-#include "Factory/EnemyFactory/EnemyFactory.h"
-#include "Factory/SystemFactory/SystemFactory.h"
-#include "Factory/WeaponFactory/WeaponFactory.h"
+#include "Factory/Factory.h"
 
 void Game::InitSystems()
 {
-	SystemFactory::InitSystems(mSystemManager, mWindow, mCamera);
+	Factory::InitSystems(mSystemManager, mWindow, mCamera, mIsBossSpawned);
 }
 
 void Game::InitPlayer()
 {
-	PlayerFactory::Create(mEntityManager);
+	Factory::CreatePlayer(mEntityManager);
 }
 
 void Game::RunFrame(float deltaTime)
@@ -88,6 +85,17 @@ bool Game::HasPlayerLeveledUp()
 	return false;
 }
 
+bool Game::IsBossDefeated()
+{
+	auto boss = mEntityManager.GetEntitiesWithComponents<BossHealthComponent>();
+	if (boss.size())
+	{
+		auto health = boss.front()->GetComponent<BossHealthComponent>();
+		return !health->IsAlive();
+	}
+	return mIsBossSpawned;
+}
+
 std::vector<std::string> Game::GetAvailableWeapons()
 {
 	auto allWeapons = Weapon::GetAllWeapons();
@@ -149,7 +157,7 @@ void Game::UpgradeWeapon(std::string name)
 			}
 		}
 
-		auto newWeapon = WeaponFactory::Create(name);
+		auto newWeapon = Factory::CreateWeapon(name);
 		weaponComponent->AddWeapon(std::move(newWeapon));
 	}
 }

@@ -11,5 +11,4 @@ public:
 private:
 	sf::View& mCamera;
 	void GainPlayerExperience(Entity& enemy, Entity& player);
-	//bool IsOutOfBound(float x, float y);
 };

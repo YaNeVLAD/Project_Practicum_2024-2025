@@ -93,15 +93,6 @@
     <ClCompile Include="src\Manager\Entity\EntityManager.cpp">
       <Filter>Исходные файлы\src\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="src\Factory\PlayerFactory\PlayerFactory.cpp">
-      <Filter>Исходные файлы\src\Factories</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Factory\EnemyFactory\EnemyFactory.cpp">
-      <Filter>Исходные файлы\src\Factories</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Factory\SystemFactory\SystemFactory.cpp">
-      <Filter>Исходные файлы\src\Factories</Filter>
-    </ClCompile>
     <ClCompile Include="src\System\Camera\CameraSystem.cpp">
       <Filter>Исходные файлы\src\Systems\Render</Filter>
     </ClCompile>
@@ -129,9 +120,6 @@
     <ClCompile Include="src\System\HomingProjectile\HomingProjectileSystem.cpp">
       <Filter>Исходные файлы\src\Systems\Update</Filter>
     </ClCompile>
-    <ClCompile Include="src\System\Interface\InterfaceSystem.cpp">
-      <Filter>Исходные файлы\src\Systems\Render</Filter>
-    </ClCompile>
     <ClCompile Include="src\System\Weapon\WeaponSystem.cpp">
       <Filter>Исходные файлы\src\Systems\Update</Filter>
     </ClCompile>
@@ -140,6 +128,12 @@
     </ClCompile>
     <ClCompile Include="src\Manager\Texture\TextureManager.cpp">
       <Filter>Исходные файлы\src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\HUD\HUDSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Factory\Factory.cpp">
+      <Filter>Исходные файлы\src\Factories</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,15 +167,6 @@
     <ClInclude Include="utils\SpriteSheet.h">
       <Filter>Файлы заголовков\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Factory\PlayerFactory\PlayerFactory.h">
-      <Filter>Файлы заголовков\Factories</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Factory\EnemyFactory\EnemyFactory.h">
-      <Filter>Файлы заголовков\Factories</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Factory\SystemFactory\SystemFactory.h">
-      <Filter>Файлы заголовков\Factories</Filter>
-    </ClInclude>
     <ClInclude Include="src\System\Camera\CameraSystem.h">
       <Filter>Файлы заголовков\Systems\Render</Filter>
     </ClInclude>
@@ -212,14 +197,17 @@
     <ClInclude Include="src\System\HomingProjectile\HomingProjectileSystem.h">
       <Filter>Файлы заголовков\Systems\Update</Filter>
     </ClInclude>
-    <ClInclude Include="src\System\Interface\InterfaceSystem.h">
-      <Filter>Файлы заголовков\Systems\Render</Filter>
-    </ClInclude>
     <ClInclude Include="App.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\Manager\Texture\TextureManager.h">
       <Filter>Файлы заголовков\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\HUD\HUDSystem.h">
+      <Filter>Файлы заголовков\Systems\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Factory\Factory.h">
+      <Filter>Файлы заголовков\Factories</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

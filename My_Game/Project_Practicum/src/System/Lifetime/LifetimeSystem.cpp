@@ -12,8 +12,18 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 	{
 		auto lifetime = entity.GetComponent<LifetimeComponent>();
 		auto health = entity.GetComponent<HealthComponent>();
+		auto bossHealth = entity.GetComponent<BossHealthComponent>();
 
-		//auto transform = entity->GetComponent<TransformComponent>();
+		if (bossHealth)
+		{
+			bossHealth->UpdateCooldown(deltaTime);
+			if (!bossHealth->IsAlive())
+			{
+				GainPlayerExperience(entity, *player.front());
+
+				entitiesToDelete.push_back(&entity);
+			}
+		}
 
 		if (health)
 		{
@@ -36,11 +46,6 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 				continue;
 			}
 		}
-
-		//if (IsOutOfBound(transform->x, transform->y))
-		//{
-		//    entitiesToDelete.push_back(entity);
-		//}
 	}
 
 	for (auto& entity : entitiesToDelete)
@@ -67,13 +72,3 @@ void LifetimeSystem::GainPlayerExperience(Entity& enemy, Entity& player)
 		}
 	}
 }
-
-//bool LifetimeSystem::IsOutOfBound(float x, float y)
-//{
-//    float left = mCamera.getCenter().x - mCamera.getSize().x / 2;
-//    float top = mCamera.getCenter().y - mCamera.getSize().y / 2;
-//    float right = left + mCamera.getSize().x;
-//    float bottom = top + mCamera.getSize().y;
-//
-//    return x < left || x > right || y < top || y > bottom;
-//}

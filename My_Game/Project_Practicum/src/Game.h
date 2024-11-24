@@ -24,6 +24,7 @@ public:
 
 	bool IsPlayerDefeated();
 	bool HasPlayerLeveledUp();
+	bool IsBossDefeated();
 
 	std::vector<std::string> GetAvailableWeapons();
 	void UpgradeWeapon(std::string name);
@@ -32,6 +33,7 @@ public:
 		
 private:
 	bool mIsPaused = false;
+	bool mIsBossSpawned = false;
 
 	sf::View& mCamera;
 	sf::RenderWindow& mWindow;
