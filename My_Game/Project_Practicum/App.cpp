@@ -116,7 +116,7 @@ void App::InitUpgradeScreen()
 		button
 			.SetSize(buttonSize)
 			.SetFillColor(sf::Color::Yellow)
-			.SetPosition(Button::Alignment::CenterX, mCamera, { 0.0f, i * (buttonSize.y + spacing) })
+			.SetPosition(Button::Alignment::Center, mCamera, { 0.0f, i * (buttonSize.y + spacing) })
 			.SetText(availableWeapons[i], mFont, 20, sf::Color::Black);
 
 		button.SetOnClickListener([this, weaponName = availableWeapons[i]]()
