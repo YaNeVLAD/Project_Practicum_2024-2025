@@ -10,10 +10,18 @@ public:
 	Game(sf::RenderWindow& window, sf::View& camera) 
 		: mWindow(window), mCamera(camera) {}
 
-	void init()
+	void Reset();
+
+	void Init()
 	{
 		InitSystems();
 		InitPlayer();
+	}
+
+	void Restart()
+	{
+		Reset();
+		Init();
 	}
 
 	void Render(float deltaTime);

@@ -8,6 +8,8 @@ class TextureManager
 public:
 	static std::vector<sf::Texture>& GetTextures(const std::string& filePath, int frameWidth, int frameHeight);
 
+	static void Clear() { mTextureCache.clear(); }
+
 private:
 	static std::unordered_map<std::string, std::vector<sf::Texture>> mTextureCache;
 };

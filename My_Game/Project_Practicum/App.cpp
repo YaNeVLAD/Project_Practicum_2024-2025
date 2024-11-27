@@ -1,5 +1,7 @@
 #include "App.h"
+
 #include <iostream>
+#include "ui/Button/Button.h"
 
 void App::Run()
 {
@@ -22,48 +24,36 @@ void App::ProcessEvents()
 		case sf::Event::Closed: mWindow.close(); break;
 		}
 
-		if (mCurrentState == App::MainMenu)
-		{
-			HandleMainMenuEvents(event);
-		}
-		else if (mCurrentState == App::Playing)
+		if (mCurrentState == AppState::Playing)
 		{
 			mGame.ProcessEvents();
 		}
-		else if (mCurrentState == App::Defeat)
+		else 
 		{
-			HandleDefeatScreenEvents(event);
-		}
-		else if (mCurrentState == App::WeaponUpgrade)
-		{
-			HandleWeaponUpgradeEvents(event);
-		}
-		else if (mCurrentState == App::Victory)
-		{
-			HandleVictoryScreenEvents(event);
+			mScreen.HandleEvents(mWindow, mCamera, event);
 		}
 	}
 }
 
 void App::Update(float deltaTime)
 {
-	if (mCurrentState == App::Playing)
+	if (mCurrentState == AppState::Playing)
 	{
 		mGame.RunFrame(deltaTime);
 		if (mGame.IsPlayerDefeated())
 		{
-			mCurrentState = App::Defeat;
+			mCurrentState = AppState::Defeat;
 		}
 
 		if (mGame.HasPlayerLeveledUp())
 		{
-			mCurrentState = App::WeaponUpgrade;
 			InitUpgradeScreen();
+			mCurrentState = AppState::WeaponUpgrade;
 		}
 
 		if (mGame.IsBossDefeated())
 		{
-			mCurrentState = App::Victory;
+			mCurrentState = AppState::Victory;
 		}
 	}
 }
@@ -74,156 +64,169 @@ void App::Render(float deltaTime)
 
 	switch (mCurrentState)
 	{
-	case App::MainMenu:
-		RenderMainMenu();
+	case AppState::MainMenu:
+		InitMainMenuScreen();
+		mWindow.draw(mScreen);
 		break;
-	case App::Playing:
+	case AppState::Victory:
+		InitVictoryScreen();
+		mWindow.draw(mScreen);
+		break;
+	case AppState::Defeat:
+		InitDefeatScreen();
+		mWindow.draw(mScreen);
+		break;
+	case AppState::WeaponUpgrade:
+		mGame.Render(0.0f);
+		mWindow.draw(mScreen);
+		break;
+	case AppState::Playing:
 		mGame.Render(deltaTime);
-		break;
-	case Victory:
-		RenderVictoryScreen();
-		break;
-	case App::Defeat:
-		RenderDefeatScreen();
-		break;
-	case WeaponUpgrade:
-		RenderWeaponUpgradeScreen();
 		break;
 	}
 
 	mWindow.display();
 }
 
-void App::HandleMainMenuEvents(const sf::Event& event)
-{
-	if (event.type == sf::Event::MouseButtonPressed) 
-	{
-		mCurrentState = App::Playing;
-		mGame.init();
-	}
-}
-
-void App::HandleVictoryScreenEvents(const sf::Event& event)
-{
-	if (event.type == sf::Event::MouseButtonPressed)
-	{
-		mWindow.close();
-	}
-}
-
-void App::HandleWeaponUpgradeEvents(const sf::Event& event)
-{
-	if (event.type != sf::Event::MouseButtonPressed)
-	{
-		return;
-	}
-
-	sf::Vector2f worldPos = mWindow.mapPixelToCoords(sf::Mouse::getPosition(mWindow), mCamera);
-
-	for (size_t i = 0; i < mWeaponUpgradeButtons.size(); ++i)
-	{
-		if (mWeaponUpgradeButtons[i].getGlobalBounds().contains(worldPos))
-		{
-			std::string name = mButtonTexts[i].getString();
-			mGame.UpgradeWeapon(name);
-			mCurrentState = Playing;
-			mGame.ResumeGame();
-		}
-	}
-}
-
-void App::HandleDefeatScreenEvents(const sf::Event& event)
-{
-	if (event.type == sf::Event::MouseButtonPressed)
-	{
-		mWindow.close();
-	}
-}
-
 void App::InitUpgradeScreen()
 {
 	mGame.PauseGame();
-	mWeaponUpgradeButtons.clear();
-	mButtonTexts.clear();
+
+	mScreen.Clear();
 
 	if (!mFont.loadFromFile("assets/font/Roboto-Bold.ttf"))
 	{
 		throw std::runtime_error("Failed to load font");
 	}
 
-	sf::Vector2f buttonSize(200.0f, 50.0f);
-
-	float spacing = 10.0f;
-
 	auto availableWeapons = mGame.GetAvailableWeapons();
-
 	if (availableWeapons.empty())
 	{
-		mCurrentState = App::Playing;
-;		mGame.ResumeGame();
+		mCurrentState = AppState::Playing;
+		mGame.ResumeGame();
 		return;
 	}
 
-	float totalHeight = availableWeapons.size() * buttonSize.y + (availableWeapons.size() - 1) * spacing;
-
-	sf::Vector2f cameraCenter = mCamera.getCenter();
-	sf::Vector2f cameraSize = mCamera.getSize();
-
-	float startY = cameraCenter.y - totalHeight / 2.0f;
+	sf::Vector2f buttonSize(200.0f, 50.0f);
+	float spacing = 10.0f;
 
 	for (size_t i = 0; i < availableWeapons.size(); ++i)
 	{
-		// метод длинный, вынести
-		sf::RectangleShape button(buttonSize);
-		button.setPosition(
-			cameraCenter.x - buttonSize.x / 2.0f,
-			startY + i * (buttonSize.y + spacing)
-		);
-		button.setFillColor(sf::Color::Yellow);
-		mWeaponUpgradeButtons.push_back(button);
+		Button button;
+		button
+			.SetSize(buttonSize)
+			.SetFillColor(sf::Color::Yellow)
+			.SetPosition(Button::Alignment::CenterX, mCamera, { 0.0f, i * (buttonSize.y + spacing) })
+			.SetText(availableWeapons[i], mFont, 20, sf::Color::Black);
 
-		sf::Text buttonText;
-		buttonText.setFont(mFont);
-		buttonText.setString(availableWeapons[i]);
-		buttonText.setCharacterSize(20);
-		buttonText.setFillColor(sf::Color::Black);
+		button.SetOnClickListener([this, weaponName = availableWeapons[i]]()
+			{
+				mGame.UpgradeWeapon(weaponName);
+				mCurrentState = AppState::Playing;
+				mGame.ResumeGame();
+			});
 
-		sf::FloatRect textBounds = buttonText.getLocalBounds();
-		buttonText.setPosition(
-			button.getPosition().x + (buttonSize.x - textBounds.width) / 2.0f,
-			button.getPosition().y + (buttonSize.y - textBounds.height) / 2.0f - textBounds.top
-		);
-		mButtonTexts.push_back(buttonText);
+		mScreen.AddView(std::make_shared<Button>(button));
 	}
 }
 
-void App::RenderMainMenu()
+void App::InitMainMenuScreen()
 {
-	mWindow.draw(mMainMenuText);
-}
+	mScreen.Clear();
 
-void App::RenderDefeatScreen()
-{
-	mWindow.draw(mDefeatText);
-	mWindow.draw(mExitButton);
-}
-
-void App::RenderVictoryScreen()
-{
-	mWindow.draw(mDefeatText);
-	mWindow.draw(mExitButton);
-}
-
-void App::RenderWeaponUpgradeScreen()
-{
-	mGame.Render(0.0f);
-	for (auto& button : mWeaponUpgradeButtons)
+	if (!mFont.loadFromFile("assets/font/Roboto-Bold.ttf"))
 	{
-		mWindow.draw(button);
+		throw std::runtime_error("Failed to load font");
 	}
 
-	for (auto& text : mButtonTexts)
+	Button startButton;
+	startButton
+		.SetSize({ 200.0f, 50.0f })
+		.SetPosition(Button::Alignment::Center, mCamera, { 0.0f, 0.f })
+		.SetFillColor(sf::Color::Green)
+		.SetText("Start Game", mFont);
+
+	startButton.SetOnClickListener([this]()
+		{
+			mGame.Restart();
+			mCurrentState = AppState::Playing;
+		});
+
+	mScreen.AddView(std::make_shared<Button>(startButton));
+}
+
+void App::InitVictoryScreen()
+{
+	mScreen.Clear();
+
+	if (!mFont.loadFromFile("assets/font/Roboto-Bold.ttf"))
 	{
-		mWindow.draw(text);
+		throw std::runtime_error("Failed to load font");
 	}
+
+	Button exitButton;
+	exitButton
+		.SetSize({ 200.0f, 50.0f })
+		.SetPosition(Button::Alignment::Center, mCamera)
+		.SetFillColor(sf::Color::Red)
+		.SetText("Main Menu", mFont);
+
+	exitButton.SetOnClickListener([this]()
+		{
+			mCurrentState = AppState::MainMenu;
+		});
+
+	Button restartButton;
+	restartButton
+		.SetSize({ 200.0f, 50.0f })
+		.SetPosition(Button::Alignment::Center, mCamera, { 0.0f, 60.f })
+		.SetFillColor(sf::Color::Green)
+		.SetText("Restart", mFont);
+
+	restartButton.SetOnClickListener([this]()
+		{
+			mGame.Restart();
+			mCurrentState = AppState::Playing;
+		});
+
+	mScreen.AddView(std::make_shared<Button>(restartButton));
+	mScreen.AddView(std::make_shared<Button>(exitButton));
+}
+
+void App::InitDefeatScreen()
+{
+	mScreen.Clear();
+
+	if (!mFont.loadFromFile("assets/font/Roboto-Bold.ttf"))
+	{
+		throw std::runtime_error("Failed to load font");
+	}
+
+	Button exitButton;
+	exitButton
+		.SetSize({ 200.0f, 50.0f })
+		.SetPosition(Button::Alignment::Center, mCamera)
+		.SetFillColor(sf::Color::Red)
+		.SetText("Main Menu", mFont);
+
+	exitButton.SetOnClickListener([this]()
+		{
+			mCurrentState = AppState::MainMenu;
+		});
+
+	Button restartButton;
+	restartButton
+		.SetSize({ 200.0f, 50.0f })
+		.SetPosition(Button::Alignment::Center, mCamera, { 0.0f, 60.f })
+		.SetFillColor(sf::Color::Green)
+		.SetText("Restart", mFont);
+
+	restartButton.SetOnClickListener([this]()
+		{
+			mGame.Restart();
+			mCurrentState = AppState::Playing;
+		});
+
+	mScreen.AddView(std::make_shared<Button>(restartButton));
+	mScreen.AddView(std::make_shared<Button>(exitButton));
 }

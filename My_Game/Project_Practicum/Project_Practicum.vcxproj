@@ -139,6 +139,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="ui\Screen\Screen.cpp" />
+    <ClCompile Include="ui\Button\Button.cpp" />
     <ClCompile Include="src\Factory\Factory.cpp" />
     <ClCompile Include="src\System\HUD\HUDSystem.cpp" />
     <ClCompile Include="src\System\HomingProjectile\HomingProjectileSystem.cpp" />
@@ -163,6 +165,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="ui\Screen\Screen.h" />
+    <ClInclude Include="ui\Button\Button.h" />
     <ClInclude Include="src\Factory\Factory.h" />
     <ClInclude Include="src\System\HUD\HUDSystem.h" />
     <ClInclude Include="src\System\HomingProjectile\HomingProjectileSystem.h" />
@@ -181,6 +185,7 @@
     <ClInclude Include="src\System\Lifetime\LifetimeSystem.h" />
     <ClInclude Include="src\System\Render\RenderSystem.h" />
     <ClInclude Include="src\Manager\Texture\TextureManager.h" />
+    <ClInclude Include="ui\View.h" />
     <ClInclude Include="utils\SpriteSheet.h" />
     <ClInclude Include="src\System\System.h" />
     <ClInclude Include="src\Manager\System\SystemManager.h" />

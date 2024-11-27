@@ -46,6 +46,13 @@ public:
         return nullptr;
     }
 
+    void Clear()
+    {
+        mSystems.clear();
+        mUpdateSystems.clear();
+        mRenderSystems.clear();
+    }
+
 	std::vector<std::unique_ptr<System>>& GetAllSystems();
 
     std::vector<std::unique_ptr<IUpdateSystem>>& GetUpdateSystems();

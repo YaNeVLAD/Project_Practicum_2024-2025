@@ -9,24 +9,26 @@ public:
 
 	std::vector<Entity>& GetEntities();
 
-    std::vector<Entity*> GetEntitiesWithType(EntityType type);
+	std::vector<Entity*> GetEntitiesWithType(EntityType type);
 
 	void RemoveEntity(Entity::IdType id);
 
-    template<typename... ComponentTypes>
-    std::vector<Entity*> GetEntitiesWithComponents()
-    {
-        std::vector<Entity*> result;
-        for (Entity& entity : mEntities)
-        {
-            if ((entity.GetComponent<ComponentTypes>() && ...))
-            {
-                result.push_back(&entity);
-            }
-        }
+	void Clear() { mEntities.clear(); }
 
-        return result;
-    }
+	template<typename... ComponentTypes>
+	std::vector<Entity*> GetEntitiesWithComponents()
+	{
+		std::vector<Entity*> result;
+		for (Entity& entity : mEntities)
+		{
+			if ((entity.GetComponent<ComponentTypes>() && ...))
+			{
+				result.push_back(&entity);
+			}
+		}
+
+		return result;
+	}
 
 private:
 	std::vector<Entity> mEntities;

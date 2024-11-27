@@ -38,6 +38,14 @@ void Game::ResumeGame()
 	mIsPaused = false;
 }
 
+void Game::Reset()
+{
+	mEntityManager.Clear();
+	mSystemManager.Clear();
+	mIsPaused = false;
+	mIsBossSpawned = false;
+}
+
 void Game::Render(float deltaTime)
 {
 	mWindow.setView(mCamera);

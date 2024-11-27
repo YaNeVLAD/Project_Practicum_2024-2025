@@ -3,6 +3,7 @@
 #include "SFML/Graphics.hpp"
 
 #include "src/Game.h"
+#include "ui/Screen/Screen.h"
 
 class App
 {
@@ -11,7 +12,7 @@ public:
 		: mWindow(sf::VideoMode::getDesktopMode(), "Bloody Survivors"),
 		  mCamera(mWindow.getView()),
 		  mGame(mWindow, mCamera),
-		  mCurrentState(MainMenu)
+		  mCurrentState(AppState::MainMenu)
 	{
 		mWindow.setVerticalSyncEnabled(true);
 		mWindow.setFramerateLimit(120);
@@ -20,7 +21,7 @@ public:
 	void Run();
 
 private:
-	enum AppState
+	enum class AppState
 	{
 		MainMenu,
 		Playing,
@@ -36,28 +37,16 @@ private:
 
 	sf::Clock mClock;
 
-	sf::Text mMainMenuText;
-	sf::Text mDefeatText;
-	sf::RectangleShape mExitButton;
-
 	sf::Font mFont;
-	std::vector<sf::Text> mButtonTexts;
-	std::vector<sf::RectangleShape> mWeaponUpgradeButtons;
-	sf::Text mUpgradePrompt;
+
+	Screen mScreen;
 
 	void ProcessEvents();
 	void Update(float deltaTime);
 	void Render(float deltaTime);
 
-	void HandleMainMenuEvents(const sf::Event& event);
-	void HandleVictoryScreenEvents(const sf::Event& event);
-	void HandleWeaponUpgradeEvents(const sf::Event& event);
-	void HandleDefeatScreenEvents(const sf::Event& event);
-
 	void InitUpgradeScreen();
-
-	void RenderMainMenu();
-	void RenderDefeatScreen();
-	void RenderVictoryScreen();
-	void RenderWeaponUpgradeScreen();
+	void InitMainMenuScreen();
+	void InitVictoryScreen();
+	void InitDefeatScreen();
 };

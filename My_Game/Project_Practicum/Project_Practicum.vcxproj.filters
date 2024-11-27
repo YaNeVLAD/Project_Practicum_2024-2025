@@ -67,6 +67,12 @@
     <Filter Include="Файлы заголовков\Systems\Render">
       <UniqueIdentifier>{0d245500-9822-4f46-817f-660108e5a783}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\ui">
+      <UniqueIdentifier>{6cfef06a-f125-4efa-8347-318d80431010}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\ui">
+      <UniqueIdentifier>{a17cf50e-c5e6-4fe7-b4ae-f108d07f97b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -134,6 +140,12 @@
     </ClCompile>
     <ClCompile Include="src\Factory\Factory.cpp">
       <Filter>Исходные файлы\src\Factories</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\Button\Button.cpp">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\Screen\Screen.cpp">
+      <Filter>Исходные файлы\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +220,15 @@
     </ClInclude>
     <ClInclude Include="src\Factory\Factory.h">
       <Filter>Файлы заголовков\Factories</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\Button\Button.h">
+      <Filter>Файлы заголовков\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\Screen\Screen.h">
+      <Filter>Файлы заголовков\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\View.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
