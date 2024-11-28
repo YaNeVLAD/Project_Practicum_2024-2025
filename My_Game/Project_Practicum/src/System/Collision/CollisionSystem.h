@@ -24,7 +24,7 @@ public:
 	void Update(EntityManager& entityManager, float deltaTime) override;
 
 private:
-    void ApplyDamage(Entity* entity, int damage);
+    void ApplyDamage(Entity* entity, DamageComponent* damage);
 	void HandleCollision(Entity* first, Entity* second);
     void HandlePushAway(Entity* first, Entity* second);
 };

@@ -1,18 +1,17 @@
 #pragma once
 
 #include "../Weapon.h"
-#include <vector>
 #include "SFML/Graphics.hpp"
 
-class MagicCharge : public Weapon
+class Fireball : public Weapon
 {
 public:
-	MagicCharge() 
+	Fireball()
 	{
-		fireRate = 1.0f;
-		projectileSpeed = 250.0f; 
+		fireRate = 2.0f;
+		projectileSpeed = 250.0f;
 		damage = 5;
-		LoadTextures(); 
+		LoadTextures();
 	}
 
 	std::string GetName() { return WEAPON_NAME; }
@@ -22,10 +21,15 @@ public:
 	int GetLevel() override { return mLevel; }
 
 private:
-	const std::string WEAPON_NAME = "Magic Charge";
-	const int MAX_LEVELS = 3;
+	const std::string WEAPON_NAME = "Fireball";
+
+	const int MAX_LEVELS = 4;
 	int mLevel = 1;
 
-	void LoadTextures();
+	int mTrailDamage = 5;
+	sf::Vector2f mScale = { 1,1 };
+
 	std::vector<sf::Texture> mFrames;
+
+	void LoadTextures();
 };

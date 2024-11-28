@@ -7,6 +7,7 @@
 #include "../../System/Render/RenderSystem.h"
 #include "../../System/Camera/CameraSystem.h"
 #include "../../System/Weapon/WeaponSystem.h"
+#include "../../System/TrailSystem/TrailSystem.h"
 #include "../../System/Movement/MovementSystem.h"
 #include "../../System/Lifetime/LifetimeSystem.h"
 #include "../../System/Collision/CollisionSystem.h"

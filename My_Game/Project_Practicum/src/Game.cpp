@@ -120,7 +120,6 @@ std::vector<std::string> Game::GetAvailableWeapons()
 		playerWeapons[weapon->GetName()] = !weapon->CanUpgrade();
 	}
 
-	// Фильтруем общий список оружий
 	allWeapons.erase(
 		std::remove_if(
 			allWeapons.begin(),
@@ -150,11 +149,10 @@ std::vector<std::string> Game::GetAvailableWeapons()
 
 void Game::UpgradeWeapon(std::string name)
 {
-	auto player = mEntityManager.GetEntitiesWithComponents<WeaponComponent, ExperienceComponent>();
+	auto player = mEntityManager.GetEntitiesWithComponents<WeaponComponent, PlayerHealthComponent>();
 	if (player.size())
 	{
 		auto weaponComponent = player.front()->GetComponent<WeaponComponent>();
-		auto experience = player.front()->GetComponent<ExperienceComponent>();
 
 		for (const auto& weapon : weaponComponent->weapons)
 		{

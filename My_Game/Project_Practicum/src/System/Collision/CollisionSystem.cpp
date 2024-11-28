@@ -47,22 +47,27 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 	}
 }
 
-void CollisionSystem::ApplyDamage(Entity* entity, int damage)
+void CollisionSystem::ApplyDamage(Entity* entity, DamageComponent* damage)
 {
+	if (entity->GetType() != damage->targetType)
+	{
+		return;
+	}
+
 	auto health = entity->GetComponent<HealthComponent>();
 	auto playerHealth = entity->GetComponent<PlayerHealthComponent>();
 	auto bossHealth = entity->GetComponent<BossHealthComponent>();
 	if (health)
 	{
-		health->TryTakeDamage(damage);
+		health->TryTakeDamage(damage->amount);
 	}
 	if (playerHealth)
 	{
-		playerHealth->TryTakeDamage(damage);
+		playerHealth->TryTakeDamage(damage->amount);
 	}
 	if (bossHealth)
 	{
-		bossHealth->TryTakeDamage(damage);
+		bossHealth->TryTakeDamage(damage->amount);
 	}
 }
 
@@ -78,7 +83,7 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 			auto damage = second->GetComponent<DamageComponent>();
 			if (damage)
 			{
-				ApplyDamage(first, damage->amount);
+				ApplyDamage(first, damage);
 			}
 		}
 		else
@@ -86,18 +91,18 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 			auto damage = first->GetComponent<DamageComponent>();
 			if (damage)
 			{
-				ApplyDamage(second, damage->amount);
+				ApplyDamage(second, damage);
 			}
 		}
 	}
-	else if ((firstType & Projectile && secondType & Enemy) || (firstType & Enemy && secondType & Projectile))
+	else if (firstType & Projectile || secondType & Projectile)
 	{
 		if (firstType & Projectile)
 		{
 			auto damage = first->GetComponent<DamageComponent>();
 			if (damage)
 			{
-				ApplyDamage(second, damage->amount);
+				ApplyDamage(second, damage);
 			}
 		}
 		else
@@ -105,7 +110,7 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 			auto damage = second->GetComponent<DamageComponent>();
 			if (damage)
 			{
-				ApplyDamage(first, damage->amount);
+				ApplyDamage(first, damage);
 			}
 		}
 	}

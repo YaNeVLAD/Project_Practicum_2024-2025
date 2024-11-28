@@ -4,6 +4,18 @@
 
 void WeaponSystem::Update(EntityManager& entityManager, float deltaTime)
 {
+    auto player = entityManager.GetEntitiesWithType(Player);
+    if (player.empty())
+    {
+        return;
+    }
+
+    auto playerTransform = player.front()->GetComponent<TransformComponent>();
+    if (!playerTransform)
+    {
+        return;
+    }
+
     std::vector<Weapon*> weaponsToAttack;
     TransformComponent* entityTransform = nullptr;
 
@@ -39,6 +51,6 @@ void WeaponSystem::Update(EntityManager& entityManager, float deltaTime)
 
     for (auto& weapon : weaponsToAttack)
     {
-        weapon->Attack(entityManager, entityTransform);
+        weapon->Attack(entityManager, entityTransform, playerTransform);
     }
 }

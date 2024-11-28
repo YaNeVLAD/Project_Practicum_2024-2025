@@ -3,6 +3,7 @@
 #include "SFML/Graphics.hpp"
 
 class Entity;
+enum EntityType;
 class Weapon;
 
 /**
@@ -314,10 +315,13 @@ struct DamageComponent : public Component
 	/**
 	* @brief Основной конструктов
 	* @param int amount - количество наносимого урона
+	* @param EntityType targetType - тип сущности, которой будет наноситься урон
 	*/
-	DamageComponent(int amount) : amount(amount) {}
+	DamageComponent(int amount, EntityType targetType) : amount(amount), targetType(targetType) {}
 
 	int amount = 0;
+
+	EntityType targetType;
 };
 
 /**
@@ -364,4 +368,13 @@ struct ExperienceComponent : public Component
 		}
 		return false;
 	}
+};
+
+struct TrailComponent : public Component
+{
+	TrailComponent(int damage, float interval) : damage(damage), spawnInterval(interval) {}
+
+	int damage;
+	float spawnInterval;
+	float elapsedTime = 0.0f;
 };

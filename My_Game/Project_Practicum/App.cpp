@@ -47,7 +47,7 @@ void App::Update(float deltaTime)
 
 		if (mGame.HasPlayerLeveledUp())
 		{
-			InitUpgradeScreen();
+			mAvailableWeapons = mGame.GetAvailableWeapons();
 			mCurrentState = AppState::WeaponUpgrade;
 		}
 
@@ -78,6 +78,7 @@ void App::Render(float deltaTime)
 		break;
 	case AppState::WeaponUpgrade:
 		mGame.Render(0.0f);
+		InitUpgradeScreen();
 		mWindow.draw(mScreen);
 		break;
 	case AppState::Playing:
@@ -99,27 +100,26 @@ void App::InitUpgradeScreen()
 		throw std::runtime_error("Failed to load font");
 	}
 
-	auto availableWeapons = mGame.GetAvailableWeapons();
-	if (availableWeapons.empty())
+	if (mAvailableWeapons.empty())
 	{
-		mCurrentState = AppState::Playing;
 		mGame.ResumeGame();
+		mCurrentState = AppState::Playing;
 		return;
 	}
 
 	sf::Vector2f buttonSize(200.0f, 50.0f);
 	float spacing = 10.0f;
 
-	for (size_t i = 0; i < availableWeapons.size(); ++i)
+	for (size_t i = 0; i < mAvailableWeapons.size(); ++i)
 	{
 		Button button;
 		button
 			.SetSize(buttonSize)
 			.SetFillColor(sf::Color::Yellow)
 			.SetPosition(Button::Alignment::Center, mCamera, { 0.0f, i * (buttonSize.y + spacing) })
-			.SetText(availableWeapons[i], mFont, 20, sf::Color::Black);
+			.SetText(mAvailableWeapons[i], mFont, 20, sf::Color::Black);
 
-		button.SetOnClickListener([this, weaponName = availableWeapons[i]]()
+		button.SetOnClickListener([this, weaponName = mAvailableWeapons[i]]()
 			{
 				mGame.UpgradeWeapon(weaponName);
 				mCurrentState = AppState::Playing;

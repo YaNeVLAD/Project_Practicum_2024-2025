@@ -1,17 +1,17 @@
 #pragma once
 
 #include "../Weapon.h"
-#include <vector>
 #include "SFML/Graphics.hpp"
 
-class Book : public Weapon
+class Entity;
+
+class LightningStrike : public Weapon
 {
 public:
-	Book()
+	LightningStrike()
 	{
-		fireRate = 5.0f;
+		fireRate = 3.0f;
 		damage = 15;
-		projectileSpeed = 125.0f;
 		LoadTextures();
 	}
 
@@ -22,12 +22,22 @@ public:
 	int GetLevel() override { return mLevel; }
 
 private:
-	const std::string WEAPON_NAME = "Holy Book";
+	const std::string WEAPON_NAME = "Lightning Strike";
+
 	const int MAX_LEVELS = 4;
 	int mLevel = 1;
 
-	float mLifetime = 3.0f;
+	int mChainCount = 1;
+	float mChainRadius = 50.0f;
+	float mMaxDistance = 400.0f;
+	
+	sf::Vector2f mCollisionSize = { 32, 32 };
+	sf::Vector2f mScale = { 1.25f, 1.25f };
+
+	std::vector<sf::Texture> mFrames;
+
+	Entity* FindFarthestEnemy(std::vector<Entity*>&, TransformComponent* transform) const;
+	Entity* FindNextChainTarget(std::vector<Entity*>& enemies, Entity* currentTarget) const;
 
 	void LoadTextures();
-	std::vector<sf::Texture> mFrames;
 };

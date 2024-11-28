@@ -1,32 +1,27 @@
 #pragma once
 
-#include "../Weapon.h"
-#include <vector>
 #include "SFML/Graphics.hpp"
+#include "../Weapon.h"
 
-class Book : public Weapon
+class BossWeapon : public Weapon
 {
 public:
-	Book()
+	BossWeapon()
 	{
-		fireRate = 5.0f;
-		damage = 15;
-		projectileSpeed = 125.0f;
+		fireRate = 1.25f;
+		projectileSpeed = 300.0f;
 		LoadTextures();
 	}
 
 	std::string GetName() { return WEAPON_NAME; }
-	void Upgrade(int level) override;
+	void Upgrade(int level) override { return; }
 	void Attack(EntityManager& entityManager, TransformComponent* parentTransform, TransformComponent* playerTransform) override;
-	bool CanUpgrade() override { return mLevel < MAX_LEVELS; }
+	bool CanUpgrade() override { return false; }
 	int GetLevel() override { return mLevel; }
 
 private:
-	const std::string WEAPON_NAME = "Holy Book";
-	const int MAX_LEVELS = 4;
-	int mLevel = 1;
-
-	float mLifetime = 3.0f;
+	const std::string WEAPON_NAME = "Boss Weapon";
+	int mLevel = -1;
 
 	void LoadTextures();
 	std::vector<sf::Texture> mFrames;

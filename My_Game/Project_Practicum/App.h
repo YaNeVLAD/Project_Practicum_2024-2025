@@ -30,6 +30,8 @@ private:
 		WeaponUpgrade
 	};
 
+	std::vector<std::string> mAvailableWeapons;
+
 	sf::RenderWindow mWindow;
 	sf::View mCamera;
 	AppState mCurrentState;

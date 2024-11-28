@@ -10,19 +10,23 @@ void Book::Upgrade(int level)
 	if (mLevel + 1 <= MAX_LEVELS)
 	{
 		mLevel++;
-		std::cout << WEAPON_NAME << " " << "upgraded to level" << " " << mLevel << std::endl;
+		damage += 5;
+		fireRate -= 1.0f;
 	}
 }
 
-void Book::Attack(EntityManager& entityManager, TransformComponent* parentTransform)
+void Book::Attack(EntityManager& entityManager, TransformComponent* parentTransform, TransformComponent* playerTransform)
 {
 	Entity& projectile = entityManager.CreateEntity(EntityType::Projectile);
 
 	projectile.AddComponent<TransformComponent>(
-		parentTransform->x, parentTransform->y, 0.0f, 0.0f
+		playerTransform->x,
+		playerTransform->y,
+		0.0f,
+		0.0f
 	);
-	projectile.AddComponent<OrbitalProjectileComponent>(100.0f, 2.0f, parentTransform);
-	projectile.AddComponent<LifetimeComponent>(4.0f);
+	projectile.AddComponent<OrbitalProjectileComponent>(125.0f, 2.0f, playerTransform);
+	projectile.AddComponent<LifetimeComponent>(mLifetime);
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(35.625, 48));
 	collisionShape->setOrigin(17.8125, 24);
@@ -30,9 +34,9 @@ void Book::Attack(EntityManager& entityManager, TransformComponent* parentTransf
 
 	projectile.AddComponent<DrawableComponent>(mFrames[0], sf::Vector2f(0.375, 0.375));
 
-	projectile.AddComponent<DamageComponent>(15);
+	projectile.AddComponent<DamageComponent>(damage, Enemy);
 }
-	
+
 void Book::LoadTextures()
 {
 	mFrames = TextureManager::GetTextures("assets/weapon/Book.png", 95, 128);

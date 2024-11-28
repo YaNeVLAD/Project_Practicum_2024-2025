@@ -147,6 +147,18 @@
     <ClCompile Include="ui\Screen\Screen.cpp">
       <Filter>Исходные файлы\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Entity\Weapon\BossWeapon\BossWeapon.cpp">
+      <Filter>Исходные файлы\src\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\TrailSystem\TrailSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Update</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity\Weapon\Fireball\Fireball.cpp">
+      <Filter>Исходные файлы\src\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity\Weapon\LightningStrike\LightningStrike.cpp">
+      <Filter>Исходные файлы\src\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -228,7 +240,19 @@
       <Filter>Файлы заголовков\ui</Filter>
     </ClInclude>
     <ClInclude Include="ui\View.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Файлы заголовков\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entity\Weapon\BossWeapon\BossWeapon.h">
+      <Filter>Файлы заголовков\Entity\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\TrailSystem\TrailSystem.h">
+      <Filter>Файлы заголовков\Systems\Update</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entity\Weapon\Fireball\Fireball.h">
+      <Filter>Файлы заголовков\Entity\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entity\Weapon\LightningStrike\LightningStrike.h">
+      <Filter>Файлы заголовков\Entity\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
