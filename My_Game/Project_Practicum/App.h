@@ -9,7 +9,7 @@ class App
 {
 public:
 	App()
-		: mWindow(sf::VideoMode::getDesktopMode(), "Bloody Survivors"),
+		: mWindow(sf::VideoMode::getDesktopMode(), "Bloody Survivors", sf::Style::Fullscreen),
 		  mCamera(mWindow.getView()),
 		  mGame(mWindow, mCamera),
 		  mCurrentState(AppState::MainMenu)

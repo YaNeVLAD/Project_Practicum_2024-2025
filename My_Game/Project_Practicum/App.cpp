@@ -28,7 +28,7 @@ void App::ProcessEvents()
 		{
 			mGame.ProcessEvents();
 		}
-		else 
+		else
 		{
 			mScreen.HandleEvents(mWindow, mCamera, event);
 		}
@@ -142,7 +142,7 @@ void App::InitMainMenuScreen()
 	Button startButton;
 	startButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(Button::Alignment::Center, mCamera, { 0.0f, 0.f })
+		.SetPosition(Button::Alignment::Center, mCamera)
 		.SetFillColor(sf::Color::Green)
 		.SetText("Start Game", mFont);
 
@@ -152,7 +152,20 @@ void App::InitMainMenuScreen()
 			mCurrentState = AppState::Playing;
 		});
 
+	Button exitButton;
+	exitButton
+		.SetSize({ 200.f, 50.f })
+		.SetPosition(Button::Alignment::Center, mCamera, { 0.f, 60.f })
+		.SetFillColor(sf::Color::Red)
+		.SetText("Exit Game", mFont);
+
+	exitButton.SetOnClickListener([this]()
+		{
+			mWindow.close();
+		});
+
 	mScreen.AddView(std::make_shared<Button>(startButton));
+	mScreen.AddView(std::make_shared<Button>(exitButton));
 }
 
 void App::InitVictoryScreen()
@@ -164,14 +177,14 @@ void App::InitVictoryScreen()
 		throw std::runtime_error("Failed to load font");
 	}
 
-	Button exitButton;
-	exitButton
+	Button mainMenuButton;
+	mainMenuButton
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(Button::Alignment::Center, mCamera)
-		.SetFillColor(sf::Color::Red)
+		.SetFillColor(sf::Color::Green)
 		.SetText("Main Menu", mFont);
 
-	exitButton.SetOnClickListener([this]()
+	mainMenuButton.SetOnClickListener([this]()
 		{
 			mCurrentState = AppState::MainMenu;
 		});
@@ -180,7 +193,7 @@ void App::InitVictoryScreen()
 	restartButton
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(Button::Alignment::Center, mCamera, { 0.0f, 60.f })
-		.SetFillColor(sf::Color::Green)
+		.SetFillColor(sf::Color::Yellow)
 		.SetText("Restart", mFont);
 
 	restartButton.SetOnClickListener([this]()
@@ -189,7 +202,20 @@ void App::InitVictoryScreen()
 			mCurrentState = AppState::Playing;
 		});
 
+	Button exitButton;
+	exitButton
+		.SetSize({ 200.f, 50.f })
+		.SetPosition(Button::Alignment::Center, mCamera, { 0.f, 120.f })
+		.SetFillColor(sf::Color::Red)
+		.SetText("Exit Game", mFont);
+
+	exitButton.SetOnClickListener([this]()
+		{
+			mWindow.close();
+		});
+
 	mScreen.AddView(std::make_shared<Button>(restartButton));
+	mScreen.AddView(std::make_shared<Button>(mainMenuButton));
 	mScreen.AddView(std::make_shared<Button>(exitButton));
 }
 
@@ -202,14 +228,14 @@ void App::InitDefeatScreen()
 		throw std::runtime_error("Failed to load font");
 	}
 
-	Button exitButton;
-	exitButton
+	Button mainMenuButton;
+	mainMenuButton
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(Button::Alignment::Center, mCamera)
-		.SetFillColor(sf::Color::Red)
+		.SetFillColor(sf::Color::Green)
 		.SetText("Main Menu", mFont);
 
-	exitButton.SetOnClickListener([this]()
+	mainMenuButton.SetOnClickListener([this]()
 		{
 			mCurrentState = AppState::MainMenu;
 		});
@@ -218,7 +244,7 @@ void App::InitDefeatScreen()
 	restartButton
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(Button::Alignment::Center, mCamera, { 0.0f, 60.f })
-		.SetFillColor(sf::Color::Green)
+		.SetFillColor(sf::Color::Yellow)
 		.SetText("Restart", mFont);
 
 	restartButton.SetOnClickListener([this]()
@@ -227,6 +253,19 @@ void App::InitDefeatScreen()
 			mCurrentState = AppState::Playing;
 		});
 
+	Button exitButton;
+	exitButton
+		.SetSize({ 200.f, 50.f })
+		.SetPosition(Button::Alignment::Center, mCamera, { 0.f, 120.f })
+		.SetFillColor(sf::Color::Red)
+		.SetText("Exit Game", mFont);
+
+	exitButton.SetOnClickListener([this]()
+		{
+			mWindow.close();
+		});
+
 	mScreen.AddView(std::make_shared<Button>(restartButton));
+	mScreen.AddView(std::make_shared<Button>(mainMenuButton));
 	mScreen.AddView(std::make_shared<Button>(exitButton));
 }
