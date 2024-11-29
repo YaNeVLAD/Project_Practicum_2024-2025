@@ -24,7 +24,7 @@ void LightningStrike::Attack(EntityManager& entityManager, TransformComponent* p
 
 	auto transform = target->GetComponent<TransformComponent>();
 
-	if (!transform)
+	if (transform == nullptr)
 	{
 		return;
 	}
@@ -60,7 +60,7 @@ Entity* LightningStrike::FindFarthestEnemy(std::vector<Entity*>& enemies, Transf
 	for (auto& enemy : enemies)
 	{
 		auto enemyTransform = enemy->GetComponent<TransformComponent>();
-		if (!enemyTransform)
+		if (enemyTransform == nullptr)
 		{
 			continue;
 		}
@@ -84,14 +84,14 @@ Entity* LightningStrike::FindFarthestEnemy(std::vector<Entity*>& enemies, Transf
 
 Entity* LightningStrike::FindNextChainTarget(std::vector<Entity*>& enemies, Entity* currentTarget) const
 {
-	if (!currentTarget)
+	if (currentTarget == nullptr)
 	{
 		return nullptr;
 	}
 
 	auto transform = currentTarget->GetComponent<TransformComponent>();
 
-	if (!transform)
+	if (transform == nullptr)
 	{
 		return nullptr;
 	}
@@ -108,7 +108,7 @@ Entity* LightningStrike::FindNextChainTarget(std::vector<Entity*>& enemies, Enti
 
 		auto enemyTransform = enemy->GetComponent<TransformComponent>();
 
-		if (!enemyTransform)
+		if (enemyTransform == nullptr)
 		{
 			return nullptr;
 		}

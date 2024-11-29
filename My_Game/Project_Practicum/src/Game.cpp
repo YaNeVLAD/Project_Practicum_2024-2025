@@ -15,6 +15,16 @@ void Game::InitPlayer()
 	Factory::CreatePlayer(mEntityManager);
 }
 
+void Game::InitMap()
+{
+	sf::Texture mapTexture;
+	if (!mapTexture.loadFromFile("assets/map/grass.png"))
+	{
+		return;
+	}
+	mMapSprite.setTexture(mapTexture);
+}
+
 void Game::RunFrame(float deltaTime)
 {
 	if (mIsPaused)
@@ -48,6 +58,7 @@ void Game::Reset()
 
 void Game::Render(float deltaTime)
 {
+	
 	mWindow.setView(mCamera);
 	for (auto& system : mSystemManager.GetRenderSystems())
 	{
@@ -70,38 +81,46 @@ void Game::ProcessEvents()
 bool Game::IsPlayerDefeated()
 {
 	auto player = mEntityManager.GetEntitiesWithComponents<PlayerHealthComponent>();
-	if (player.size())
+
+	if (player.empty())
 	{
-		auto health = player.front()->GetComponent<PlayerHealthComponent>();
-		return !health->IsAlive();
+		return true;
 	}
-	return true;
+
+	auto health = player.front()->GetComponent<PlayerHealthComponent>();
+	return !health->IsAlive();
 }
 
 bool Game::HasPlayerLeveledUp()
 {
 	auto player = mEntityManager.GetEntitiesWithComponents<ExperienceComponent>();
-	if (player.size())
+
+	if (player.empty())
 	{
-		auto experience = player.front()->GetComponent<ExperienceComponent>();
-		if (experience->levelUpFlag)
-		{
-			experience->levelUpFlag = false;
-			return true;
-		}
+		return false;
 	}
+
+	auto experience = player.front()->GetComponent<ExperienceComponent>();
+	if (experience->levelUpFlag)
+	{
+		experience->levelUpFlag = false;
+		return true;
+	}
+
 	return false;
 }
 
 bool Game::IsBossDefeated()
 {
 	auto boss = mEntityManager.GetEntitiesWithComponents<BossHealthComponent>();
-	if (boss.size())
+
+	if (boss.empty())
 	{
-		auto health = boss.front()->GetComponent<BossHealthComponent>();
-		return !health->IsAlive();
+		return mIsBossSpawned;
 	}
-	return mIsBossSpawned;
+
+	auto health = boss.front()->GetComponent<BossHealthComponent>();
+	return !health->IsAlive();
 }
 
 std::vector<std::string> Game::GetAvailableWeapons()
@@ -110,7 +129,9 @@ std::vector<std::string> Game::GetAvailableWeapons()
 
 	auto player = mEntityManager.GetEntitiesWithComponents<WeaponComponent>();
 	if (player.empty())
+	{
 		return {};
+	}
 
 	auto weaponComponent = player.front()->GetComponent<WeaponComponent>();
 
@@ -150,20 +171,23 @@ std::vector<std::string> Game::GetAvailableWeapons()
 void Game::UpgradeWeapon(std::string name)
 {
 	auto player = mEntityManager.GetEntitiesWithComponents<WeaponComponent, PlayerHealthComponent>();
-	if (player.size())
+
+	if (player.empty())
 	{
-		auto weaponComponent = player.front()->GetComponent<WeaponComponent>();
-
-		for (const auto& weapon : weaponComponent->weapons)
-		{
-			if (weapon->GetName() == name)
-			{
-				weapon->Upgrade(1);
-				return;
-			}
-		}
-
-		auto newWeapon = Factory::CreateWeapon(name);
-		weaponComponent->AddWeapon(std::move(newWeapon));
+		return;
 	}
+
+	auto weaponComponent = player.front()->GetComponent<WeaponComponent>();
+
+	for (const auto& weapon : weaponComponent->weapons)
+	{
+		if (weapon->GetName() == name)
+		{
+			weapon->Upgrade(1);
+			return;
+		}
+	}
+
+	auto newWeapon = Factory::CreateWeapon(name);
+	weaponComponent->AddWeapon(std::move(newWeapon));
 }

@@ -28,7 +28,7 @@ void InputSystem::Update(EntityManager& entityManager, float deltaTime)
 			transform->vx = 200;
 		}
 
-		if (animation)
+		if (animation != nullptr)
 		{
 			animation->isAnimating = (transform->vx != 0 || transform->vy != 0);
 		}

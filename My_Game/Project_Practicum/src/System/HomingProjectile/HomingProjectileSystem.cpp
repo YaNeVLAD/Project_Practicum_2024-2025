@@ -16,7 +16,7 @@ void HomingProjectileSystem::Update(EntityManager& entityManager, float deltaTim
 		auto rotation = projectileEntity->GetComponent<RotationComponent>();
 
 		Entity* closestEnemy = FindClosestTarget(projectileTransform, enemies);
-		if (!closestEnemy)
+		if (closestEnemy == nullptr)
 		{
 			continue;
 		}
@@ -33,7 +33,7 @@ void HomingProjectileSystem::Update(EntityManager& entityManager, float deltaTim
 		projectileTransform->x += direction.x * homingComponent->speed * deltaTime;
 		projectileTransform->y += direction.y * homingComponent->speed * deltaTime;
 
-		if (rotation)
+		if (rotation != nullptr)
 		{
 			rotation->angle = std::atan2(direction.y, direction.x) * (180.0f / 3.14159265f);
 			collision->shape->setRotation(rotation->angle);
@@ -50,7 +50,7 @@ Entity* HomingProjectileSystem::FindClosestTarget(TransformComponent* projectile
 	{
 		auto enemyTransform = enemy->GetComponent<TransformComponent>();
 
-		if (!enemyTransform)
+		if (enemyTransform == nullptr)
 		{
 			return nullptr;
 		}

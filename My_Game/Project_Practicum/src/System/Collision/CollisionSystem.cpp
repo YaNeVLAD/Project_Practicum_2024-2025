@@ -2,11 +2,16 @@
 
 #include <iostream>
 #include <set>
-
+//Сделать меньше auto в коде
+//Убрать неявное приведение типов
 void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 {
 	auto entities = entityManager.GetEntitiesWithComponents<CollisionComponent>();
-	if (entities.empty()) return;
+	
+	if (entities.empty())
+	{
+		return;
+	}
 
 	std::vector<CollisionEvent> events;
 
@@ -22,7 +27,7 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 	std::sort(events.begin(), events.end());
 
 	std::set<std::pair<float, Entity*>> active;
-
+	//Уменьшить вложенность
 	for (const auto& event : events)
 	{
 		if (event.type == 1)
@@ -57,15 +62,16 @@ void CollisionSystem::ApplyDamage(Entity* entity, DamageComponent* damage)
 	auto health = entity->GetComponent<HealthComponent>();
 	auto playerHealth = entity->GetComponent<PlayerHealthComponent>();
 	auto bossHealth = entity->GetComponent<BossHealthComponent>();
-	if (health)
+
+	if (health != nullptr)
 	{
 		health->TryTakeDamage(damage->amount);
 	}
-	if (playerHealth)
+	if (playerHealth != nullptr)
 	{
 		playerHealth->TryTakeDamage(damage->amount);
 	}
-	if (bossHealth)
+	if (bossHealth != nullptr)
 	{
 		bossHealth->TryTakeDamage(damage->amount);
 	}
@@ -81,7 +87,7 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 		if (firstType & Player)
 		{
 			auto damage = second->GetComponent<DamageComponent>();
-			if (damage)
+			if (damage != nullptr)
 			{
 				ApplyDamage(first, damage);
 			}
@@ -89,7 +95,7 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 		else
 		{
 			auto damage = first->GetComponent<DamageComponent>();
-			if (damage)
+			if (damage != nullptr)
 			{
 				ApplyDamage(second, damage);
 			}
@@ -100,7 +106,7 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 		if (firstType & Projectile)
 		{
 			auto damage = first->GetComponent<DamageComponent>();
-			if (damage)
+			if (damage != nullptr)
 			{
 				ApplyDamage(second, damage);
 			}
@@ -108,7 +114,7 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 		else
 		{
 			auto damage = second->GetComponent<DamageComponent>();
-			if (damage)
+			if (damage != nullptr)
 			{
 				ApplyDamage(first, damage);
 			}

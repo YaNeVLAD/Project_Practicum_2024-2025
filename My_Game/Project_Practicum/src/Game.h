@@ -16,6 +16,7 @@ public:
 	{
 		InitSystems();
 		InitPlayer();
+		InitMap();
 	}
 
 	void Restart()
@@ -43,6 +44,8 @@ private:
 	bool mIsPaused = false;
 	bool mIsBossSpawned = false;
 
+	sf::Sprite mMapSprite;
+
 	sf::View& mCamera;
 	sf::RenderWindow& mWindow;
 	SystemManager mSystemManager;
@@ -50,4 +53,5 @@ private:
 
 	void InitSystems();
 	void InitPlayer();
+	void InitMap();
 };

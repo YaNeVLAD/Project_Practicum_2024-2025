@@ -22,7 +22,7 @@ void MovementSystem::Update(EntityManager& entityManager, float deltaTime)
 			MoveTowardsTarget(*transform, playerPosition, 100.0f, deltaTime);
 		}
 
-		if (collision)
+		if (collision != nullptr)
 		{
 			collision->UpdatePosition(transform->x, transform->y);
 		}
@@ -62,12 +62,12 @@ void MovementSystem::UpdateDirectionAndRotation(TransformComponent& transform, R
 	{
 		transform.lastDirection = newDirection;
 
-		if (rotation)
+		if (rotation != nullptr)
 		{
 			float angle = std::atan2(transform.lastDirection.y, transform.lastDirection.x) * (180.0f / 3.14159f);
 			rotation->angle = angle;
 
-			if (collision)
+			if (collision != nullptr)
 			{
 				collision->shape->setRotation(angle);
 			}

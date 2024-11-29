@@ -25,6 +25,7 @@ void SpawnSystem::Update(EntityManager& entityManager, float deltaTime)
 	}
 }
 
+//Разделить метод
 sf::Vector2f SpawnSystem::SelectSpawnPosition()
 {
     sf::Vector2f cameraCenter = mCamera.getCenter();

@@ -9,19 +9,17 @@ void RenderSystem::Render(EntityManager& entityManager, float deltaTime)
 
 		auto animation = entity->GetComponent<AnimationComponent>();
 		auto rotation = entity->GetComponent<RotationComponent>();
- 
-		auto collision = entity->GetComponent<CollisionComponent>();
 
-		if (collision)
-		{
-			auto& shape = collision->shape;
-			shape->setOutlineColor(sf::Color::Green);
-			shape->setOutlineThickness(1.0f);
-			shape->setFillColor(sf::Color::Transparent);
-			mWindow.draw(*shape);
-		}
+		//auto collision = entity->GetComponent<CollisionComponent>();
 
-		drawable->sprite.setPosition(transform->x, transform->y);
+		//if (collision)
+		//{
+		//	auto& shape = collision->shape;
+		//	shape->setOutlineColor(sf::Color::Green);
+		//	shape->setOutlineThickness(1.0f);
+		//	shape->setFillColor(sf::Color::Transparent);
+		//	mWindow.draw(*shape);
+		//}
 
 		if (rotation)
 		{
@@ -37,15 +35,13 @@ void RenderSystem::Render(EntityManager& entityManager, float deltaTime)
 				drawable->sprite.setScale(newScaleX, drawable->sprite.getScale().y);
 			}
 		}
-		
-		if (animation && !animation->isAnimating && !animation->frames.empty())
+
+		if (animation != nullptr && !animation->isAnimating && !animation->frames.empty())
 		{
 			drawable->sprite.setTexture(animation->frames[0]);
 		}
 
-		mWindow.draw(drawable->sprite);
-
-		if (animation && animation->isAnimating)
+		if (animation != nullptr && animation->isAnimating)
 		{
 			animation->elapsedTime += deltaTime;
 
@@ -53,6 +49,10 @@ void RenderSystem::Render(EntityManager& entityManager, float deltaTime)
 
 			drawable->sprite.setTexture(animation->frames[animation->currentFrameIndex]);
 		}
+
+		drawable->sprite.setPosition(transform->x, transform->y);
+
+		mWindow.draw(drawable->sprite);
 	}
 }
 

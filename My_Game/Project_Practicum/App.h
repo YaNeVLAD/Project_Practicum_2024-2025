@@ -8,14 +8,14 @@
 class App
 {
 public:
-	App()
-		: mWindow(sf::VideoMode::getDesktopMode(), "Bloody Survivors", sf::Style::Fullscreen),
-		  mCamera(mWindow.getView()),
-		  mGame(mWindow, mCamera),
-		  mCurrentState(AppState::MainMenu)
+	App() :
+		mWindow(sf::VideoMode::getDesktopMode(), "Bloody Survivors", sf::Style::Fullscreen),
+		mCamera(mWindow.getView()),
+		mGame(mWindow, mCamera),
+		mCurrentState(AppState::MainMenu)
 	{
 		mWindow.setVerticalSyncEnabled(true);
-		mWindow.setFramerateLimit(60);
+		mWindow.setFramerateLimit(120);
 	}
 
 	void Run();

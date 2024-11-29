@@ -11,7 +11,7 @@ void WeaponSystem::Update(EntityManager& entityManager, float deltaTime)
     }
 
     auto playerTransform = player.front()->GetComponent<TransformComponent>();
-    if (!playerTransform)
+    if (playerTransform == nullptr)
     {
         return;
     }
@@ -24,7 +24,7 @@ void WeaponSystem::Update(EntityManager& entityManager, float deltaTime)
         auto weaponComponent = entity->GetComponent<WeaponComponent>();
         auto transform = entity->GetComponent<TransformComponent>();
 
-        if (weaponComponent && transform)
+        if (weaponComponent != nullptr && transform != nullptr)
         {
             entityTransform = transform;
 

@@ -14,7 +14,7 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 		auto health = entity.GetComponent<HealthComponent>();
 		auto bossHealth = entity.GetComponent<BossHealthComponent>();
 
-		if (bossHealth)
+		if (bossHealth != nullptr)
 		{
 			bossHealth->UpdateCooldown(deltaTime);
 			if (!bossHealth->IsAlive())
@@ -25,7 +25,7 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 			}
 		}
 
-		if (health)
+		if (health != nullptr)
 		{
 			health->UpdateCooldown(deltaTime);
 
@@ -37,7 +37,7 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 			}
 		}
 
-		if (lifetime)
+		if (lifetime != nullptr)
 		{
 			lifetime->time -= deltaTime;
 
