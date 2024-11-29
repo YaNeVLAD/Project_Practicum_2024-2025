@@ -5,14 +5,6 @@
 class Button : public View
 {
 public:
-	enum class Alignment
-	{
-		Default,
-		CenterX,
-		CenterY,
-		Center
-	};
-
 	Button() = default;
 
 	Button& SetSize(const sf::Vector2f size);

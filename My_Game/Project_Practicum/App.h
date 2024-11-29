@@ -9,13 +9,14 @@ class App
 {
 public:
 	App() :
-		mWindow(sf::VideoMode::getDesktopMode(), "Bloody Survivors", sf::Style::Fullscreen),
+		mWindow(sf::VideoMode::getDesktopMode(), "Bloody Survivors"),
 		mCamera(mWindow.getView()),
 		mGame(mWindow, mCamera),
 		mCurrentState(AppState::MainMenu)
 	{
 		mWindow.setVerticalSyncEnabled(true);
 		mWindow.setFramerateLimit(120);
+		LoadFont();
 	}
 
 	void Run();
@@ -51,4 +52,6 @@ private:
 	void InitMainMenuScreen();
 	void InitVictoryScreen();
 	void InitDefeatScreen();
+
+	void LoadFont();
 };

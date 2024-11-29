@@ -6,16 +6,24 @@
 class View : public sf::Drawable
 {
 public:
-    virtual ~View() = default;
+	enum class Alignment
+	{
+		Default,
+		CenterX,
+		CenterY,
+		Center
+	};
 
-    virtual bool Contains(const sf::Vector2f& point) const = 0;
+	virtual ~View() = default;
 
-    void Click() const { if (mOnClick) mOnClick(); }
+	virtual bool Contains(const sf::Vector2f& point) const = 0;
 
-    void SetOnClickListener(const std::function<void()>& callback) { mOnClick = callback; }
+	void Click() const { if (mOnClick) mOnClick(); }
+
+	void SetOnClickListener(const std::function<void()>& callback) { mOnClick = callback; }
 
 protected:
-    std::function<void()> mOnClick = nullptr;
+	std::function<void()> mOnClick = nullptr;
 
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 };

@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "ui/Button/Button.h"
+#include "src/Manager/Texture/TextureManager.h"
 
 void App::Run()
 {
@@ -95,11 +96,6 @@ void App::InitUpgradeScreen()
 
 	mScreen.Clear();
 
-	if (!mFont.loadFromFile("assets/font/Roboto-Bold.ttf"))
-	{
-		throw std::runtime_error("Failed to load font");
-	}
-
 	if (mAvailableWeapons.empty())
 	{
 		mGame.ResumeGame();
@@ -116,7 +112,7 @@ void App::InitUpgradeScreen()
 		button
 			.SetSize(buttonSize)
 			.SetFillColor(sf::Color::Yellow)
-			.SetPosition(Button::Alignment::Center, mCamera, { 0.0f, i * (buttonSize.y + spacing) })
+			.SetPosition(View::Alignment::Center, mCamera, { 0.0f, i * (buttonSize.y + spacing) })
 			.SetText(mAvailableWeapons[i], mFont, 20, sf::Color::Black);
 
 		button.SetOnClickListener([this, weaponName = mAvailableWeapons[i]]()
@@ -134,15 +130,10 @@ void App::InitMainMenuScreen()
 {
 	mScreen.Clear();
 
-	if (!mFont.loadFromFile("assets/font/Roboto-Bold.ttf"))
-	{
-		throw std::runtime_error("Failed to load font");
-	}
-
 	Button startButton;
 	startButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(Button::Alignment::Center, mCamera)
+		.SetPosition(View::Alignment::Center, mCamera)
 		.SetFillColor(sf::Color::Green)
 		.SetText("Start Game", mFont);
 
@@ -155,7 +146,7 @@ void App::InitMainMenuScreen()
 	Button exitButton;
 	exitButton
 		.SetSize({ 200.f, 50.f })
-		.SetPosition(Button::Alignment::Center, mCamera, { 0.f, 60.f })
+		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 60.f })
 		.SetFillColor(sf::Color::Red)
 		.SetText("Exit Game", mFont);
 
@@ -172,15 +163,10 @@ void App::InitVictoryScreen()
 {
 	mScreen.Clear();
 
-	if (!mFont.loadFromFile("assets/font/Roboto-Bold.ttf"))
-	{
-		throw std::runtime_error("Failed to load font");
-	}
-
 	Button mainMenuButton;
 	mainMenuButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(Button::Alignment::Center, mCamera)
+		.SetPosition(View::Alignment::Center, mCamera)
 		.SetFillColor(sf::Color::Green)
 		.SetText("Main Menu", mFont);
 
@@ -192,7 +178,7 @@ void App::InitVictoryScreen()
 	Button restartButton;
 	restartButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(Button::Alignment::Center, mCamera, { 0.0f, 60.f })
+		.SetPosition(View::Alignment::Center, mCamera, { 0.0f, 60.f })
 		.SetFillColor(sf::Color::Yellow)
 		.SetText("Restart", mFont);
 
@@ -205,7 +191,7 @@ void App::InitVictoryScreen()
 	Button exitButton;
 	exitButton
 		.SetSize({ 200.f, 50.f })
-		.SetPosition(Button::Alignment::Center, mCamera, { 0.f, 120.f })
+		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 120.f })
 		.SetFillColor(sf::Color::Red)
 		.SetText("Exit Game", mFont);
 
@@ -223,15 +209,10 @@ void App::InitDefeatScreen()
 {
 	mScreen.Clear();
 
-	if (!mFont.loadFromFile("assets/font/Roboto-Bold.ttf"))
-	{
-		throw std::runtime_error("Failed to load font");
-	}
-
 	Button mainMenuButton;
 	mainMenuButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(Button::Alignment::Center, mCamera)
+		.SetPosition(View::Alignment::Center, mCamera)
 		.SetFillColor(sf::Color::Green)
 		.SetText("Main Menu", mFont);
 
@@ -243,7 +224,7 @@ void App::InitDefeatScreen()
 	Button restartButton;
 	restartButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(Button::Alignment::Center, mCamera, { 0.0f, 60.f })
+		.SetPosition(View::Alignment::Center, mCamera, { 0.0f, 60.f })
 		.SetFillColor(sf::Color::Yellow)
 		.SetText("Restart", mFont);
 
@@ -256,7 +237,7 @@ void App::InitDefeatScreen()
 	Button exitButton;
 	exitButton
 		.SetSize({ 200.f, 50.f })
-		.SetPosition(Button::Alignment::Center, mCamera, { 0.f, 120.f })
+		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 120.f })
 		.SetFillColor(sf::Color::Red)
 		.SetText("Exit Game", mFont);
 
@@ -268,4 +249,9 @@ void App::InitDefeatScreen()
 	mScreen.AddView(std::make_shared<Button>(restartButton));
 	mScreen.AddView(std::make_shared<Button>(mainMenuButton));
 	mScreen.AddView(std::make_shared<Button>(exitButton));
+}
+
+void App::LoadFont()
+{
+	mFont = TextureManager::GetFont("assets/font/Roboto-Bold.ttf");
 }

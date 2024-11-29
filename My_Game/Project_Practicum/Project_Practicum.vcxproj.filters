@@ -159,6 +159,9 @@
     <ClCompile Include="src\Entity\Weapon\LightningStrike\LightningStrike.cpp">
       <Filter>Исходные файлы\src\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="ui\ProgressBar\ProgressBar.cpp">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="src\Entity\Weapon\LightningStrike\LightningStrike.h">
       <Filter>Файлы заголовков\Entity\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ProgressBar\ProgressBar.h">
+      <Filter>Файлы заголовков\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
