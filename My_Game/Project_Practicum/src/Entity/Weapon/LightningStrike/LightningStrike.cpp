@@ -22,6 +22,11 @@ void LightningStrike::Attack(EntityManager& entityManager, TransformComponent* p
 	
 	Entity* target = FindFarthestEnemy(enemies, playerTransform);
 
+	if (target == nullptr)
+	{
+		return;
+	}
+
 	auto transform = target->GetComponent<TransformComponent>();
 
 	if (transform == nullptr)

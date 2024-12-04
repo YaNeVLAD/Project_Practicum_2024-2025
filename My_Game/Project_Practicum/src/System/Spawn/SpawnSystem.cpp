@@ -1,81 +1,128 @@
 #include "SpawnSystem.h"
 
-#include <random>
 #include <iostream>
+
 #include "../../Factory/Factory.h"
 
 void SpawnSystem::Update(EntityManager& entityManager, float deltaTime)
 {
-	mTimeSinceLastSpawn += deltaTime;
+	mTimeSinceLastEnemySpawn += deltaTime;
+	mTimeSinceLastBonusSpawn += deltaTime;
 
-    mElapsedTime += deltaTime;
+	mElapsedTime += deltaTime;
 
-    if (!mIsBossSpawned && mElapsedTime >= BOSS_SPAWN_TIME)
-    {
-        SpawnBoss(entityManager);
-    }
+	if (!mIsBossSpawned && mElapsedTime >= BOSS_SPAWN_TIME)
+	{
+		SpawnBoss(entityManager);
+	}
 
-    auto enemies = entityManager.GetEntitiesWithType(Enemy);
-       
-	if (mTimeSinceLastSpawn >= mSpawnInterval && enemies.size() < MAX_ENTITES_ON_SCREEN)
+	auto enemies = entityManager.GetEntitiesWithType(Enemy);
+
+	if (mTimeSinceLastEnemySpawn >= mEnemySpawnInterval && enemies.size() < MAX_ENEMIES_ON_SCREEN)
 	{
 		sf::Vector2f position = SelectSpawnPosition();
 		Factory::CreateEnemy(entityManager, position.x, position.y);
-		mTimeSinceLastSpawn = 0.0f;
+		mTimeSinceLastEnemySpawn = 0.f;
+	}
+
+	if (mTimeSinceLastBonusSpawn >= mBonusSpawnInterval)
+	{
+		sf::Vector2f position = SelectSpawnPosition();
+		SpawnBonus(entityManager, position);
+		mTimeSinceLastBonusSpawn = 0.f;
 	}
 }
 
-//Разделить метод
+sf::FloatRect SpawnSystem::getCameraBounds()
+{
+	sf::Vector2f cameraCenter = mCamera.getCenter();
+	sf::Vector2f cameraSize = mCamera.getSize();
+
+	if (cameraSize.x == 0.0f || cameraSize.y == 0.0f)
+	{
+		return sf::FloatRect(0.f, 0.f, 0.f, 0.f);
+	}
+
+	float left = cameraCenter.x - cameraSize.x / 2.0f;
+	float top = cameraCenter.y - cameraSize.y / 2.0f;
+	float right = cameraCenter.x + cameraSize.x / 2.0f;
+	float bottom = cameraCenter.y + cameraSize.y / 2.0f;
+
+	return sf::FloatRect(left, top, right, bottom);
+}
+
 sf::Vector2f SpawnSystem::SelectSpawnPosition()
 {
-    sf::Vector2f cameraCenter = mCamera.getCenter();
-    sf::Vector2f cameraSize = mCamera.getSize();
+	sf::FloatRect bounds = getCameraBounds();
 
-    if (cameraSize.x == 0.0f || cameraSize.y == 0.0f)
-    {
-        return sf::Vector2f(0, 0);
-    }
+	std::uniform_real_distribution<float> horizontalDistribution(bounds.left, bounds.width);
+	std::uniform_real_distribution<float> verticalDistribution(bounds.top, bounds.height);
 
-    float leftBound = cameraCenter.x - cameraSize.x / 2.0f;
-    float rightBound = cameraCenter.x + cameraSize.x / 2.0f;
-    float topBound = cameraCenter.y - cameraSize.y / 2.0f;
-    float bottomBound = cameraCenter.y + cameraSize.y / 2.0f;
+	float horizontalDistance = horizontalDistribution(mGenerator);
+	float verticalDistance = verticalDistribution(mGenerator);
 
-    static std::random_device rd;
-    static std::mt19937 generator(rd());
-    std::uniform_int_distribution<int> sideDist(0, 3);
-    std::uniform_real_distribution<float> horizontalDist(leftBound, rightBound);
-    std::uniform_real_distribution<float> verticalDist(topBound, bottomBound);
+	sf::Vector2f distance = { horizontalDistance, verticalDistance };
 
-    int side = sideDist(generator);
-    float spawnX = 0.0f, spawnY = 0.0f;
+	return generatePosition(distance);
+}
 
-    switch (side)
-    {
-    case 0:
-        spawnX = horizontalDist(generator);
-        spawnY = topBound - 40;
-        break;
-    case 1:
-        spawnX = horizontalDist(generator);
-        spawnY = bottomBound + 40;
-        break;
-    case 2:
-        spawnX = leftBound - 40;
-        spawnY = verticalDist(generator);
-        break;
-    case 3:
-        spawnX = rightBound + 40;
-        spawnY = verticalDist(generator);
-        break;
-    }
+sf::Vector2f SpawnSystem::generatePosition(sf::Vector2f& distance)
+{
+	sf::FloatRect bounds = getCameraBounds();
 
-    return sf::Vector2f(spawnX, spawnY);
+	std::uniform_int_distribution<int> sideDist(0, 3);
+
+	int side = sideDist(mGenerator);
+	sf::Vector2f spawn = { 0.f, 0.f };
+
+	switch (side)
+	{
+	case 0:
+		spawn.x = distance.x;
+		spawn.y = bounds.top - 40;
+		break;
+	case 1:
+		spawn.x = distance.x;
+		spawn.y = bounds.height + 40;
+		break;
+	case 2:
+		spawn.x = bounds.left - 40;
+		spawn.y = distance.y;
+		break;
+	case 3:
+		spawn.x = bounds.width + 40;
+		spawn.y = distance.y;
+		break;
+	}
+
+	return spawn;
 }
 
 void SpawnSystem::SpawnBoss(EntityManager& em)
 {
-    sf::Vector2f pos = SelectSpawnPosition();
-    Factory::CreateBoss(em, pos.x, pos.y);
-    mIsBossSpawned = true;
+	sf::Vector2f pos = SelectSpawnPosition();
+	Factory::CreateBoss(em, pos.x, pos.y);
+	mIsBossSpawned = true;
+}
+
+void SpawnSystem::SpawnBonus(EntityManager& em, sf::Vector2f position)
+{
+	std::uniform_int_distribution<int> typeDistribution(
+		BonusComponent::BonusType::Health,
+		BonusComponent::BonusType::Bomb
+	);
+
+	int type = typeDistribution(mGenerator);
+
+	switch (type)
+	{
+	case BonusComponent::BonusType::Health:
+		Factory::CreateHealthBonus(em, position);
+		break;
+	case BonusComponent::BonusType::Bomb:
+		Factory::CreateBombBonus(em, position);
+		break;
+	default:
+		break;
+	}
 }

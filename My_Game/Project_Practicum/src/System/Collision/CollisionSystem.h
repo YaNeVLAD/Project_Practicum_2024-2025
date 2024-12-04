@@ -3,18 +3,24 @@
 #include "../System.h"
 
 struct CollisionEvent {
+    enum class Type
+    {
+        Open = 1,
+        Close = -1
+    };
+
     float x;
-    int type; // 1 - начало, -1 - конец
+    Type type;
     Entity* entity;
     sf::FloatRect rect;
 
     bool operator<(const CollisionEvent& other) const
     {
         if (x != other.x) return x < other.x;
-        return type > other.type; // Открытие перед закрытием при одинаковых x
+        return type > other.type;
     }
 
-    CollisionEvent(float x, int type, Entity* entity, sf::FloatRect rect)
+    CollisionEvent(float x, Type type, Entity* entity, sf::FloatRect rect)
         : x(x), type(type), entity(entity), rect(rect) {}
 };
 
@@ -25,6 +31,7 @@ public:
 
 private:
     void ApplyDamage(Entity* entity, DamageComponent* damage);
-	void HandleCollision(Entity* first, Entity* second);
+    void ApplyBonus(EntityManager& em, Entity* player, Entity* bonus);
+	void HandleCollision(EntityManager& em, Entity* first, Entity* second);
     void HandlePushAway(Entity* first, Entity* second);
 };

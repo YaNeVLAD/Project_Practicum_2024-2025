@@ -5,9 +5,9 @@
 #include "../Manager/System/SystemManager.h"
 #include "../Manager/Entity/EntityManager.h"
 #include "../Manager/Texture/TextureManager.h"
-#include "../Entity/Weapon/MagicCharge/MagicCharge.h"
-#include "../Entity/Weapon/BossWeapon/BossWeapon.h"
 #include "../Entity/Weapon/Fireball/Fireball.h"
+#include "../Entity/Weapon/BossWeapon/BossWeapon.h"
+#include "../Entity/Weapon/MagicCharge/MagicCharge.h"
 #include "../Entity/Weapon/LightningStrike/LightningStrike.h"
 
 void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera, bool& isBossSpawned)
@@ -19,7 +19,7 @@ void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window
 	systemManager.AddSystem<LifetimeSystem>(camera);
 	systemManager.AddSystem<HomingProjectileSystem>();
 	systemManager.AddSystem<OrbitalProjectileSystem>();
-	systemManager.AddSystem<SpawnSystem>(camera, 1.0f, isBossSpawned);
+	systemManager.AddSystem<SpawnSystem>(camera, 1.0f, 1.0f, isBossSpawned);
 	systemManager.AddSystem<TrailSystem>();
 
 	systemManager.AddSystem<RenderSystem>(window);
@@ -109,4 +109,38 @@ void Factory::CreatePlayer(EntityManager& entityManager)
 	player.AddComponent<PlayerHealthComponent>(100, 1.0f);
 
 	player.AddComponent<ExperienceComponent>(100);
+}
+
+void Factory::CreateHealthBonus(EntityManager& entityManager, sf::Vector2f pos)
+{
+	auto& bonus = entityManager.CreateEntity(EntityType::Bonus);
+
+	bonus.AddComponent<BonusComponent>(BonusComponent::BonusType::Health);
+
+	bonus.AddComponent<TransformComponent>(pos.x, pos.y);
+	bonus.AddComponent<DrawableComponent>(32, 32, sf::Color::Green);
+
+	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
+	collisionShape->setOrigin(16, 16);
+	bonus.AddComponent<CollisionComponent>(std::move(collisionShape));
+
+	bonus.AddComponent<LifetimeComponent>(15.f);
+}
+
+void Factory::CreateBombBonus(EntityManager& entityManager, sf::Vector2f pos)
+{
+	auto& bonus = entityManager.CreateEntity(EntityType::Bonus);
+
+	bonus.AddComponent<BonusComponent>(BonusComponent::BonusType::Bomb);
+
+	bonus.AddComponent<DamageComponent>(999, Enemy);
+
+	bonus.AddComponent<TransformComponent>(pos.x, pos.y);
+	bonus.AddComponent<DrawableComponent>(32, 32, sf::Color::Red);
+
+	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
+	collisionShape->setOrigin(16, 16);
+	bonus.AddComponent<CollisionComponent>(std::move(collisionShape));
+
+	bonus.AddComponent<LifetimeComponent>(15.f);
 }

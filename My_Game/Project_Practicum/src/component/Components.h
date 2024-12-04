@@ -256,6 +256,18 @@ struct HealthComponent : public Component
 		}
 	}
 
+	void AddHealth(int amount)
+	{
+		if (currentHealth + amount > maxHealth)
+		{
+			currentHealth = maxHealth;
+		}
+		else
+		{
+			currentHealth += amount;
+		}
+	}
+
 	void UpdateCooldown(float deltaTime)
 	{
 		if (cooldownTimer > 0.0f)
@@ -352,7 +364,7 @@ struct ExperienceComponent : public Component
 	{
 		currentExperience += xpAmount;
 	}
-	
+
 	/**
 	* @brief Функция повышения уровня
 	*/
@@ -377,4 +389,16 @@ struct TrailComponent : public Component
 	int damage;
 	float spawnInterval;
 	float elapsedTime = 0.0f;
+};
+
+struct BonusComponent : public Component
+{
+	enum BonusType {
+		Health,
+		Bomb,
+	};
+
+	BonusType type;
+
+	BonusComponent(BonusType type) : type(type) {}
 };

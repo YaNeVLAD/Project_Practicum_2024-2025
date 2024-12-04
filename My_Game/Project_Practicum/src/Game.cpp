@@ -17,12 +17,11 @@ void Game::InitPlayer()
 
 void Game::InitMap()
 {
-	sf::Texture mapTexture;
-	if (!mapTexture.loadFromFile("assets/map/grass.png"))
+	if (!mMapTexture.loadFromFile("assets/map/grass.png"))
 	{
 		return;
 	}
-	mMapSprite.setTexture(mapTexture);
+	mMapSprite.setTexture(mMapTexture);
 }
 
 void Game::RunFrame(float deltaTime)
@@ -58,8 +57,8 @@ void Game::Reset()
 
 void Game::Render(float deltaTime)
 {
-	
 	mWindow.setView(mCamera);
+
 	for (auto& system : mSystemManager.GetRenderSystems())
 	{
 		system->Render(mEntityManager, deltaTime);

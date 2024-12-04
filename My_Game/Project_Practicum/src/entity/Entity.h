@@ -11,7 +11,8 @@ enum EntityType
 {
     Player = 1 << 0,
     Enemy = 1 << 1,
-    Projectile = 1 << 2
+    Projectile = 1 << 2,
+    Bonus = 1 << 3,
 };
 
 class Entity 

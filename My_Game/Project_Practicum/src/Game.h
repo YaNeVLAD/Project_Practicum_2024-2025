@@ -45,6 +45,7 @@ private:
 	bool mIsBossSpawned = false;
 
 	sf::Sprite mMapSprite;
+	sf::Texture mMapTexture;
 
 	sf::View& mCamera;
 	sf::RenderWindow& mWindow;

@@ -2,12 +2,11 @@
 
 #include <iostream>
 #include <set>
-//Сделать меньше auto в коде
-//Убрать неявное приведение типов
+
 void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 {
 	auto entities = entityManager.GetEntitiesWithComponents<CollisionComponent>();
-	
+
 	if (entities.empty())
 	{
 		return;
@@ -20,34 +19,81 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 		auto collision = entity->GetComponent<CollisionComponent>();
 		sf::FloatRect rect = collision->getRect();
 
-		events.push_back(CollisionEvent(rect.left, 1, entity, rect));
-		events.push_back(CollisionEvent(rect.left + rect.width, -1, entity, rect));
+		events.push_back(CollisionEvent(rect.left, CollisionEvent::Type::Open, entity, rect));
+		events.push_back(CollisionEvent(rect.left + rect.width, CollisionEvent::Type::Close, entity, rect));
 	}
 
 	std::sort(events.begin(), events.end());
 
 	std::set<std::pair<float, Entity*>> active;
-	//Уменьшить вложенность
+	
 	for (const auto& event : events)
 	{
-		if (event.type == 1)
+		if (event.type == CollisionEvent::Type::Open)
 		{
 			for (const auto& activeRect : active)
 			{
 				const auto& otherEntity = activeRect.second;
+
 				auto otherCollision = otherEntity->GetComponent<CollisionComponent>();
 				sf::FloatRect otherRect = otherCollision->getRect();
 
-				if (event.rect.intersects(otherRect))
+				if (!event.rect.intersects(otherRect))
 				{
-					HandleCollision(event.entity, otherEntity);
+					continue;
 				}
+
+				HandleCollision(entityManager, event.entity, otherEntity);
 			}
 			active.insert(std::pair(event.rect.top, event.entity));
 		}
 		else
 		{
 			active.erase(std::pair(event.rect.top, event.entity));
+		}
+	}
+}
+
+void CollisionSystem::ApplyBonus(EntityManager& em, Entity* player, Entity* bonus)
+{
+	if (player == nullptr || bonus == nullptr)
+	{
+		return;
+	}
+
+	auto bonusComponent = bonus->GetComponent<BonusComponent>();
+	auto lifetime = bonus->GetComponent<LifetimeComponent>();
+
+	if (bonusComponent == nullptr || lifetime == nullptr)
+	{
+		return;
+	}
+
+	lifetime->time = -1.f;
+
+	if (bonusComponent->type == BonusComponent::BonusType::Health)
+	{
+		auto health = player->GetComponent<PlayerHealthComponent>();
+		if (health == nullptr)
+		{
+			return;
+		}
+
+		health->AddHealth(50);
+	}
+	else if (bonusComponent->type == BonusComponent::BonusType::Bomb)
+	{
+		auto damage = bonus->GetComponent<DamageComponent>();
+		auto enemies = em.GetEntitiesWithComponents<HealthComponent>();
+
+		if (enemies.empty() || damage == nullptr)
+		{
+			return;
+		}
+
+ 		for (auto& enemy : enemies)
+		{
+			ApplyDamage(enemy, damage);
 		}
 	}
 }
@@ -77,8 +123,13 @@ void CollisionSystem::ApplyDamage(Entity* entity, DamageComponent* damage)
 	}
 }
 
-void CollisionSystem::HandleCollision(Entity* first, Entity* second)
+void CollisionSystem::HandleCollision(EntityManager& em, Entity* first, Entity* second)
 {
+	if (first == nullptr || second == nullptr)
+	{
+		return;
+	}
+
 	auto firstType = first->GetType();
 	auto secondType = second->GetType();
 
@@ -118,6 +169,17 @@ void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 			{
 				ApplyDamage(first, damage);
 			}
+		}
+	}
+	else if ((firstType & Bonus && secondType & Player) || (firstType & Player && secondType & Bonus))
+	{
+		if (firstType & Player)
+		{
+			ApplyBonus(em, first, second);
+		}
+		else
+		{
+			ApplyBonus(em, second, first);
 		}
 	}
 	else if (firstType & Enemy && secondType & Enemy)

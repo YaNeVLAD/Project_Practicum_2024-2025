@@ -14,4 +14,6 @@ public:
 	static void CreateEnemy(EntityManager& entityManager, float x, float y);
 	static void CreateBoss(EntityManager& entityManager, float x, float y);
 	static void CreatePlayer(EntityManager& entityManager);
+	static void CreateHealthBonus(EntityManager& entityManager, sf::Vector2f pos);
+	static void CreateBombBonus(EntityManager& entityManager, sf::Vector2f pos);
 };
