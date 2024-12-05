@@ -13,6 +13,7 @@ enum EntityType
     Enemy = 1 << 1,
     Projectile = 1 << 2,
     Bonus = 1 << 3,
+    Particle = 1<< 4,
 };
 
 class Entity 
@@ -37,7 +38,7 @@ public:
     }
 
     template<typename ComponentType>
-    ComponentType* GetComponent() 
+    ComponentType* GetComponent()
     {
         auto it = mComponents.find(std::type_index(typeid(ComponentType)));
         return it != mComponents.end() ? static_cast<ComponentType*>(it->second.get()) : nullptr;

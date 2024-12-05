@@ -30,7 +30,8 @@ private:
 	const float BOSS_SPAWN_TIME = 300.f;
 	bool& mIsBossSpawned;
 
-	const int MAX_ENEMIES_ON_SCREEN = 30;
+	const int MAX_ENEMIES_ON_SCREEN = 100;
+	const int MAX_CONTAINERS_ON_SCREEN = 10;
 
 	sf::FloatRect getCameraBounds();
 
@@ -38,5 +39,4 @@ private:
 	sf::Vector2f SelectSpawnPosition();
 
 	void SpawnBoss(EntityManager& em);
-	void SpawnBonus(EntityManager& em, sf::Vector2f position);
 };

@@ -26,6 +26,8 @@ void Game::InitMap()
 
 void Game::RunFrame(float deltaTime)
 {
+	mEntityManager.UpdateEntities();
+
 	if (mIsPaused)
 	{
 		return;
@@ -92,14 +94,14 @@ bool Game::IsPlayerDefeated()
 
 bool Game::HasPlayerLeveledUp()
 {
-	auto player = mEntityManager.GetEntitiesWithComponents<ExperienceComponent>();
+	auto player = mEntityManager.GetEntitiesWithComponents<LevelComponent>();
 
 	if (player.empty())
 	{
 		return false;
 	}
 
-	auto experience = player.front()->GetComponent<ExperienceComponent>();
+	auto experience = player.front()->GetComponent<LevelComponent>();
 	if (experience->levelUpFlag)
 	{
 		experience->levelUpFlag = false;

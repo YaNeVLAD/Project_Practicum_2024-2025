@@ -26,7 +26,7 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 	std::sort(events.begin(), events.end());
 
 	std::set<std::pair<float, Entity*>> active;
-	
+
 	for (const auto& event : events)
 	{
 		if (event.type == CollisionEvent::Type::Open)
@@ -84,42 +84,52 @@ void CollisionSystem::ApplyBonus(EntityManager& em, Entity* player, Entity* bonu
 	else if (bonusComponent->type == BonusComponent::BonusType::Bomb)
 	{
 		auto damage = bonus->GetComponent<DamageComponent>();
-		auto enemies = em.GetEntitiesWithComponents<HealthComponent>();
 
-		if (enemies.empty() || damage == nullptr)
+		if (damage == nullptr)
 		{
 			return;
 		}
 
- 		for (auto& enemy : enemies)
+		for (auto& enemy : em.GetEntitiesWithType(EntityType::Enemy))
 		{
-			ApplyDamage(enemy, damage);
+			DealDamage(enemy, damage);
 		}
 	}
 }
 
-void CollisionSystem::ApplyDamage(Entity* entity, DamageComponent* damage)
+void CollisionSystem::DealDamage(Entity* target, DamageComponent* damage)
 {
-	if (entity->GetType() != damage->targetType)
+	if (damage == nullptr)
 	{
 		return;
 	}
 
-	auto health = entity->GetComponent<HealthComponent>();
-	auto playerHealth = entity->GetComponent<PlayerHealthComponent>();
-	auto bossHealth = entity->GetComponent<BossHealthComponent>();
+	if (target->GetType() != damage->targetType)
+	{
+		return;
+	}
 
+	auto health = target->GetComponent<HealthComponent>();
+	auto bossHealth = target->GetComponent<BossHealthComponent>();
+	auto playerHealth = target->GetComponent<PlayerHealthComponent>();
+
+	auto container = target->GetComponent<ContainerComponent>();
+
+	if (container != nullptr)
+	{
+		container->isDestroyed = true;
+	}
 	if (health != nullptr)
 	{
-		health->TryTakeDamage(damage->amount);
+		damage->DealDamage(health);
 	}
 	if (playerHealth != nullptr)
 	{
-		playerHealth->TryTakeDamage(damage->amount);
+		damage->DealDamage(playerHealth);
 	}
 	if (bossHealth != nullptr)
 	{
-		bossHealth->TryTakeDamage(damage->amount);
+		damage->DealDamage(bossHealth);
 	}
 }
 
@@ -135,56 +145,53 @@ void CollisionSystem::HandleCollision(EntityManager& em, Entity* first, Entity* 
 
 	if ((firstType & Player && secondType & Enemy) || (firstType & Enemy && secondType & Player))
 	{
-		if (firstType & Player)
-		{
-			auto damage = second->GetComponent<DamageComponent>();
-			if (damage != nullptr)
-			{
-				ApplyDamage(first, damage);
-			}
-		}
-		else
-		{
-			auto damage = first->GetComponent<DamageComponent>();
-			if (damage != nullptr)
-			{
-				ApplyDamage(second, damage);
-			}
-		}
+		auto enemy = (firstType & Enemy) ? first : second;
+		auto player = (firstType & Player) ? first : second;
+		DealDamage(player, enemy->GetComponent<DamageComponent>());
 	}
-	else if (firstType & Projectile || secondType & Projectile)
+	else if ((firstType & Player && secondType & Particle) || (firstType & Particle && secondType & Player))
 	{
-		if (firstType & Projectile)
-		{
-			auto damage = first->GetComponent<DamageComponent>();
-			if (damage != nullptr)
-			{
-				ApplyDamage(second, damage);
-			}
-		}
-		else
-		{
-			auto damage = second->GetComponent<DamageComponent>();
-			if (damage != nullptr)
-			{
-				ApplyDamage(first, damage);
-			}
-		}
+		auto player = (firstType & Player) ? first : second;
+		auto particle = (firstType & Particle) ? first : second;
+		ApplyParticleEffect(player, particle);
 	}
 	else if ((firstType & Bonus && secondType & Player) || (firstType & Player && secondType & Bonus))
 	{
-		if (firstType & Player)
-		{
-			ApplyBonus(em, first, second);
-		}
-		else
-		{
-			ApplyBonus(em, second, first);
-		}
+		auto player = (firstType & Player) ? first : second;
+		auto bonus = (firstType & Bonus) ? first : second;
+		ApplyBonus(em, player, bonus);
+	}
+	else if (firstType & Projectile || secondType & Projectile)
+	{
+		auto projectile = (firstType & Projectile) ? first : second;
+		auto target = (firstType & Projectile) ? second : first;
+		DealDamage(target, projectile->GetComponent<DamageComponent>());
 	}
 	else if (firstType & Enemy && secondType & Enemy)
 	{
 		HandlePushAway(first, second);
+	}
+}
+
+void CollisionSystem::ApplyParticleEffect(Entity* player, Entity* particle)
+{
+	if (player == nullptr || particle == nullptr)
+	{
+		return;
+	}
+
+	auto lvl = player->GetComponent<LevelComponent>();
+	auto exp = particle->GetComponent<ExperienceComponent>();
+	auto lifetime = particle->GetComponent<LifetimeComponent>();
+
+	if (lvl != nullptr && exp != nullptr)
+	{
+		lvl->GainExperience(exp->amount);
+	}
+
+	if (lifetime != nullptr)
+	{
+		lifetime->time = 0.f;
 	}
 }
 

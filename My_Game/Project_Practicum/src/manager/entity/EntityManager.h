@@ -15,6 +15,8 @@ public:
 
 	void Clear() { mEntities.clear(); }
 
+	void UpdateEntities();
+
 	template<typename... ComponentTypes>
 	std::vector<Entity*> GetEntitiesWithComponents()
 	{
@@ -31,6 +33,8 @@ public:
 	}
 
 private:
+	std::vector<Entity> mEntitiesToAdd;
+	std::vector<Entity::IdType> mEntitiesToRemove;
 	std::vector<Entity> mEntities;
 	Entity::IdType mNextEntityId = 0;
 };

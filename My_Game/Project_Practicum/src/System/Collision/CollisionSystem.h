@@ -30,8 +30,9 @@ public:
 	void Update(EntityManager& entityManager, float deltaTime) override;
 
 private:
-    void ApplyDamage(Entity* entity, DamageComponent* damage);
+    void DealDamage(Entity* target, DamageComponent* damage);
     void ApplyBonus(EntityManager& em, Entity* player, Entity* bonus);
 	void HandleCollision(EntityManager& em, Entity* first, Entity* second);
+    void ApplyParticleEffect(Entity* player, Entity* particle);
     void HandlePushAway(Entity* first, Entity* second);
 };

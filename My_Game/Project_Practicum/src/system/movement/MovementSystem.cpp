@@ -17,7 +17,9 @@ void MovementSystem::Update(EntityManager& entityManager, float deltaTime)
 
 		auto collision = entity->GetComponent<CollisionComponent>();
 
-		if (entity->GetType() & EntityType::Enemy)
+		auto container = entity->GetComponent<ContainerComponent>();
+
+		if (entity->GetType() & EntityType::Enemy && container == nullptr)
 		{
 			MoveTowardsTarget(*transform, playerPosition, 100.0f, deltaTime);
 		}

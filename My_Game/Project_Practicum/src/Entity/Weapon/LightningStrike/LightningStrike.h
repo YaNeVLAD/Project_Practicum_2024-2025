@@ -37,7 +37,6 @@ private:
 	std::vector<sf::Texture> mFrames;
 
 	Entity* FindFarthestEnemy(std::vector<Entity*>&, TransformComponent* transform) const;
-	Entity* FindNextChainTarget(std::vector<Entity*>& enemies, Entity* currentTarget) const;
 
 	void LoadTextures();
 };

@@ -21,6 +21,8 @@ void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window
 	systemManager.AddSystem<OrbitalProjectileSystem>();
 	systemManager.AddSystem<SpawnSystem>(camera, 1.0f, 1.0f, isBossSpawned);
 	systemManager.AddSystem<TrailSystem>();
+	systemManager.AddSystem<DamageSystem>();
+	systemManager.AddSystem<ContainerSystem>();
 
 	systemManager.AddSystem<RenderSystem>(window);
 	systemManager.AddSystem<CameraSystem>(camera);
@@ -49,30 +51,30 @@ std::unique_ptr<Weapon> Factory::CreateWeapon(const std::string& weaponName)
 	throw std::invalid_argument("Unknown weapon type " + weaponName);
 }
 
-void Factory::CreateEnemy(EntityManager& entityManager, float x, float y)
+void Factory::CreateEnemy(EntityManager& entityManager, sf::Vector2f pos)
 {
 	auto& enemy = entityManager.CreateEntity(EntityType::Enemy);
-	enemy.AddComponent<TransformComponent>(x, y, 0.0f, 0.0f);
+	enemy.AddComponent<TransformComponent>(pos);
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(50, 50));
 	collisionShape->setOrigin(25, 25);
 	enemy.AddComponent<CollisionComponent>(std::move(collisionShape), sf::Vector2f(0, 15));
-	enemy.AddComponent<HealthComponent>(50, 0.5f);
+	enemy.AddComponent<HealthComponent>(50);
 
 	std::vector<sf::Texture> frames = TextureManager::GetTextures("assets/melee_enemy/Walk.png", 128, 128);
 	enemy.AddComponent<AnimationComponent>(frames, 0.2f, true, -1.0f, true);
 	enemy.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(0.75f, 0.75f));
 
-	enemy.AddComponent<DamageComponent>(10, Player);
+	enemy.AddComponent<DamageComponent>(10, 1.f, Player);
 }
 
-void Factory::CreateBoss(EntityManager& entityManager, float x, float y)
+void Factory::CreateBoss(EntityManager& entityManager, sf::Vector2f pos)
 {
 	auto& boss = entityManager.CreateEntity(EntityType::Enemy);
 
-	boss.AddComponent<TransformComponent>(x, y, 0.0f, 0.0f);
-	boss.AddComponent<BossHealthComponent>(300, 0.5f);
-	boss.AddComponent<DamageComponent>(20, Player);
+	boss.AddComponent<TransformComponent>(pos);
+	boss.AddComponent<BossHealthComponent>(300);
+	boss.AddComponent<DamageComponent>(20, 1.f, Player);
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(40, 80));
 	collisionShape->setOrigin(20, 40);
@@ -90,7 +92,7 @@ void Factory::CreateBoss(EntityManager& entityManager, float x, float y)
 void Factory::CreatePlayer(EntityManager& entityManager)
 {
 	auto& player = entityManager.CreateEntity(EntityType::Player);
-	player.AddComponent<TransformComponent>(0.0f, 0.0f, 0.0f, 0.0f);
+	player.AddComponent<TransformComponent>();
 	player.AddComponent<InputComponent>();
 	player.AddComponent<CameraComponent>();
 	player.AddComponent<WeaponComponent>();
@@ -106,9 +108,9 @@ void Factory::CreatePlayer(EntityManager& entityManager)
 	player.AddComponent<AnimationComponent>(frames, 0.2f, true, -1.0f, false);
 	player.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(1.1f, 1.1f));
 
-	player.AddComponent<PlayerHealthComponent>(100, 1.0f);
+	player.AddComponent<PlayerHealthComponent>(100);
 
-	player.AddComponent<ExperienceComponent>(100);
+	player.AddComponent<LevelComponent>(100);
 }
 
 void Factory::CreateHealthBonus(EntityManager& entityManager, sf::Vector2f pos)
@@ -117,7 +119,7 @@ void Factory::CreateHealthBonus(EntityManager& entityManager, sf::Vector2f pos)
 
 	bonus.AddComponent<BonusComponent>(BonusComponent::BonusType::Health);
 
-	bonus.AddComponent<TransformComponent>(pos.x, pos.y);
+	bonus.AddComponent<TransformComponent>(pos);
 	bonus.AddComponent<DrawableComponent>(32, 32, sf::Color::Green);
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
@@ -133,9 +135,9 @@ void Factory::CreateBombBonus(EntityManager& entityManager, sf::Vector2f pos)
 
 	bonus.AddComponent<BonusComponent>(BonusComponent::BonusType::Bomb);
 
-	bonus.AddComponent<DamageComponent>(999, Enemy);
+	bonus.AddComponent<DamageComponent>(999, 0.f, Enemy);
 
-	bonus.AddComponent<TransformComponent>(pos.x, pos.y);
+	bonus.AddComponent<TransformComponent>(pos);
 	bonus.AddComponent<DrawableComponent>(32, 32, sf::Color::Red);
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
@@ -143,4 +145,37 @@ void Factory::CreateBombBonus(EntityManager& entityManager, sf::Vector2f pos)
 	bonus.AddComponent<CollisionComponent>(std::move(collisionShape));
 
 	bonus.AddComponent<LifetimeComponent>(15.f);
+}
+
+void Factory::CreateContainer(EntityManager& entityManager, sf::Vector2f pos)
+{
+	auto& container = entityManager.CreateEntity(EntityType::Enemy);
+
+	container.AddComponent<ContainerComponent>();
+
+	container.AddComponent<TransformComponent>(pos);
+
+	auto& frames = TextureManager::GetTextures("assets/map/Barrel.png", 128, 128);
+	container.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(0.75, 0.75));
+
+	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
+	collisionShape->setOrigin(16, 16);
+	container.AddComponent<CollisionComponent>(std::move(collisionShape));
+}
+
+void Factory::CreateExperience(EntityManager& entityManager, sf::Vector2f pos)
+{
+	auto& experience = entityManager.CreateEntity(EntityType::Particle);
+
+	experience.AddComponent<ExperienceComponent>(50);
+
+	experience.AddComponent<TransformComponent>(pos);
+
+	experience.AddComponent<DrawableComponent>(16, 16, sf::Color::Green);
+
+	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
+	collisionShape->setOrigin(16, 16);
+	experience.AddComponent<CollisionComponent>(std::move(collisionShape));
+
+	experience.AddComponent<LifetimeComponent>(30.f);
 }

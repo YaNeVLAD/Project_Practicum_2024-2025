@@ -139,6 +139,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="src\System\Damage\DamageSystem.cpp" />
+    <ClCompile Include="src\System\Container\ContainerSystem.cpp" />
     <ClCompile Include="ui\ProgressBar\ProgressBar.cpp" />
     <ClCompile Include="src\Entity\Weapon\LightningStrike\LightningStrike.cpp" />
     <ClCompile Include="src\Entity\Weapon\Fireball\Fireball.cpp" />
@@ -170,6 +172,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="src\System\Damage\DamageSystem.h" />
+    <ClInclude Include="src\System\Container\ContainerSystem.h" />
     <ClInclude Include="ui\ProgressBar\ProgressBar.h" />
     <ClInclude Include="src\Entity\Weapon\LightningStrike\LightningStrike.h" />
     <ClInclude Include="src\Entity\Weapon\Fireball\Fireball.h" />

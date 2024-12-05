@@ -21,17 +21,32 @@ std::vector<Entity*> EntityManager::GetEntitiesWithType(EntityType type)
 
 void EntityManager::RemoveEntity(Entity::IdType id)
 {
-	auto it = std::remove_if(mEntities.begin(), mEntities.end(),
-		[id](const Entity& entity) {return entity.GetId() == id; });
+	mEntitiesToRemove.push_back(id);
+}
 
-	if (it != mEntities.end())
+void EntityManager::UpdateEntities()
+{
+	for (auto& entity : mEntitiesToAdd)
 	{
-		mEntities.erase(it, mEntities.end());
+		mEntities.push_back(std::move(entity));
 	}
+	mEntitiesToAdd.clear();
+
+	for (const auto& id : mEntitiesToRemove)
+	{
+		auto it = std::remove_if(mEntities.begin(), mEntities.end(),
+			[id](const Entity& entity) {return entity.GetId() == id; });
+
+		if (it != mEntities.end())
+		{
+			mEntities.erase(it, mEntities.end());
+		}
+	}
+	mEntitiesToRemove.clear();
 }
 
 Entity& EntityManager::CreateEntity(EntityType type)
 {
-	mEntities.emplace_back(mNextEntityId++, type);
-	return mEntities.back();
+	mEntitiesToAdd.emplace_back(mNextEntityId++, type);
+	return mEntitiesToAdd.back();
 }

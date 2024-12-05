@@ -10,5 +10,4 @@ public:
 
 private:
 	sf::View& mCamera;
-	void GainPlayerExperience(Entity& enemy, Entity& player);
 };

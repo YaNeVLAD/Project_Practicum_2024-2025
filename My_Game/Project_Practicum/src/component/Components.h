@@ -31,16 +31,26 @@ struct TransformComponent : public Component
 {
 	/**
 	* @brief Основной конструктор
-	* @param float x - координата
-	* @param float y - координата
-	* @param float vx - скорость по оси x
-	* @param float vy - скорость по оси y
+	* @param sf::Vector2f position - вектор позиции
+	* @param sf::Vector2f velocity - вектор скорости
 	*/
-	TransformComponent(float x = 0, float y = 0, float vx = 0, float vy = 0) : x(x), y(y), vx(vx), vy(vy) {}
+	TransformComponent(sf::Vector2f position = { 0, 0 }, sf::Vector2f velocity = { 0, 0 })
+		: x(position.x), y(position.y), vx(velocity.x), vy(velocity.y) {
+	}
+
+	sf::Vector2f GetPosition()
+	{
+		return { x, y };
+	}
+
+	sf::Vector2f GetVelocity()
+	{
+		return { vx, vy };
+	}
 
 	float x, y;
 	float vx, vy;
-	sf::Vector2f lastDirection = { 1.0f, 0.0f };
+	sf::Vector2f lastDirection = { 0.f, 0.f };
 };
 
 /**
@@ -232,48 +242,22 @@ struct HealthComponent : public Component
 	/**
 	* @brief Основной конструктов
 	* @param int maxHealth - максимальное здоровье сущности
-	* @param float damageCooldown - перезарядка для получения урона
 	*/
-	HealthComponent(int maxHealth, float damageCooldown)
-		: maxHealth(maxHealth), currentHealth(maxHealth), damageCooldown(damageCooldown) {
-	}
+	HealthComponent(int maxHealth) : maxHealth(maxHealth), currentHealth(maxHealth) {}
 
 	int maxHealth;
 	int currentHealth;
-	float damageCooldown;
-	float cooldownTimer = 0.0f;
 
-	void TryTakeDamage(int damage)
+	void RemoveHealth(int amount)
 	{
-		if (cooldownTimer <= 0.0f)
-		{
-			currentHealth -= damage;
-			cooldownTimer = damageCooldown;
-			if (currentHealth < 0)
-			{
-				currentHealth = 0;
-			}
-		}
+		currentHealth -= amount;
 	}
 
 	void AddHealth(int amount)
 	{
-		if (currentHealth + amount > maxHealth)
-		{
-			currentHealth = maxHealth;
-		}
-		else
-		{
-			currentHealth += amount;
-		}
-	}
-
-	void UpdateCooldown(float deltaTime)
-	{
-		if (cooldownTimer > 0.0f)
-		{
-			cooldownTimer -= deltaTime;
-		}
+		(currentHealth + amount > maxHealth)
+			? currentHealth = maxHealth
+			: currentHealth += amount;
 	}
 
 	bool IsAlive() const
@@ -281,10 +265,10 @@ struct HealthComponent : public Component
 		return currentHealth > 0;
 	}
 
-	void LevelUp(int additionalHealth)
+	void IncreaseHealth(int amount)
 	{
 		float healthRatio = static_cast<float>(currentHealth) / maxHealth;
-		maxHealth += additionalHealth;
+		maxHealth += amount;
 		currentHealth = static_cast<int>(maxHealth * healthRatio);
 	}
 };
@@ -297,11 +281,8 @@ struct PlayerHealthComponent : public HealthComponent
 	/**
 	* @brief Основной конструктов
 	* @param int maxHealth - максимальное здоровье сущности
-	* @param float damageCooldown - перезарядка для получения урона
 	*/
-	PlayerHealthComponent(int maxHealth, float damageCooldown)
-		: HealthComponent(maxHealth, damageCooldown) {
-	}
+	PlayerHealthComponent(int maxHealth) : HealthComponent(maxHealth) {}
 };
 
 /**
@@ -312,11 +293,8 @@ struct BossHealthComponent : public HealthComponent
 	/**
 	* @brief Основной конструктов
 	* @param int maxHealth - максимальное здоровье сущности
-	* @param float damageCooldown - перезарядка для получения урона
 	*/
-	BossHealthComponent(int maxHealth, float damageCooldown)
-		: HealthComponent(maxHealth, damageCooldown) {
-	}
+	BossHealthComponent(int maxHealth) : HealthComponent(maxHealth) {}
 };
 
 /**
@@ -329,23 +307,60 @@ struct DamageComponent : public Component
 	* @param int amount - количество наносимого урона
 	* @param EntityType targetType - тип сущности, которой будет наноситься урон
 	*/
-	DamageComponent(int amount, EntityType targetType) : amount(amount), targetType(targetType) {}
+	DamageComponent(int amount, float cooldown, EntityType targetType)
+		: amount(amount), cooldown(cooldown), timer(cooldown), targetType(targetType) {
+	}
 
-	int amount = 0;
+	int amount;
+	float timer;
+	float cooldown;
+
+	HealthComponent* lastTargetHealth = nullptr;
 
 	EntityType targetType;
+
+	void UpdateCooldown(float dt)
+	{
+		timer -= dt;
+	}
+
+	bool CanDealDamage(HealthComponent* targetHealth) const
+	{
+		return timer <= 0.f;
+	}
+
+	void DealDamage(HealthComponent* targetHealth)
+	{
+		if (targetHealth == nullptr)
+		{
+			return;
+		}
+
+		if (targetHealth != lastTargetHealth)
+		{
+			lastTargetHealth = targetHealth;
+			targetHealth->RemoveHealth(amount);
+			timer = cooldown;
+		}
+
+		if (CanDealDamage(targetHealth))
+		{
+			targetHealth->RemoveHealth(amount);
+			timer = cooldown;
+		}
+	}
 };
 
 /**
 * @brief Компонент хранит данные, необходимые для получения опыта сущности
 */
-struct ExperienceComponent : public Component
+struct LevelComponent : public Component
 {
 	/**
 	* @brief Основной конструктов
 	* @param int maxExperience - максимальное количество опыта на первом уровне
 	*/
-	ExperienceComponent(int maxExperience)
+	LevelComponent(int maxExperience)
 		: maxExperience(maxExperience) {
 	}
 
@@ -357,28 +372,37 @@ struct ExperienceComponent : public Component
 	bool levelUpFlag = false;
 
 	/**
-	* @brief Функция добавления опыта
+	* @brief Функция добавления опыта. При достаточном количестве опыта уровень повысится автоматически
 	* @param int xpAmount - количество полученного опыта
 	*/
-	void GainExperience(int xpAmount)
+	void GainExperience(int amount)
 	{
-		currentExperience += xpAmount;
+		currentExperience += amount;
+		TryLevelUp();
 	}
 
 	/**
-	* @brief Функция повышения уровня
+	* @brief Функция условного повышения уровня
 	*/
-	bool CheckLevelUp()
+	bool TryLevelUp()
 	{
 		if (currentExperience >= maxExperience)
 		{
-			currentExperience = 0;
-			maxExperience = static_cast<int>(maxExperience * XP_PER_LVL_MULT);
-			level++;
-			levelUpFlag = true;
+			LevelUp();
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	* @brief Функция принудительного повышения уровня
+	*/
+	void LevelUp()
+	{
+		currentExperience = 0;
+		maxExperience = static_cast<int>(maxExperience * XP_PER_LVL_MULT);
+		level++;
+		levelUpFlag = true;
 	}
 };
 
@@ -401,4 +425,18 @@ struct BonusComponent : public Component
 	BonusType type;
 
 	BonusComponent(BonusType type) : type(type) {}
+};
+
+struct ContainerComponent : public Component
+{
+	ContainerComponent() {}
+
+	bool isDestroyed = false;
+};
+
+struct ExperienceComponent : public Component
+{
+	ExperienceComponent(int amount) : amount(amount) {}
+
+	int amount;
 };

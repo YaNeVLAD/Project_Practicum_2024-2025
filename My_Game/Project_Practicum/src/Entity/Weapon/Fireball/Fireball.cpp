@@ -21,9 +21,8 @@ void Fireball::Attack(EntityManager& entityManager, TransformComponent* parentTr
 	auto& fireball = entityManager.CreateEntity(Projectile);
 
 	fireball.AddComponent<TransformComponent>(
-		playerTransform->x, playerTransform->y,
-		projectileSpeed * playerTransform->lastDirection.x,
-		projectileSpeed * playerTransform->lastDirection.y
+		playerTransform->GetPosition(),
+		projectileSpeed * playerTransform->lastDirection
 	);
 
 	fireball.AddComponent<DrawableComponent>(mFrames[0], mScale);
@@ -40,7 +39,7 @@ void Fireball::Attack(EntityManager& entityManager, TransformComponent* parentTr
 
 	fireball.AddComponent<CollisionComponent>(std::move(collisionShape));
 
-	fireball.AddComponent<DamageComponent>(damage, Enemy);
+	fireball.AddComponent<DamageComponent>(damage, 0.5f, Enemy);
 
 	fireball.AddComponent<TrailComponent>(mTrailDamage, 0.15f);
 }

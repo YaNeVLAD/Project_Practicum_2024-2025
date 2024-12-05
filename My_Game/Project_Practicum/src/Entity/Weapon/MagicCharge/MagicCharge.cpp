@@ -10,7 +10,7 @@ void MagicCharge::Upgrade(int level)
 	if (mLevel + 1 <= MAX_LEVELS)
 	{
 		mLevel++;
-		damage += 5;
+		damage += 2;
 	}
 }
 
@@ -18,7 +18,7 @@ void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* paren
 {
 	Entity& projectile = entityManager.CreateEntity(EntityType::Projectile);
 	projectile.AddComponent<TransformComponent>(
-		playerTransform->x + 16, playerTransform->y + 32, 0.0f, 0.0f
+		playerTransform->GetPosition() + sf::Vector2f(16, 32)
 	);
 	projectile.AddComponent<LifetimeComponent>(1.25f);
 	projectile.AddComponent<DrawableComponent>(mFrames[0], sf::Vector2f(1.5, 1.5));
@@ -31,7 +31,7 @@ void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* paren
 
 	projectile.AddComponent<HomingProjectileComponent>(projectileSpeed);
 
-	projectile.AddComponent<DamageComponent>(damage, Enemy);
+	projectile.AddComponent<DamageComponent>(damage, 0.25f, Enemy);
 }
 
 void MagicCharge::LoadTextures()

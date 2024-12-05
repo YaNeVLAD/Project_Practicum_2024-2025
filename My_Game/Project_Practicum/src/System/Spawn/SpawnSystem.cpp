@@ -17,18 +17,19 @@ void SpawnSystem::Update(EntityManager& entityManager, float deltaTime)
 	}
 
 	auto enemies = entityManager.GetEntitiesWithType(Enemy);
+	auto containers = entityManager.GetEntitiesWithComponents<ContainerComponent>();
 
 	if (mTimeSinceLastEnemySpawn >= mEnemySpawnInterval && enemies.size() < MAX_ENEMIES_ON_SCREEN)
 	{
 		sf::Vector2f position = SelectSpawnPosition();
-		Factory::CreateEnemy(entityManager, position.x, position.y);
+		Factory::CreateEnemy(entityManager, position);
 		mTimeSinceLastEnemySpawn = 0.f;
 	}
 
-	if (mTimeSinceLastBonusSpawn >= mBonusSpawnInterval)
+	if (mTimeSinceLastBonusSpawn >= mBonusSpawnInterval && containers.size() < MAX_CONTAINERS_ON_SCREEN)
 	{
 		sf::Vector2f position = SelectSpawnPosition();
-		SpawnBonus(entityManager, position);
+		Factory::CreateContainer(entityManager, position);
 		mTimeSinceLastBonusSpawn = 0.f;
 	}
 }
@@ -101,28 +102,6 @@ sf::Vector2f SpawnSystem::generatePosition(sf::Vector2f& distance)
 void SpawnSystem::SpawnBoss(EntityManager& em)
 {
 	sf::Vector2f pos = SelectSpawnPosition();
-	Factory::CreateBoss(em, pos.x, pos.y);
+	Factory::CreateBoss(em, pos);
 	mIsBossSpawned = true;
-}
-
-void SpawnSystem::SpawnBonus(EntityManager& em, sf::Vector2f position)
-{
-	std::uniform_int_distribution<int> typeDistribution(
-		BonusComponent::BonusType::Health,
-		BonusComponent::BonusType::Bomb
-	);
-
-	int type = typeDistribution(mGenerator);
-
-	switch (type)
-	{
-	case BonusComponent::BonusType::Health:
-		Factory::CreateHealthBonus(em, position);
-		break;
-	case BonusComponent::BonusType::Bomb:
-		Factory::CreateBombBonus(em, position);
-		break;
-	default:
-		break;
-	}
 }

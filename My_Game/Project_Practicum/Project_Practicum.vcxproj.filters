@@ -162,6 +162,12 @@
     <ClCompile Include="ui\ProgressBar\ProgressBar.cpp">
       <Filter>Исходные файлы\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\Container\ContainerSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Update</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Damage\DamageSystem.cpp">
+      <Filter>Исходные файлы\src\Systems\Update</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -259,6 +265,12 @@
     </ClInclude>
     <ClInclude Include="ui\ProgressBar\ProgressBar.h">
       <Filter>Файлы заголовков\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Container\ContainerSystem.h">
+      <Filter>Файлы заголовков\Systems\Update</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\Damage\DamageSystem.h">
+      <Filter>Файлы заголовков\Systems\Update</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

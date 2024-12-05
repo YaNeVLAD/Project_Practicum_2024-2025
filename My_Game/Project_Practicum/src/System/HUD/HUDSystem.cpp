@@ -77,7 +77,7 @@ void HUDSystem::RenderPlayerHealth(Entity* player)
 
 void HUDSystem::RenderXPBar(Entity* player)
 {
-	auto experience = player->GetComponent<ExperienceComponent>();
+	auto experience = player->GetComponent<LevelComponent>();
 
 	ProgressBar xpBar;
 	xpBar

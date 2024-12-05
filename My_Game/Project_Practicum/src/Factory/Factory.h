@@ -11,9 +11,11 @@ class Factory
 public:
 	static void InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera, bool& isBossSpawned);
 	static std::unique_ptr<Weapon> CreateWeapon(const std::string& weaponName);
-	static void CreateEnemy(EntityManager& entityManager, float x, float y);
-	static void CreateBoss(EntityManager& entityManager, float x, float y);
+	static void CreateEnemy(EntityManager& entityManager, sf::Vector2f pos);
+	static void CreateBoss(EntityManager& entityManager, sf::Vector2f pos);
 	static void CreatePlayer(EntityManager& entityManager);
 	static void CreateHealthBonus(EntityManager& entityManager, sf::Vector2f pos);
 	static void CreateBombBonus(EntityManager& entityManager, sf::Vector2f pos);
+	static void CreateContainer(EntityManager& entityManager, sf::Vector2f pos);
+	static void CreateExperience(EntityManager& entityManager, sf::Vector2f pos);
 };
