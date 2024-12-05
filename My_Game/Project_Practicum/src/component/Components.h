@@ -38,11 +38,17 @@ struct TransformComponent : public Component
 		: x(position.x), y(position.y), vx(velocity.x), vy(velocity.y) {
 	}
 
+	/**
+	* @brief Функция получения вектора позиции
+	*/
 	sf::Vector2f GetPosition()
 	{
 		return { x, y };
 	}
 
+	/**
+	* @brief Функция получения вектора скорости
+	*/
 	sf::Vector2f GetVelocity()
 	{
 		return { vx, vy };
@@ -174,6 +180,9 @@ struct LifetimeComponent : public Component
 	float maxLifeTime = 0.0f;
 };
 
+/**
+* @brief Компонент обозначает что сущность будет наводиться на ближайшего врага
+*/
 struct HomingProjectileComponent : public Component
 {
 	HomingProjectileComponent(float speed)
@@ -248,11 +257,19 @@ struct HealthComponent : public Component
 	int maxHealth;
 	int currentHealth;
 
+	/**
+	* @brief Функция вычитает здоровье из текущего
+	* @param int amount - количество вычитаемого здоровья
+	*/
 	void RemoveHealth(int amount)
 	{
 		currentHealth -= amount;
 	}
 
+	/**
+	* @brief Функция добавляет здоровье, не увеличивая его максимум
+	* @param int amount - количество добавляемого здоровья
+	*/
 	void AddHealth(int amount)
 	{
 		(currentHealth + amount > maxHealth)
@@ -260,11 +277,18 @@ struct HealthComponent : public Component
 			: currentHealth += amount;
 	}
 
+	/**
+	* @brief Функция определяет жива сущность или нет
+	*/
 	bool IsAlive() const
 	{
 		return currentHealth > 0;
 	}
 
+	/**
+	* @brief Функция увеличивает максимальное здоровье, сохраняя соотношение текущего здоровья к максимальному
+	* @param int amount - количество добавляемого здоровья
+	*/
 	void IncreaseHealth(int amount)
 	{
 		float healthRatio = static_cast<float>(currentHealth) / maxHealth;
@@ -319,16 +343,27 @@ struct DamageComponent : public Component
 
 	EntityType targetType;
 
+	/**
+	* @brief Функция обновляет таймер следующей атаки
+	* @param float dt - время на которое уменьшается таймер
+	*/
 	void UpdateCooldown(float dt)
 	{
 		timer -= dt;
 	}
 
+	/**
+	* @brief Функция определяет можно ли нанести урон или нет
+	*/
 	bool CanDealDamage(HealthComponent* targetHealth) const
 	{
 		return timer <= 0.f;
 	}
 
+	/**
+	* @brief Функция наносит наносит урон компоненту здоровья
+	* @param HealthComponent* targetHealth - компонент здоровья атакуемой сущности
+	*/
 	void DealDamage(HealthComponent* targetHealth)
 	{
 		if (targetHealth == nullptr)
@@ -360,9 +395,7 @@ struct LevelComponent : public Component
 	* @brief Основной конструктов
 	* @param int maxExperience - максимальное количество опыта на первом уровне
 	*/
-	LevelComponent(int maxExperience)
-		: maxExperience(maxExperience) {
-	}
+	LevelComponent(int maxExperience) : maxExperience(maxExperience) {}
 
 	const float XP_PER_LVL_MULT = 1.5f;
 
@@ -406,8 +439,16 @@ struct LevelComponent : public Component
 	}
 };
 
+/**
+* @brief Компонент обозначает, что за сущностью будет оставаться след из проджектайлов
+*/
 struct TrailComponent : public Component
 {
+	/**
+	* @brief Основной конструктор
+	* @param int damage - количество урона проджектайла следа
+	* @param float interval - задержка перед созданием нового проджектайла следа
+	*/
 	TrailComponent(int damage, float interval) : damage(damage), spawnInterval(interval) {}
 
 	int damage;
@@ -415,6 +456,9 @@ struct TrailComponent : public Component
 	float elapsedTime = 0.0f;
 };
 
+/**
+* @brief Компонент обозначает что сущность является бонусом
+*/
 struct BonusComponent : public Component
 {
 	enum BonusType {
@@ -424,18 +468,34 @@ struct BonusComponent : public Component
 
 	BonusType type;
 
+	/**
+	* @brief Основной конструктор
+	* @BonusType type - тип бонуса
+	*/
 	BonusComponent(BonusType type) : type(type) {}
 };
 
+/**
+* @brief Компонент обозначает что сущность является контейнером
+*/
 struct ContainerComponent : public Component
 {
+	/**
+	* @brief Основной конструктор
+	*/
 	ContainerComponent() {}
 
 	bool isDestroyed = false;
 };
 
+/**
+* @brief Компонент обозначает что сущность является опытом
+*/
 struct ExperienceComponent : public Component
 {
+	/**
+	* @brief Основной конструктор
+	*/
 	ExperienceComponent(int amount) : amount(amount) {}
 
 	int amount;
