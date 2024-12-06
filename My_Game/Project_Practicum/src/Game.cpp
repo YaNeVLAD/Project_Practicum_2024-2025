@@ -117,7 +117,7 @@ bool Game::IsBossDefeated()
 
 	if (boss.empty())
 	{
-		return mIsBossSpawned;
+		return false;
 	}
 
 	auto health = boss.front()->GetComponent<BossHealthComponent>();

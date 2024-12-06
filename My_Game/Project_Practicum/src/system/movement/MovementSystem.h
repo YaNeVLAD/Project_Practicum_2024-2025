@@ -9,5 +9,5 @@ public:
 
 private:
 	void MoveTowardsTarget(TransformComponent& transform, const sf::Vector2f targetPosition, float speed, float deltaTime);
-	void UpdateDirectionAndRotation(TransformComponent& transform, RotationComponent* rotation, CollisionComponent* collision);
+	void UpdateDirectionAndRotation(TransformComponent* transform, RotationComponent* rotation, CollisionComponent* collision);
 };

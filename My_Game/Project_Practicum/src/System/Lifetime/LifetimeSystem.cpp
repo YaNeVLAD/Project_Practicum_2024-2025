@@ -17,25 +17,19 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 
 		auto transform = entity.GetComponent<TransformComponent>();
 
-		if (bossHealth != nullptr)
+		if (bossHealth != nullptr && !bossHealth->IsAlive())
 		{
-			if (!bossHealth->IsAlive())
-			{
-				entitiesToDelete.push_back(entity.GetId());
-			}
+			entitiesToDelete.push_back(entity.GetId());
 		}
 
-		if (health != nullptr)
+		if (health != nullptr && !health->IsAlive())
 		{
-			if (!health->IsAlive())
+			if (transform != nullptr)
 			{
-				if (transform != nullptr)
-				{
-					Factory::CreateExperience(entityManager, sf::Vector2f(transform->x, transform->y));
-				}
-
-				entitiesToDelete.push_back(entity.GetId());
+				Factory::CreateExperience(entityManager, sf::Vector2f(transform->x, transform->y));
 			}
+
+			entitiesToDelete.push_back(entity.GetId());
 		}
 
 		if (lifetime != nullptr)

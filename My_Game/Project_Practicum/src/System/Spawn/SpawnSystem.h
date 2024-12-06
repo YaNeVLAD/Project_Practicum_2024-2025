@@ -27,7 +27,7 @@ private:
 	float mTimeSinceLastBonusSpawn = 0.f;
 
 	float mElapsedTime = 0.0f;
-	const float BOSS_SPAWN_TIME = 300.f;
+	const float BOSS_SPAWN_TIME = 3.f;
 	bool& mIsBossSpawned;
 
 	const int MAX_ENEMIES_ON_SCREEN = 100;

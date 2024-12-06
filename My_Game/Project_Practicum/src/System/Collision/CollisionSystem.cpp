@@ -92,7 +92,12 @@ void CollisionSystem::ApplyBonus(EntityManager& em, Entity* player, Entity* bonu
 
 		for (auto& enemy : em.GetEntitiesWithType(EntityType::Enemy))
 		{
-			DealDamage(enemy, damage);
+			auto health = enemy->GetComponent<HealthComponent>();
+			if (health == nullptr)
+			{
+				continue;
+			}
+			damage->DealDamage(health);
 		}
 	}
 	else if (bonusComponent->type == BonusComponent::BonusType::Magnet)

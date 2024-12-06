@@ -71,9 +71,9 @@ sf::Vector2f SpawnSystem::generatePosition(sf::Vector2f& distance)
 {
 	sf::FloatRect bounds = getCameraBounds();
 
-	std::uniform_int_distribution<int> sideDist(0, 3);
+	std::uniform_int_distribution<int> sideDistribution(0, 3);
 
-	int side = sideDist(mGenerator);
+	int side = sideDistribution(mGenerator);
 	sf::Vector2f spawn = { 0.f, 0.f };
 
 	switch (side)

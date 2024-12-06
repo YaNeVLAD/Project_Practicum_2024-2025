@@ -31,7 +31,7 @@ void MovementSystem::Update(EntityManager& entityManager, float deltaTime)
 
 		if (transform->vx != 0 || transform->vy != 0)
 		{
-			UpdateDirectionAndRotation(*transform, rotation, collision);
+			UpdateDirectionAndRotation(transform, rotation, collision);
 		}
 
 		transform->x += transform->vx * deltaTime;
@@ -53,26 +53,29 @@ void MovementSystem::MoveTowardsTarget(TransformComponent& transform, const sf::
 	}
 }
 
-void MovementSystem::UpdateDirectionAndRotation(TransformComponent& transform, RotationComponent* rotation, CollisionComponent* collision)
+void MovementSystem::UpdateDirectionAndRotation(TransformComponent* transform, RotationComponent* rotation, CollisionComponent* collision)
 {
 	sf::Vector2f newDirection = sf::Vector2f(
-		std::copysign(1.0f, transform.vx),
-		std::copysign(1.0f, transform.vy)
+		std::copysign(1.0f, transform->vx),
+		std::copysign(1.0f, transform->vy)
 	);
 
-	if (transform.lastDirection != newDirection)
+	if (transform->lastDirection == newDirection)
 	{
-		transform.lastDirection = newDirection;
-
-		if (rotation != nullptr)
-		{
-			float angle = std::atan2(transform.lastDirection.y, transform.lastDirection.x) * (180.0f / 3.14159f);
-			rotation->angle = angle;
-
-			if (collision != nullptr)
-			{
-				collision->shape->setRotation(angle);
-			}
-		}
+		return;
 	}
+	transform->lastDirection = newDirection;
+
+	if (rotation == nullptr)
+	{
+		return;
+	}
+	float angle = std::atan2(transform->lastDirection.y, transform->lastDirection.x) * (180.0f / 3.14159f);
+	rotation->angle = angle;
+
+	if (collision == nullptr)
+	{
+		return;
+	}
+	collision->shape->setRotation(angle);
 }

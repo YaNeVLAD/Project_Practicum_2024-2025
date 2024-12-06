@@ -13,7 +13,7 @@ public:
 
 	void RemoveEntity(Entity::IdType id);
 
-	void Clear() { mEntities.clear(); }
+	void Clear();
 
 	void UpdateEntities();
 

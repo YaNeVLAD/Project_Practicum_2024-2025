@@ -133,7 +133,7 @@ void App::InitMainMenuScreen()
 	Button startButton;
 	startButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(View::Alignment::Center, mCamera)
+		.SetPosition(View::Alignment::Center, mCamera, {-160.f, 0.f})
 		.SetFillColor(sf::Color::Green)
 		.SetText("Start Game", mFont);
 
@@ -146,7 +146,7 @@ void App::InitMainMenuScreen()
 	Button exitButton;
 	exitButton
 		.SetSize({ 200.f, 50.f })
-		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 60.f })
+		.SetPosition(View::Alignment::Center, mCamera, { 160.f, 0.f })
 		.SetFillColor(sf::Color::Red)
 		.SetText("Exit Game", mFont);
 

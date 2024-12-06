@@ -24,6 +24,13 @@ void EntityManager::RemoveEntity(Entity::IdType id)
 	mEntitiesToRemove.push_back(id);
 }
 
+void EntityManager::Clear()
+{
+	mEntities.clear();
+	mEntitiesToAdd.clear();
+	mEntitiesToRemove.clear();
+}
+
 void EntityManager::UpdateEntities()
 {
 	for (auto& entity : mEntitiesToAdd)
