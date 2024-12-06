@@ -13,7 +13,7 @@ public:
 	static std::unique_ptr<Weapon> CreateWeapon(const std::string& weaponName);
 	static void CreateEnemy(EntityManager& entityManager, sf::Vector2f pos);
 	static void CreateBoss(EntityManager& entityManager, sf::Vector2f pos);
-	static void CreatePlayer(EntityManager& entityManager);
+	static void CreatePlayer(EntityManager& entityManager, sf::Vector2f pos);
 	static void CreateHealthBonus(EntityManager& entityManager, sf::Vector2f pos);
 	static void CreateBombBonus(EntityManager& entityManager, sf::Vector2f pos);
 	static void CreateContainer(EntityManager& entityManager, sf::Vector2f pos);

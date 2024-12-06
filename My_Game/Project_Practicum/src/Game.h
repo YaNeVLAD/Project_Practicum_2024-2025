@@ -3,6 +3,7 @@
 #include "SFML/Graphics.hpp"
 #include "Manager/System/SystemManager.h"
 #include "Manager/Entity/EntityManager.h"
+#include "../ui/Map/Map.h"
 
 class Game
 {
@@ -44,8 +45,7 @@ private:
 	bool mIsPaused = false;
 	bool mIsBossSpawned = false;
 
-	sf::Sprite mMapSprite;
-	sf::Texture mMapTexture;
+	Map mMap;
 
 	sf::View& mCamera;
 	sf::RenderWindow& mWindow;

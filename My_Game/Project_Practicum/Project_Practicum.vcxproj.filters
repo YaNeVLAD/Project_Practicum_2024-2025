@@ -168,6 +168,9 @@
     <ClCompile Include="src\System\Damage\DamageSystem.cpp">
       <Filter>Исходные файлы\src\Systems\Update</Filter>
     </ClCompile>
+    <ClCompile Include="ui\Map\Map.cpp">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -271,6 +274,9 @@
     </ClInclude>
     <ClInclude Include="src\System\Damage\DamageSystem.h">
       <Filter>Файлы заголовков\Systems\Update</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\Map\Map.h">
+      <Filter>Файлы заголовков\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

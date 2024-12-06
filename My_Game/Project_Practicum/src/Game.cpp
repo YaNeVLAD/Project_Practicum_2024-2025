@@ -12,16 +12,12 @@ void Game::InitSystems()
 
 void Game::InitPlayer()
 {
-	Factory::CreatePlayer(mEntityManager);
+	Factory::CreatePlayer(mEntityManager, { mWindow.getSize().x / 2.f, mWindow.getSize().y / 2.f });
 }
 
 void Game::InitMap()
 {
-	if (!mMapTexture.loadFromFile("assets/map/grass.png"))
-	{
-		return;
-	}
-	mMapSprite.setTexture(mMapTexture);
+	mMap.Init("assets/map/Grass.png");
 }
 
 void Game::RunFrame(float deltaTime)
@@ -37,6 +33,8 @@ void Game::RunFrame(float deltaTime)
 	{
 		system->Update(mEntityManager, deltaTime);
 	}
+
+	mMap.UpdatePosition(mCamera);
 }
 
 void Game::PauseGame()
@@ -60,6 +58,8 @@ void Game::Reset()
 void Game::Render(float deltaTime)
 {
 	mWindow.setView(mCamera);
+
+	mWindow.draw(mMap);
 
 	for (auto& system : mSystemManager.GetRenderSystems())
 	{

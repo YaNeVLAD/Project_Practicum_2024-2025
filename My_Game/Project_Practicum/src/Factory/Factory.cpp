@@ -89,10 +89,10 @@ void Factory::CreateBoss(EntityManager& entityManager, sf::Vector2f pos)
 	boss.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(1, 1));
 }
 
-void Factory::CreatePlayer(EntityManager& entityManager)
+void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 {
 	auto& player = entityManager.CreateEntity(EntityType::Player);
-	player.AddComponent<TransformComponent>();
+	player.AddComponent<TransformComponent>(pos);
 	player.AddComponent<InputComponent>();
 	player.AddComponent<CameraComponent>();
 	player.AddComponent<WeaponComponent>();
