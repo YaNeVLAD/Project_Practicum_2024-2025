@@ -8,6 +8,5 @@ public:
 	void Update(EntityManager& entityManager, float deltaTime) override;
 
 private:
-	Entity* FindClosestTarget(TransformComponent* projectile, const std::vector<Entity*>& enemies);
+	Entity* FindClosestTarget(EntityManager& em, TransformComponent* projectile, const EntityType& targetType);
 };
-

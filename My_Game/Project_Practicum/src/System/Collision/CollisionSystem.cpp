@@ -95,6 +95,13 @@ void CollisionSystem::ApplyBonus(EntityManager& em, Entity* player, Entity* bonu
 			DealDamage(enemy, damage);
 		}
 	}
+	else if (bonusComponent->type == BonusComponent::BonusType::Magnet)
+	{
+		for (auto& experience : em.GetEntitiesWithComponents<ExperienceComponent>())
+		{
+			experience->AddComponent<HomingProjectileComponent>(1000.f, EntityType::Player);
+		}
+	}
 }
 
 void CollisionSystem::DealDamage(Entity* target, DamageComponent* damage)

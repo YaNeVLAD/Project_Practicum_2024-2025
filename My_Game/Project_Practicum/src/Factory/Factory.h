@@ -16,6 +16,7 @@ public:
 	static void CreatePlayer(EntityManager& entityManager, sf::Vector2f pos);
 	static void CreateHealthBonus(EntityManager& entityManager, sf::Vector2f pos);
 	static void CreateBombBonus(EntityManager& entityManager, sf::Vector2f pos);
+	static void CreateMagnetBonus(EntityManager& entityManager, sf::Vector2f pos);
 	static void CreateContainer(EntityManager& entityManager, sf::Vector2f pos);
 	static void CreateExperience(EntityManager& entityManager, sf::Vector2f pos);
 };

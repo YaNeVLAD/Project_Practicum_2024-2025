@@ -185,11 +185,16 @@ struct LifetimeComponent : public Component
 */
 struct HomingProjectileComponent : public Component
 {
-	HomingProjectileComponent(float speed)
-		: speed(speed) {
-	}
+	/**
+	* @brief Основной конструктор
+	* @param float speed - скорость снаряда
+	* @param EntityType targetType - тип сущности, на которые будет наводиться снаряд
+	*/
+	HomingProjectileComponent(float speed, EntityType targetType)
+		: speed(speed), targetType(targetType) {}
 
 	float speed;
+	EntityType targetType;
 };
 
 /**
@@ -464,6 +469,7 @@ struct BonusComponent : public Component
 	enum BonusType {
 		Health,
 		Bomb,
+		Magnet,
 	};
 
 	BonusType type;

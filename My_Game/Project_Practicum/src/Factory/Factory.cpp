@@ -147,6 +147,22 @@ void Factory::CreateBombBonus(EntityManager& entityManager, sf::Vector2f pos)
 	bonus.AddComponent<LifetimeComponent>(15.f);
 }
 
+void Factory::CreateMagnetBonus(EntityManager& entityManager, sf::Vector2f pos)
+{
+	auto& magnet = entityManager.CreateEntity(EntityType::Bonus);
+
+	magnet.AddComponent<BonusComponent>(BonusComponent::BonusType::Magnet);
+
+	magnet.AddComponent<TransformComponent>(pos);
+	magnet.AddComponent<DrawableComponent>(32, 32, sf::Color::Blue);
+
+	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
+	collisionShape->setOrigin(16, 16);
+	magnet.AddComponent<CollisionComponent>(std::move(collisionShape));
+
+	magnet.AddComponent<LifetimeComponent>(15.f);
+}
+
 void Factory::CreateContainer(EntityManager& entityManager, sf::Vector2f pos)
 {
 	auto& container = entityManager.CreateEntity(EntityType::Enemy);

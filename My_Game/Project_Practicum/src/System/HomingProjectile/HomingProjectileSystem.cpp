@@ -5,7 +5,6 @@
 void HomingProjectileSystem::Update(EntityManager& entityManager, float deltaTime)
 {
 	auto projectiles = entityManager.GetEntitiesWithComponents<HomingProjectileComponent, TransformComponent, CollisionComponent>();
-	auto enemies = entityManager.GetEntitiesWithType(Enemy);
 
 	for (auto& projectileEntity : projectiles)
 	{
@@ -15,13 +14,13 @@ void HomingProjectileSystem::Update(EntityManager& entityManager, float deltaTim
 
 		auto rotation = projectileEntity->GetComponent<RotationComponent>();
 
-		Entity* closestEnemy = FindClosestTarget(projectileTransform, enemies);
-		if (closestEnemy == nullptr)
+		Entity* closestTarget = FindClosestTarget(entityManager, projectileTransform, homingComponent->targetType);
+		if (closestTarget == nullptr)
 		{
 			continue;
 		}
 
-		auto enemyTransform = closestEnemy->GetComponent<TransformComponent>();
+		auto enemyTransform = closestTarget->GetComponent<TransformComponent>();
 		sf::Vector2f direction(enemyTransform->x - projectileTransform->x, enemyTransform->y - projectileTransform->y);
 
 		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -41,12 +40,12 @@ void HomingProjectileSystem::Update(EntityManager& entityManager, float deltaTim
 	}
 }
 
-Entity* HomingProjectileSystem::FindClosestTarget(TransformComponent* projectile, const std::vector<Entity*>& enemies)
+Entity* HomingProjectileSystem::FindClosestTarget(EntityManager& em, TransformComponent* projectile, const EntityType& targetType)
 {
 	Entity* closestEnemy = nullptr;
 	float minDistanceSquared = std::numeric_limits<float>::max();
 
-	for (auto& enemy : enemies)
+	for (auto& enemy : em.GetEntitiesWithType(targetType))
 	{
 		auto enemyTransform = enemy->GetComponent<TransformComponent>();
 
@@ -57,13 +56,13 @@ Entity* HomingProjectileSystem::FindClosestTarget(TransformComponent* projectile
 
 		float dx = projectile->x - enemyTransform->x;
 		float dy = projectile->y - enemyTransform->y;
-		float distanceSquared = dx * dx + dy * dy; \
+		float distanceSquared = dx * dx + dy * dy;
 
-			if (distanceSquared < minDistanceSquared)
-			{
-				minDistanceSquared = distanceSquared;
-				closestEnemy = enemy;
-			}
+		if (distanceSquared < minDistanceSquared)
+		{
+			minDistanceSquared = distanceSquared;
+			closestEnemy = enemy;
+		}
 	}
 
 	return closestEnemy;

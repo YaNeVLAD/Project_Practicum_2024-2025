@@ -29,7 +29,7 @@ void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* paren
 	collisionShape->setOrigin(16, 16);
 	projectile.AddComponent<CollisionComponent>(std::move(collisionShape));
 
-	projectile.AddComponent<HomingProjectileComponent>(projectileSpeed);
+	projectile.AddComponent<HomingProjectileComponent>(projectileSpeed, EntityType::Enemy);
 
 	projectile.AddComponent<DamageComponent>(damage, 0.25f, Enemy);
 }

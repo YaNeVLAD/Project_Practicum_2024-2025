@@ -28,7 +28,7 @@ void ContainerSystem::SpawnBonus(EntityManager& em, sf::Vector2f position)
 {
 	std::uniform_int_distribution<int> typeDistribution(
 		BonusComponent::BonusType::Health,
-		BonusComponent::BonusType::Bomb
+		BonusComponent::BonusType::Magnet
 	);
 
 	int type = typeDistribution(mGenerator);
@@ -40,6 +40,9 @@ void ContainerSystem::SpawnBonus(EntityManager& em, sf::Vector2f position)
 		break;
 	case BonusComponent::BonusType::Bomb:
 		Factory::CreateBombBonus(em, position);
+		break;
+	case BonusComponent::BonusType::Magnet:
+		Factory::CreateMagnetBonus(em, position);
 		break;
 	default:
 		break;
