@@ -42,9 +42,9 @@ void RenderSystem::Render(EntityManager& entityManager, float deltaTime)
 
 			RenderAnimatedEntity(drawable, animation);
 
-			if (!animation->frames.empty())
+			if (!animation->frames->empty())
 			{
-				drawable->sprite.setTexture(animation->frames[animation->currentFrameIndex]);
+				drawable->sprite.setTexture(*animation->GetCurrentFrame());
 			}
 		}
 
@@ -61,7 +61,7 @@ void RenderSystem::RenderAnimatedEntity(DrawableComponent* drawable, AnimationCo
 		animation->elapsedTime = 0.0f;
 		animation->currentFrameIndex++;
 
-		if (animation->currentFrameIndex >= animation->frames.size())
+		if (animation->currentFrameIndex >= animation->frames->size())
 		{
 			if (animation->loop)
 			{

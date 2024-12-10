@@ -250,7 +250,7 @@ struct AnimationComponent : public Component
 	bool loop = true;
 
 	AnimationState currentState;
-	std::vector<sf::Texture> frames;
+	std::vector<sf::Texture>* frames;
 	std::map<AnimationState, std::vector<sf::Texture>> animations;
 
 	void SetState(AnimationState state)
@@ -258,7 +258,7 @@ struct AnimationComponent : public Component
 		if (currentState != state && animations.find(state) != animations.end())
 		{
 			currentState = state;
-			frames = animations[state];
+			frames = &animations[state];
 			currentFrameIndex = 0;
 			elapsedTime = 0.f;
 		}
@@ -269,10 +269,18 @@ struct AnimationComponent : public Component
 		animations[state] = stateFrames;
 		if (currentState == state)
 		{
-			frames = stateFrames;
+			frames = &animations[state];
 		}
-
 	}
+
+	const sf::Texture* GetCurrentFrame() const
+	{
+		if (frames != nullptr && !frames->empty())
+		{
+			return &(*frames)[currentFrameIndex];
+		}
+		return nullptr;
+;	}
 };
 
 /**
