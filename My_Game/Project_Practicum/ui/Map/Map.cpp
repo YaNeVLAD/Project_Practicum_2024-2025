@@ -18,7 +18,7 @@ void Map::Init(const std::string& textureFile)
 		{
 			sf::Sprite sprite;
 			sprite.setTexture(mBgTexture);
-			sprite.setPosition(i * mMapSize.x, j * mMapSize.y);
+			sprite.setPosition(static_cast<float>(i * mMapSize.x), static_cast<float>(j * mMapSize.y));
 			mBackgrounds[i][j] = sprite;
 		}
 	}
@@ -45,8 +45,8 @@ void Map::UpdatePosition(const sf::View& camera)
 	sf::Vector2f viewCenter = camera.getCenter();
 	sf::Vector2f viewSize = camera.getSize();
 
-	float offsetX = std::fmod(viewCenter.x, mMapSize.x);
-	float offsetY = std::fmod(viewCenter.y, mMapSize.y);
+	float offsetX = std::fmod(viewCenter.x, static_cast<float>(mMapSize.x));
+	float offsetY = std::fmod(viewCenter.y, static_cast<float>(mMapSize.y));
 
 	if (offsetX < 0) offsetX += mMapSize.x;
 	if (offsetY < 0) offsetY += mMapSize.y;

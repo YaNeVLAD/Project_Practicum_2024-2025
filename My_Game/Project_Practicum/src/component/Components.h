@@ -250,7 +250,7 @@ struct AnimationComponent : public Component
 	bool loop = true;
 
 	AnimationState currentState;
-	std::vector<sf::Texture>* frames;
+	std::vector<sf::Texture>* frames = nullptr;
 	std::map<AnimationState, std::vector<sf::Texture>> animations;
 
 	void SetState(AnimationState state)
