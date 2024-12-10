@@ -19,6 +19,8 @@ void MovementSystem::Update(EntityManager& entityManager, float deltaTime)
 
 		auto container = entity->GetComponent<ContainerComponent>();
 
+		auto animation = entity->GetComponent<AnimationComponent>();
+
 		if (entity->GetType() & EntityType::Enemy && container == nullptr)
 		{
 			MoveTowardsTarget(*transform, playerPosition, 100.0f, deltaTime);
@@ -36,6 +38,13 @@ void MovementSystem::Update(EntityManager& entityManager, float deltaTime)
 
 		transform->x += transform->vx * deltaTime;
 		transform->y += transform->vy * deltaTime;
+
+		if (animation != nullptr)
+		{
+			(transform->vx == 0 && transform->vy == 0)
+				? animation->SetState(AnimationComponent::IDLE)
+				: animation->SetState(AnimationComponent::WALK);
+		}
 	}
 }
 

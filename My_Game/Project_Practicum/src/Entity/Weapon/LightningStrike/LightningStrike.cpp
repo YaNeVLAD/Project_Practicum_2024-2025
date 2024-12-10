@@ -36,11 +36,15 @@ void LightningStrike::Attack(EntityManager& entityManager, TransformComponent* p
 	}
 
 	Entity& lightning = entityManager.CreateEntity(EntityType::Projectile);
-	lightning.AddComponent<DrawableComponent>(mFrames[2], mScale);
+
 	lightning.AddComponent<LifetimeComponent>(0.3f);
 	lightning.AddComponent<TransformComponent>(transform->GetPosition());
 
-	lightning.AddComponent<AnimationComponent>(mFrames, 0.15f, false, 0.3f, true);
+	lightning.AddComponent<DrawableComponent>(mFrames[2], mScale);
+	lightning.AddComponent<AnimationComponent>(0.3f, true);
+	auto animation = lightning.GetComponent<AnimationComponent>();
+	animation->AddAnimation(AnimationComponent::ATTACK, mFrames);
+	animation->SetState(AnimationComponent::ATTACK);
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(
 		sf::Vector2f(

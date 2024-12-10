@@ -36,18 +36,16 @@ void RenderSystem::Render(EntityManager& entityManager, float deltaTime)
 			}
 		}
 
-		if (animation != nullptr && !animation->isAnimating && !animation->frames.empty())
-		{
-			drawable->sprite.setTexture(animation->frames[0]);
-		}
-
-		if (animation != nullptr && animation->isAnimating)
+		if (animation != nullptr)
 		{
 			animation->elapsedTime += deltaTime;
 
 			RenderAnimatedEntity(drawable, animation);
 
-			drawable->sprite.setTexture(animation->frames[animation->currentFrameIndex]);
+			if (!animation->frames.empty())
+			{
+				drawable->sprite.setTexture(animation->frames[animation->currentFrameIndex]);
+			}
 		}
 
 		drawable->sprite.setPosition(transform->x, transform->y);

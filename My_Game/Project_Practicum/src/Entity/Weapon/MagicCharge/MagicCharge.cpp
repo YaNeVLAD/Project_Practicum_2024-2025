@@ -21,8 +21,13 @@ void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* paren
 		playerTransform->GetPosition() + sf::Vector2f(16, 32)
 	);
 	projectile.AddComponent<LifetimeComponent>(1.25f);
+
 	projectile.AddComponent<DrawableComponent>(mFrames[0], sf::Vector2f(1.5, 1.5));
-	projectile.AddComponent<AnimationComponent>(mFrames, 0.3f, true, -1.0f, true);
+	projectile.AddComponent<AnimationComponent>(0.3f, true);
+	auto animation = projectile.GetComponent<AnimationComponent>();
+	animation->AddAnimation(AnimationComponent::ATTACK, mFrames);
+	animation->SetState(AnimationComponent::ATTACK);
+	
 	projectile.AddComponent<RotationComponent>();
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));

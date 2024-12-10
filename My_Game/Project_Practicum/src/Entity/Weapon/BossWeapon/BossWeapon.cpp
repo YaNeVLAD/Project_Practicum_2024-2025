@@ -20,8 +20,12 @@ void BossWeapon::Attack(EntityManager& entityManager, TransformComponent* parent
 		parentTransform->GetPosition(), direction * projectileSpeed
 	);
 	projectile.AddComponent<LifetimeComponent>(1.5f);
-	projectile.AddComponent<DrawableComponent>(mFrames[0], sf::Vector2f(1.5, 1.5));
-	projectile.AddComponent<AnimationComponent>(mFrames, 0.2f, true, -1.0f, true);
+
+	projectile.AddComponent<DrawableComponent>(mFrames[0]);
+	projectile.AddComponent<AnimationComponent>(0.3f, true);
+	auto animation = projectile.GetComponent<AnimationComponent>();
+	animation->AddAnimation(AnimationComponent::ATTACK, mFrames);
+	animation->SetState(AnimationComponent::ATTACK);
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
 	collisionShape->setOrigin(16, 16);

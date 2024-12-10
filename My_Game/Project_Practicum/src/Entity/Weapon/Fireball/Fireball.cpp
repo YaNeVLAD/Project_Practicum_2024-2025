@@ -26,7 +26,10 @@ void Fireball::Attack(EntityManager& entityManager, TransformComponent* parentTr
 	);
 
 	fireball.AddComponent<DrawableComponent>(mFrames[0], mScale);
-	fireball.AddComponent<AnimationComponent>(mFrames, 0.2f, true, -1.0f, true);
+	fireball.AddComponent<AnimationComponent>(0.3f, true);
+	auto animation = fireball.GetComponent<AnimationComponent>();
+	animation->AddAnimation(AnimationComponent::ATTACK, mFrames);
+	animation->SetState(AnimationComponent::ATTACK);
 
 	fireball.AddComponent<LifetimeComponent>(1.8f);
 

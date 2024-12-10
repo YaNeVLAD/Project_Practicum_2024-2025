@@ -61,9 +61,14 @@ void Factory::CreateEnemy(EntityManager& entityManager, sf::Vector2f pos)
 	enemy.AddComponent<CollisionComponent>(std::move(collisionShape), sf::Vector2f(0, 15));
 	enemy.AddComponent<HealthComponent>(50);
 
-	std::vector<sf::Texture> frames = TextureManager::GetTextures("assets/melee_enemy/Walk.png", 128, 128);
-	enemy.AddComponent<AnimationComponent>(frames, 0.2f, true, -1.0f, true);
-	enemy.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(0.75f, 0.75f));
+	enemy.AddComponent<AnimationComponent>(0.2f, true);
+
+	std::vector<sf::Texture> walkFrames = TextureManager::GetTextures("assets/melee_enemy/Walk.png", 128, 128);
+	
+	auto animation = enemy.GetComponent<AnimationComponent>();
+	animation->AddAnimation(AnimationComponent::WALK, walkFrames);
+
+	enemy.AddComponent<DrawableComponent>(walkFrames[0], sf::Vector2f(0.75f, 0.75f));
 
 	enemy.AddComponent<DamageComponent>(10, 1.f, Player);
 }
@@ -84,9 +89,16 @@ void Factory::CreateBoss(EntityManager& entityManager, sf::Vector2f pos)
 	auto weapons = boss.GetComponent<WeaponComponent>();
 	weapons->AddWeapon(std::make_unique<BossWeapon>());
 
-	std::vector<sf::Texture> frames = TextureManager::GetTextures("assets/boss/Walk.png", 128, 128);
-	boss.AddComponent<AnimationComponent>(frames, 0.2f, true, -1.0f, true);
-	boss.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(1, 1));
+	boss.AddComponent<AnimationComponent>(0.2f, true);
+
+	std::vector<sf::Texture> walkFrames = TextureManager::GetTextures("assets/boss/Walk.png", 128, 128);
+	std::vector<sf::Texture> hurtFrames = TextureManager::GetTextures("assets/boss/Hurt.png", 128, 128);
+
+	auto animation = boss.GetComponent<AnimationComponent>();
+	animation->AddAnimation(AnimationComponent::WALK, walkFrames);
+	animation->AddAnimation(AnimationComponent::HURT, hurtFrames);
+
+	boss.AddComponent<DrawableComponent>(walkFrames[0], sf::Vector2f(1, 1));
 }
 
 void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
@@ -104,9 +116,18 @@ void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 	collisionShape->setOrigin(20, 20);
 	player.AddComponent<CollisionComponent>(std::move(collisionShape), sf::Vector2f(0, 35));
 
-	std::vector<sf::Texture> frames = TextureManager::GetTextures("assets/character/Walk.png", 128, 128);
-	player.AddComponent<AnimationComponent>(frames, 0.2f, true, -1.0f, false);
-	player.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(1.1f, 1.1f));
+	player.AddComponent<AnimationComponent>(0.2f, true);
+
+	std::vector<sf::Texture> walkFrames = TextureManager::GetTextures("assets/character/Walk.png", 128, 128);
+	std::vector<sf::Texture> idleFrames = TextureManager::GetTextures("assets/character/Idle.png", 128, 128);
+	std::vector<sf::Texture> hurtFrames = TextureManager::GetTextures("assets/character/Hurt.png", 128, 128);
+
+	auto animation = player.GetComponent<AnimationComponent>();
+	animation->AddAnimation(AnimationComponent::IDLE, idleFrames);
+	animation->AddAnimation(AnimationComponent::WALK, walkFrames);
+	animation->AddAnimation(AnimationComponent::HURT, hurtFrames);
+
+	player.AddComponent<DrawableComponent>(idleFrames[0], sf::Vector2f(1.1f, 1.1f));
 
 	player.AddComponent<PlayerHealthComponent>(100);
 

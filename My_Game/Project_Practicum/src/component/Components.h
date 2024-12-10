@@ -223,6 +223,15 @@ struct OrbitalProjectileComponent : public Component
 */
 struct AnimationComponent : public Component
 {
+	enum AnimationState
+	{
+		IDLE,
+		WALK,
+		HURT,
+		DEAD,
+		ATTACK
+	};
+
 	/**
 	* @brief Основной конструктор
 	* @param std::vector<sf::Texture> frames - набор картинок для покадровой анимации
@@ -231,21 +240,39 @@ struct AnimationComponent : public Component
 	* @param float duration - время всей анимации
 	*/
 	AnimationComponent(
-		std::vector<sf::Texture> frames,
 		float frameTime,
-		bool loop = true,
-		float duration = -1.0f,
-		bool isAnimating = false
-	) : frames(std::move(frames)), frameTime(frameTime), loop(loop), duration(duration), isAnimating(isAnimating) {
-	}
+		bool loop = true
+	) : frameTime(frameTime), loop(loop), currentState(AnimationState::IDLE) {}
 
-	std::vector<sf::Texture> frames;
 	float frameTime = 0.0f;
 	float elapsedTime = 0.0f;
 	int currentFrameIndex = 0;
 	bool loop = true;
-	float duration = -1.0f;
-	bool isAnimating = false;
+
+	AnimationState currentState;
+	std::vector<sf::Texture> frames;
+	std::map<AnimationState, std::vector<sf::Texture>> animations;
+
+	void SetState(AnimationState state)
+	{
+		if (currentState != state && animations.find(state) != animations.end())
+		{
+			currentState = state;
+			frames = animations[state];
+			currentFrameIndex = 0;
+			elapsedTime = 0.f;
+		}
+	}
+
+	void AddAnimation(AnimationState state, const std::vector<sf::Texture>& stateFrames)
+	{
+		animations[state] = stateFrames;
+		if (currentState == state)
+		{
+			frames = stateFrames;
+		}
+
+	}
 };
 
 /**

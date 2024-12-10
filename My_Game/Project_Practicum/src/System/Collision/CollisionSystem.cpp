@@ -127,6 +127,13 @@ void CollisionSystem::DealDamage(Entity* target, DamageComponent* damage)
 
 	auto container = target->GetComponent<ContainerComponent>();
 
+	auto animation = target->GetComponent<AnimationComponent>();
+
+	if (animation != nullptr)
+	{
+		animation->SetState(AnimationComponent::HURT);
+	}
+
 	if (container != nullptr)
 	{
 		container->isDestroyed = true;

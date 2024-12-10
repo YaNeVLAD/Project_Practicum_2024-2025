@@ -11,26 +11,21 @@ void InputSystem::Update(EntityManager& entityManager, float deltaTime)
 		transform->vx = 0;
 		transform->vy = 0;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
 			transform->vy = -200;
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
 			transform->vy = 200;
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			transform->vx = -200;
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			transform->vx = 200;
-		}
-
-		if (animation != nullptr)
-		{
-			animation->isAnimating = (transform->vx != 0 || transform->vy != 0);
 		}
 	}
 }
