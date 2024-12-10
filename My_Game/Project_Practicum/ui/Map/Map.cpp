@@ -1,4 +1,5 @@
 #include "Map.h"
+
 #include "../../src/Manager/Texture/TextureManager.h"
 #include <iostream>
 #include <cmath>

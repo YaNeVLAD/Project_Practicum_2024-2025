@@ -7,7 +7,7 @@
 
 void Game::InitSystems()
 {
-	Factory::InitSystems(mSystemManager, mWindow, mCamera, mIsBossSpawned);
+	Factory::InitSystems(mSystemManager, mWindow, mCamera, mIsBossSpawned, mIsPaused);
 }
 
 void Game::InitPlayer()
@@ -81,15 +81,7 @@ void Game::ProcessEvents()
 
 bool Game::IsPlayerDefeated()
 {
-	auto player = mEntityManager.GetEntitiesWithComponents<PlayerHealthComponent>();
-
-	if (player.empty())
-	{
-		return true;
-	}
-
-	auto health = player.front()->GetComponent<PlayerHealthComponent>();
-	return !health->IsAlive();
+	return mEntityManager.GetEntitiesWithComponents<GameOverComponent>().size();
 }
 
 bool Game::HasPlayerLeveledUp()

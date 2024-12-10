@@ -191,7 +191,8 @@ struct HomingProjectileComponent : public Component
 	* @param EntityType targetType - тип сущности, на которые будет наводиться снаряд
 	*/
 	HomingProjectileComponent(float speed, EntityType targetType)
-		: speed(speed), targetType(targetType) {}
+		: speed(speed), targetType(targetType) {
+	}
 
 	float speed;
 	EntityType targetType;
@@ -242,7 +243,8 @@ struct AnimationComponent : public Component
 	AnimationComponent(
 		float frameTime,
 		bool loop = true
-	) : frameTime(frameTime), loop(loop), currentState(AnimationState::IDLE) {}
+	) : frameTime(frameTime), loop(loop), currentState(AnimationState::IDLE) {
+	}
 
 	float frameTime = 0.0f;
 	float elapsedTime = 0.0f;
@@ -275,12 +277,12 @@ struct AnimationComponent : public Component
 
 	const sf::Texture* GetCurrentFrame() const
 	{
-		if (frames != nullptr && !frames->empty())
+		if (frames != nullptr && !frames->empty() && currentFrameIndex < frames->size())
 		{
 			return &(*frames)[currentFrameIndex];
 		}
 		return nullptr;
-;	}
+	}
 };
 
 /**
@@ -541,3 +543,18 @@ struct ExperienceComponent : public Component
 
 	int amount;
 };
+
+/**
+* @brief Компонент обозначает что сущность проигрывает последнюю анимацию смерти
+*/
+struct DeathAnimationComponent : public Component
+{
+	bool isCompleted = false;
+	float elapsedTime = 0.f;
+	float currentZoom = 1.f;
+};
+
+/**
+* @brief Наличие компонента в игре означает поражение
+*/
+struct GameOverComponent : public Component {};

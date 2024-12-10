@@ -10,7 +10,7 @@
 #include "../Entity/Weapon/MagicCharge/MagicCharge.h"
 #include "../Entity/Weapon/LightningStrike/LightningStrike.h"
 
-void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera, bool& isBossSpawned)
+void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera, bool& isBossSpawned, bool& isPaused)
 {
 	systemManager.AddSystem<InputSystem>();
 	systemManager.AddSystem<WeaponSystem>();
@@ -23,6 +23,7 @@ void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window
 	systemManager.AddSystem<TrailSystem>();
 	systemManager.AddSystem<DamageSystem>();
 	systemManager.AddSystem<ContainerSystem>();
+	systemManager.AddSystem<DeathAnimationSystem>(camera, isPaused);
 
 	systemManager.AddSystem<RenderSystem>(window);
 	systemManager.AddSystem<CameraSystem>(camera);
@@ -121,11 +122,13 @@ void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 	std::vector<sf::Texture> walkFrames = TextureManager::GetTextures("assets/character/Walk.png", 128, 128);
 	std::vector<sf::Texture> idleFrames = TextureManager::GetTextures("assets/character/Idle.png", 128, 128);
 	std::vector<sf::Texture> hurtFrames = TextureManager::GetTextures("assets/character/Hurt.png", 128, 128);
+	std::vector<sf::Texture> deadFrames = TextureManager::GetTextures("assets/character/Dead.png", 128, 128);
 
 	auto animation = player.GetComponent<AnimationComponent>();
 	animation->AddAnimation(AnimationComponent::IDLE, idleFrames);
 	animation->AddAnimation(AnimationComponent::WALK, walkFrames);
 	animation->AddAnimation(AnimationComponent::HURT, hurtFrames);
+	animation->AddAnimation(AnimationComponent::DEAD, deadFrames);
 
 	player.AddComponent<DrawableComponent>(idleFrames[0], sf::Vector2f(1.1f, 1.1f));
 

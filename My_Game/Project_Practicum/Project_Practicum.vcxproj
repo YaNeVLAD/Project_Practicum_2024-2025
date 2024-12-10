@@ -139,6 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="src\System\DeathAnimation\DeathAnimationSystem.cpp" />
     <ClCompile Include="ui\Map\Map.cpp" />
     <ClCompile Include="src\System\Damage\DamageSystem.cpp" />
     <ClCompile Include="src\System\Container\ContainerSystem.cpp" />
@@ -173,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="src\System\DeathAnimation\DeathAnimationSystem.h" />
     <ClInclude Include="ui\Map\Map.h" />
     <ClInclude Include="src\System\Damage\DamageSystem.h" />
     <ClInclude Include="src\System\Container\ContainerSystem.h" />

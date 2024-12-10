@@ -13,6 +13,7 @@
 #include "../../System/Lifetime/LifetimeSystem.h"
 #include "../../System/Container/ContainerSystem.h"
 #include "../../System/Collision/CollisionSystem.h"
+#include "../../System/DeathAnimation/DeathAnimationSystem.h"
 #include "../../System/HomingProjectile/HomingProjectileSystem.h"
 #include "../../System/OrbitalProjectile/OrbitalProjectileSystem.h"
 

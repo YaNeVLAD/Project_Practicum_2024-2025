@@ -9,7 +9,7 @@ class SystemManager;
 class Factory
 {
 public:
-	static void InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera, bool& isBossSpawned);
+	static void InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera, bool& isBossSpawned, bool& isPaused);
 	static std::unique_ptr<Weapon> CreateWeapon(const std::string& weaponName);
 	static void CreateEnemy(EntityManager& entityManager, sf::Vector2f pos);
 	static void CreateBoss(EntityManager& entityManager, sf::Vector2f pos);

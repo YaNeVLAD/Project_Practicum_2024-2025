@@ -6,8 +6,20 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 {
 	std::vector<Entity::IdType> entitiesToDelete;
 
-	auto player = entityManager.GetEntitiesWithComponents<PlayerHealthComponent>();
-	auto playerHealth = player.front()->GetComponent<PlayerHealthComponent>();
+	for (auto& player : entityManager.GetEntitiesWithType(Player))
+	{
+		auto animation = player->GetComponent<AnimationComponent>();
+		auto playerHealth = player->GetComponent<PlayerHealthComponent>();
+		auto deathAnimation = player->GetComponent<DeathAnimationComponent>();
+
+		if (playerHealth != nullptr && !playerHealth->IsAlive() && deathAnimation == nullptr)
+		{
+			animation->SetState(AnimationComponent::DEAD);
+			animation->frameTime = 0.45f;
+			animation->loop = false;
+			player->AddComponent<DeathAnimationComponent>();
+		}
+	}
 
 	for (auto& entity : entityManager.GetEntities())
 	{
