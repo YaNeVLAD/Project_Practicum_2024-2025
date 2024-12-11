@@ -2,6 +2,8 @@
 
 #include "../System.h"
 
+#include <unordered_set>
+
 struct CollisionEvent {
     enum class Type
     {
@@ -32,7 +34,7 @@ public:
 private:
     void DealDamage(Entity* target, DamageComponent* damage);
     void ApplyBonus(EntityManager& em, Entity* player, Entity* bonus);
-	void HandleCollision(EntityManager& em, Entity* first, Entity* second);
+	void HandleCollision(EntityManager& em, Entity* first, Entity* second, std::unordered_set<Entity*>& processedProjectiles);
     void ApplyParticleEffect(Entity* player, Entity* particle);
     void HandlePushAway(Entity* first, Entity* second);
 };

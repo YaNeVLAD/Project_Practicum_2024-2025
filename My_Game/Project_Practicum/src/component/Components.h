@@ -369,24 +369,22 @@ struct BossHealthComponent : public HealthComponent
 struct DamageComponent : public Component
 {
 	/**
-	* @brief Основной конструктов
+	* @brief Основной конструктор
 	* @param int amount - количество наносимого урона
+	* @param float cooldown - время перезарядки между атаками
 	* @param EntityType targetType - тип сущности, которой будет наноситься урон
 	*/
 	DamageComponent(int amount, float cooldown, EntityType targetType)
-		: amount(amount), cooldown(cooldown), timer(cooldown), targetType(targetType) {
+		: amount(amount), cooldown(cooldown), timer(0.f), targetType(targetType) {
 	}
 
 	int amount;
 	float timer;
 	float cooldown;
-
-	HealthComponent* lastTargetHealth = nullptr;
-
 	EntityType targetType;
 
 	/**
-	* @brief Функция обновляет таймер следующей атаки
+	* @brief Функция обновляет таймер перезарядки
 	* @param float dt - время на которое уменьшается таймер
 	*/
 	void UpdateCooldown(float dt)
@@ -395,36 +393,34 @@ struct DamageComponent : public Component
 	}
 
 	/**
-	* @brief Функция определяет можно ли нанести урон или нет
+	* @brief Функция проверяет, готово ли оружие для нанесения урона
+	* @return true, если можно наносить урон, иначе false
 	*/
-	bool CanDealDamage(HealthComponent* targetHealth) const
+	bool CanDealDamage() const
 	{
 		return timer <= 0.f;
 	}
 
 	/**
-	* @brief Функция наносит наносит урон компоненту здоровья
+	* @brief Функция наносит урон компоненту здоровья
 	* @param HealthComponent* targetHealth - компонент здоровья атакуемой сущности
 	*/
-	void DealDamage(HealthComponent* targetHealth)
+	void DealDamage(HealthComponent* targetHealth) const
 	{
-		if (targetHealth == nullptr)
+		if (targetHealth == nullptr || !CanDealDamage())
 		{
 			return;
 		}
 
-		if (targetHealth != lastTargetHealth)
-		{
-			lastTargetHealth = targetHealth;
-			targetHealth->RemoveHealth(amount);
-			timer = cooldown;
-		}
+		targetHealth->RemoveHealth(amount);
+	}
 
-		if (CanDealDamage(targetHealth))
-		{
-			targetHealth->RemoveHealth(amount);
-			timer = cooldown;
-		}
+	/**
+	* @brief Начинает перезарядку после нанесения урона
+	*/
+	void StartCooldown()
+	{
+		timer = cooldown;
 	}
 };
 

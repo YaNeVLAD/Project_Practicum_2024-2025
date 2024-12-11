@@ -172,7 +172,7 @@
       <Filter>Исходные файлы\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\System\DeathAnimation\DeathAnimationSystem.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Исходные файлы\src\Systems\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -282,7 +282,7 @@
       <Filter>Файлы заголовков\ui</Filter>
     </ClInclude>
     <ClInclude Include="src\System\DeathAnimation\DeathAnimationSystem.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Файлы заголовков\Systems\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
