@@ -45,6 +45,16 @@ public:
     }
 
     template<typename ComponentType>
+    void RemoveComponent()
+    {
+        auto it = mComponents.find(std::type_index(typeid(ComponentType)));
+        if (it != mComponents.end())
+        {
+            mComponents.erase(it);
+        }
+    }
+
+    template<typename ComponentType>
     bool HasComponent()
     {
         return mComponents.find(std::type_index(typeid(ComponentType))) != mComponents.end();

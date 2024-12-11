@@ -558,3 +558,5 @@ struct DeathAnimationComponent : public Component
 * @brief Наличие компонента в игре означает поражение
 */
 struct GameOverComponent : public Component {};
+
+struct VictoryComponent : public Component {};

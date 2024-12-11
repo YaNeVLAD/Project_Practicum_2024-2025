@@ -171,6 +171,9 @@
     <ClCompile Include="ui\Map\Map.cpp">
       <Filter>Исходные файлы\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\DeathAnimation\DeathAnimationSystem.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -277,6 +280,9 @@
     </ClInclude>
     <ClInclude Include="ui\Map\Map.h">
       <Filter>Файлы заголовков\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\DeathAnimation\DeathAnimationSystem.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

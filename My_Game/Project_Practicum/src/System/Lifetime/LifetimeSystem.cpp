@@ -1,38 +1,34 @@
 #include "LifetimeSystem.h"
+
 #include "../../Factory/Factory.h"
 #include <iostream>
 
 void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 {
-	std::vector<Entity::IdType> entitiesToDelete;
-
 	for (auto& player : entityManager.GetEntitiesWithType(Player))
 	{
-		auto animation = player->GetComponent<AnimationComponent>();
-		auto playerHealth = player->GetComponent<PlayerHealthComponent>();
-		auto deathAnimation = player->GetComponent<DeathAnimationComponent>();
-
-		if (playerHealth != nullptr && !playerHealth->IsAlive() && deathAnimation == nullptr)
+		if (auto health = player->GetComponent<PlayerHealthComponent>())
 		{
-			animation->SetState(AnimationComponent::DEAD);
-			animation->frameTime = 0.45f;
-			animation->loop = false;
-			player->AddComponent<DeathAnimationComponent>();
+			TryApplyDeathAnimation(player, health);
 		}
 	}
+
+	for (auto& boss : entityManager.GetEntitiesWithComponents<BossHealthComponent>())
+	{
+		if (auto health = boss->GetComponent<BossHealthComponent>())
+		{
+			TryApplyDeathAnimation(boss, health);
+		}
+	}
+
+	std::vector<Entity::IdType> entitiesToDelete;
 
 	for (auto& entity : entityManager.GetEntities())
 	{
 		auto health = entity.GetComponent<HealthComponent>();
 		auto lifetime = entity.GetComponent<LifetimeComponent>();
-		auto bossHealth = entity.GetComponent<BossHealthComponent>();
 
 		auto transform = entity.GetComponent<TransformComponent>();
-
-		if (bossHealth != nullptr && !bossHealth->IsAlive())
-		{
-			entitiesToDelete.push_back(entity.GetId());
-		}
 
 		if (health != nullptr && !health->IsAlive())
 		{
@@ -58,5 +54,19 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 	for (const auto& id : entitiesToDelete)
 	{
 		entityManager.RemoveEntity(id);
+	}
+}
+
+void LifetimeSystem::TryApplyDeathAnimation(Entity* entity, auto* health)
+{
+	auto animation = entity->GetComponent<AnimationComponent>();
+	auto deathAnimation = entity->GetComponent<DeathAnimationComponent>();
+
+	if (health != nullptr && !health->IsAlive() && deathAnimation == nullptr)
+	{
+		animation->SetState(AnimationComponent::DEAD);
+		animation->frameTime = 0.45f;
+		animation->loop = false;
+		entity->AddComponent<DeathAnimationComponent>();
 	}
 }

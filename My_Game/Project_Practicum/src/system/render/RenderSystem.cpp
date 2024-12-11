@@ -40,9 +40,9 @@ void RenderSystem::Render(EntityManager& entityManager, float deltaTime)
 		{
 			animation->elapsedTime += deltaTime;
 
-			RenderAnimatedEntity(drawable, animation);
+			RenderAnimatedEntity(animation);
 
-			if (!animation->frames->empty())
+			if (animation->frames != nullptr && !animation->frames->empty())
 			{
 				drawable->sprite.setTexture(*animation->GetCurrentFrame());
 			}
@@ -54,8 +54,18 @@ void RenderSystem::Render(EntityManager& entityManager, float deltaTime)
 	}
 }
 
-void RenderSystem::RenderAnimatedEntity(DrawableComponent* drawable, AnimationComponent* animation)
+void RenderSystem::RenderAnimatedEntity(AnimationComponent* animation)
 {
+	if (animation == nullptr)
+	{
+		return;
+	}
+
+	if (animation->frames == nullptr)
+	{
+		return;
+	}
+
 	if (animation->elapsedTime >= animation->frameTime)
 	{
 		animation->elapsedTime = 0.0f;

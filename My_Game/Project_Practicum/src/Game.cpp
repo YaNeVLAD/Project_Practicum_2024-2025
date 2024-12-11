@@ -105,15 +105,7 @@ bool Game::HasPlayerLeveledUp()
 
 bool Game::IsBossDefeated()
 {
-	auto boss = mEntityManager.GetEntitiesWithComponents<BossHealthComponent>();
-
-	if (boss.empty())
-	{
-		return false;
-	}
-
-	auto health = boss.front()->GetComponent<BossHealthComponent>();
-	return !health->IsAlive();
+	return mEntityManager.GetEntitiesWithComponents<VictoryComponent>().size();
 }
 
 std::vector<std::string> Game::GetAvailableWeapons()

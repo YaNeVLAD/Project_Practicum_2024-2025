@@ -94,10 +94,12 @@ void Factory::CreateBoss(EntityManager& entityManager, sf::Vector2f pos)
 
 	std::vector<sf::Texture> walkFrames = TextureManager::GetTextures("assets/boss/Walk.png", 128, 128);
 	std::vector<sf::Texture> hurtFrames = TextureManager::GetTextures("assets/boss/Hurt.png", 128, 128);
+	std::vector<sf::Texture> deadFrames = TextureManager::GetTextures("assets/boss/Dead.png", 128, 128);
 
 	auto animation = boss.GetComponent<AnimationComponent>();
 	animation->AddAnimation(AnimationComponent::WALK, walkFrames);
 	animation->AddAnimation(AnimationComponent::HURT, hurtFrames);
+	animation->AddAnimation(AnimationComponent::DEAD, deadFrames);
 
 	boss.AddComponent<DrawableComponent>(walkFrames[0], sf::Vector2f(1, 1));
 }

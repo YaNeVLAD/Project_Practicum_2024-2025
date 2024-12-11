@@ -10,4 +10,6 @@ public:
 
 private:
 	sf::View& mCamera;
+
+	void TryApplyDeathAnimation(Entity* entity, auto* health);
 };
