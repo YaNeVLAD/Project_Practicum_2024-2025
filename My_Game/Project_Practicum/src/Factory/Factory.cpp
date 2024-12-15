@@ -226,3 +226,24 @@ void Factory::CreateExperience(EntityManager& entityManager, sf::Vector2f pos)
 
 	experience.AddComponent<LifetimeComponent>(30.f);
 }
+
+void Factory::LoadTextures()
+{
+	TextureManager::GetTextures("assets/weapon/Axe.png", 64, 64);
+	TextureManager::GetTextures("assets/weapon/Book.png", 95, 128);
+	TextureManager::GetTextures("assets/weapon/Charge.png", 64, 64);
+	TextureManager::GetTextures("assets/weapon/Fireball.png", 64, 64);
+
+	TextureManager::GetTextures("assets/melee_enemy/Walk.png", 128, 128);
+
+	TextureManager::GetTextures("assets/boss/Walk.png", 128, 128);
+	TextureManager::GetTextures("assets/boss/Hurt.png", 128, 128);
+	TextureManager::GetTextures("assets/boss/Dead.png", 128, 128);
+
+	TextureManager::GetTextures("assets/character/Walk.png", 128, 128);
+	TextureManager::GetTextures("assets/character/Dead.png", 128, 128);
+	TextureManager::GetTextures("assets/character/Idle.png", 128, 128);
+	TextureManager::GetTextures("assets/character/Hurt.png", 128, 128);
+
+	TextureManager::GetTextures("assets/map/Barrel.png", 128, 128);
+}

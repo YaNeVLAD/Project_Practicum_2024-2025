@@ -32,7 +32,7 @@ public:
 	void Update(EntityManager& entityManager, float deltaTime) override;
 
 private:
-    EntityManager* mEntityManager;
+    EntityManager* mEntityManager = nullptr;
     std::unordered_set<Entity*> mCollidedDamageEntities;
 
     void DealDamage(Entity* target, DamageComponent* damage);

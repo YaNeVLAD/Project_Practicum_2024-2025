@@ -3,6 +3,7 @@
 #include <iostream>
 #include "ui/Button/Button.h"
 #include "src/Manager/Texture/TextureManager.h"
+#include "src/Factory/Factory.h"
 
 void App::Run()
 {
@@ -254,4 +255,9 @@ void App::InitDefeatScreen()
 void App::LoadFont()
 {
 	mFont = TextureManager::GetFont("assets/font/Roboto-Bold.ttf");
+}
+
+void App::LoadTextures()
+{
+	Factory::LoadTextures();
 }

@@ -17,6 +17,7 @@ public:
 		mWindow.setVerticalSyncEnabled(true);
 		mWindow.setFramerateLimit(120);
 		LoadFont();
+		LoadTextures();
 	}
 
 	void Run();
@@ -54,4 +55,5 @@ private:
 	void InitDefeatScreen();
 
 	void LoadFont();
+	void LoadTextures();
 };
