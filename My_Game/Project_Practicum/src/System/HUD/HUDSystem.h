@@ -2,6 +2,7 @@
 
 #include "../System.h"
 #include "../../../ui/Screen/Screen.h"
+#include "../../../ui/ProgressBar/ProgressBar.h"
 
 class HUDSystem : public IRenderSystem
 {
@@ -16,6 +17,9 @@ public:
 
 private:
 	Screen mScreen;
+
+	ProgressBar mXpBar;
+	ProgressBar mPlayerHealth;
 
 	sf::Font mFont;
 	sf::View& mCamera;

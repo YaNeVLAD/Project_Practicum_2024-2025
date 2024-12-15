@@ -2,7 +2,7 @@
 
 #include "../../Entity.h"
 #include "../../../Manager/Entity/EntityManager.h"
-#include <iostream>
+#include "../../../Manager/Texture/TextureManager.h"
 
 void Axe::Attack(EntityManager& entityManager, TransformComponent* parentTransform, TransformComponent* playerTransform)
 {
@@ -24,11 +24,16 @@ void Axe::Attack(EntityManager& entityManager, TransformComponent* parentTransfo
 
     projectile.AddComponent<DamageComponent>(damage, 0.3f, EntityType::Enemy);
 
-    auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
-    collisionShape->setOrigin(16, 16);
+    auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(64, 64));
+    collisionShape->setOrigin(32, 32);
     projectile.AddComponent<CollisionComponent>(std::move(collisionShape));
 
-    projectile.AddComponent<DrawableComponent>(32, 32, sf::Color::Cyan);
+    projectile.AddComponent<DrawableComponent>(mFrames[0]);
+    projectile.AddComponent<AnimationComponent>(0.1f);
+
+    auto animation = projectile.GetComponent<AnimationComponent>();
+    animation->AddAnimation(AnimationComponent::ATTACK, mFrames);
+    animation->SetState(AnimationComponent::ATTACK);
 }
 
 void Axe::Upgrade(int level)
@@ -37,7 +42,7 @@ void Axe::Upgrade(int level)
     {
         mLevel++;
         damage += 5;
-        fireRate -= 0.2f;
+        fireRate -= 0.1f;
     }
 }
 
@@ -54,4 +59,9 @@ int Axe::GetLevel()
 bool Axe::CanUpgrade()
 {
     return mLevel < MAX_LEVELS;
+}
+
+void Axe::LoadTextures()
+{
+    mFrames = TextureManager::GetTextures("assets/weapon/Axe.png", 64, 64);
 }

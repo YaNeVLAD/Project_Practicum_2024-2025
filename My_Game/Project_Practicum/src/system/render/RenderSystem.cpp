@@ -10,16 +10,16 @@ void RenderSystem::Render(EntityManager& entityManager, float deltaTime)
 		auto animation = entity->GetComponent<AnimationComponent>();
 		auto rotation = entity->GetComponent<RotationComponent>();
 
-		//auto collision = entity->GetComponent<CollisionComponent>();
+		auto collision = entity->GetComponent<CollisionComponent>();
 
-		//if (collision)
-		//{
-		//	auto& shape = collision->shape;
-		//	shape->setOutlineColor(sf::Color::Green);
-		//	shape->setOutlineThickness(1.0f);
-		//	shape->setFillColor(sf::Color::Transparent);
-		//	mWindow.draw(*shape);
-		//}
+		if (collision)
+		{
+			auto& shape = collision->shape;
+			shape->setOutlineColor(sf::Color::Green);
+			shape->setOutlineThickness(1.0f);
+			shape->setFillColor(sf::Color::Transparent);
+			mWindow.draw(*shape);
+		}
 
 		if (rotation)
 		{

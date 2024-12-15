@@ -7,7 +7,7 @@
 
 void LightningStrike::Upgrade(int level)
 {
-	if (mLevel + 1 <= MAX_LEVELS)
+	if (CanUpgrade())
 	{
 		mLevel++;
 		fireRate -= 0.25f;

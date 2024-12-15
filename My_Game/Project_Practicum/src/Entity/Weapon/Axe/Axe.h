@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Weapon.h"
+#include "SFML/Graphics.hpp"
 
 class Axe : public Weapon
 {
@@ -12,6 +13,8 @@ public:
 		cooldown = 0.f;
 		damage = 10;
 		mGravity = projectileSpeed / 3;
+
+		LoadTextures();
 	}
 
 	void Attack(EntityManager& entityManager, TransformComponent* parentTransform, TransformComponent* playerTransform) override;
@@ -26,4 +29,8 @@ private:
 	int mLevel = 1;
 
 	float mGravity = 9.8f;
+	
+	std::vector<sf::Texture> mFrames;
+
+	void LoadTextures();
 };
