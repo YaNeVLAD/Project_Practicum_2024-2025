@@ -1,6 +1,7 @@
 #include "Factory.h"
 
 #include "../Entity/Weapon/Weapon.h"
+#include "../Entity/Weapon/Axe/Axe.h"
 #include "../Entity/Weapon/Book/Book.h"
 #include "../Manager/System/SystemManager.h"
 #include "../Manager/Entity/EntityManager.h"
@@ -47,6 +48,10 @@ std::unique_ptr<Weapon> Factory::CreateWeapon(const std::string& weaponName)
 	if (weaponName == "Lightning Strike")
 	{
 		return std::make_unique<LightningStrike>();
+	}
+	if (weaponName == "Axe")
+	{
+		return std::make_unique<Axe>();
 	}
 
 	throw std::invalid_argument("Unknown weapon type " + weaponName);
@@ -113,7 +118,7 @@ void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 	player.AddComponent<WeaponComponent>();
 
 	auto weapons = player.GetComponent<WeaponComponent>();
-	weapons->AddWeapon(std::make_unique<MagicCharge>());
+	weapons->AddWeapon(std::make_unique<Axe>());
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(40, 40));
 	collisionShape->setOrigin(20, 20);

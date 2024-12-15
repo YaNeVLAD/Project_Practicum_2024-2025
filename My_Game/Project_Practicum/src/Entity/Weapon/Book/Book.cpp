@@ -7,7 +7,7 @@
 
 void Book::Upgrade(int level)
 {
-	if (mLevel + 1 <= MAX_LEVELS)
+	if (CanUpgrade())
 	{
 		mLevel++;
 		damage += 5;

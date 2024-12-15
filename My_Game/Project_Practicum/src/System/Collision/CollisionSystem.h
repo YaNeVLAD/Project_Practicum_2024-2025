@@ -32,9 +32,12 @@ public:
 	void Update(EntityManager& entityManager, float deltaTime) override;
 
 private:
+    EntityManager* mEntityManager;
+    std::unordered_set<Entity*> mCollidedDamageEntities;
+
     void DealDamage(Entity* target, DamageComponent* damage);
-    void ApplyBonus(EntityManager& em, Entity* player, Entity* bonus);
-	void HandleCollision(EntityManager& em, Entity* first, Entity* second, std::unordered_set<Entity*>& processedProjectiles);
+    void ApplyBonus(Entity* player, Entity* bonus);
+	void HandleCollision(Entity* first, Entity* second);
     void ApplyParticleEffect(Entity* player, Entity* particle);
     void HandlePushAway(Entity* first, Entity* second);
 };

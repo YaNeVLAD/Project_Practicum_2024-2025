@@ -5,6 +5,10 @@
 
 void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 {
+	if (mEntityManager == nullptr)
+	{
+		mEntityManager = &entityManager;
+	}
 	auto entities = entityManager.GetEntitiesWithComponents<CollisionComponent>();
 
 	if (entities.empty())
@@ -54,24 +58,23 @@ void CollisionSystem::Update(EntityManager& entityManager, float deltaTime)
 		}
 	}
 
-	std::unordered_set<Entity*> processedProjectiles;
-
 	for (auto& entityPair : collidedEntities)
 	{
-		HandleCollision(entityManager, entityPair.first, entityPair.second, processedProjectiles);
+		HandleCollision(entityPair.first, entityPair.second);
 	}
 
-	for (auto* projectile : processedProjectiles)
+	for (auto* entity : mCollidedDamageEntities)
 	{
-		auto damage = projectile->GetComponent<DamageComponent>();
+		auto damage = entity->GetComponent<DamageComponent>();
 		if (damage != nullptr && damage->CanDealDamage())
 		{
 			damage->StartCooldown();
 		}
 	}
+	mCollidedDamageEntities.clear();
 }
 
-void CollisionSystem::ApplyBonus(EntityManager& em, Entity* player, Entity* bonus)
+void CollisionSystem::ApplyBonus(Entity* player, Entity* bonus)
 {
 	if (player == nullptr || bonus == nullptr)
 	{
@@ -107,7 +110,7 @@ void CollisionSystem::ApplyBonus(EntityManager& em, Entity* player, Entity* bonu
 			return;
 		}
 
-		for (auto& enemy : em.GetEntitiesWithType(EntityType::Enemy))
+		for (auto& enemy : mEntityManager->GetEntitiesWithType(EntityType::Enemy))
 		{
 			auto health = enemy->GetComponent<HealthComponent>();
 			if (health == nullptr)
@@ -119,7 +122,7 @@ void CollisionSystem::ApplyBonus(EntityManager& em, Entity* player, Entity* bonu
 	}
 	else if (bonusComponent->type == BonusComponent::BonusType::Magnet)
 	{
-		for (auto& experience : em.GetEntitiesWithComponents<ExperienceComponent>())
+		for (auto& experience : mEntityManager->GetEntitiesWithComponents<ExperienceComponent>())
 		{
 			experience->AddComponent<HomingProjectileComponent>(1000.f, EntityType::Player);
 		}
@@ -169,7 +172,7 @@ void CollisionSystem::DealDamage(Entity* target, DamageComponent* damage)
 	}
 }
 
-void CollisionSystem::HandleCollision(EntityManager& em, Entity* first, Entity* second, std::unordered_set<Entity*>& processedProjectiles)
+void CollisionSystem::HandleCollision(Entity* first, Entity* second)
 {
 	if (first == nullptr || second == nullptr)
 	{
@@ -183,12 +186,9 @@ void CollisionSystem::HandleCollision(EntityManager& em, Entity* first, Entity* 
 	{
 		auto enemy = (firstType & Enemy) ? first : second;
 		auto player = (firstType & Player) ? first : second;
-		auto damage = enemy->GetComponent<DamageComponent>();
-		if (damage != nullptr)
-		{
-			DealDamage(player, damage);
-			damage->StartCooldown();
-		}
+		DealDamage(player, enemy->GetComponent<DamageComponent>());
+
+		mCollidedDamageEntities.insert(enemy);
 	}
 	else if ((firstType & Player && secondType & Particle) || (firstType & Particle && secondType & Player))
 	{
@@ -200,7 +200,7 @@ void CollisionSystem::HandleCollision(EntityManager& em, Entity* first, Entity* 
 	{
 		auto player = (firstType & Player) ? first : second;
 		auto bonus = (firstType & Bonus) ? first : second;
-		ApplyBonus(em, player, bonus);
+		ApplyBonus(player, bonus);
 	}
 	else if (firstType & Projectile || secondType & Projectile)
 	{
@@ -208,7 +208,7 @@ void CollisionSystem::HandleCollision(EntityManager& em, Entity* first, Entity* 
 		auto target = (firstType & Projectile) ? second : first;
 		DealDamage(target, projectile->GetComponent<DamageComponent>());
 
-		processedProjectiles.insert(projectile);
+		mCollidedDamageEntities.insert(projectile);
 	}
 	else if (firstType & Enemy && secondType & Enemy)
 	{

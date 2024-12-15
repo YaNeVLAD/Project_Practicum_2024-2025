@@ -21,6 +21,8 @@ void MovementSystem::Update(EntityManager& entityManager, float deltaTime)
 
 		auto animation = entity->GetComponent<AnimationComponent>();
 
+		auto parabolic = entity->GetComponent<ParaboloidProjectileComponent>();
+
 		if (entity->GetType() & EntityType::Enemy && container == nullptr)
 		{
 			MoveTowardsTarget(*transform, playerPosition, 100.0f, deltaTime);
@@ -34,6 +36,11 @@ void MovementSystem::Update(EntityManager& entityManager, float deltaTime)
 		if (transform->vx != 0 || transform->vy != 0)
 		{
 			UpdateDirectionAndRotation(transform, rotation, collision);
+		}
+
+		if (parabolic != nullptr)
+		{
+			transform->vy += parabolic->gravity * deltaTime;
 		}
 
 		transform->x += transform->vx * deltaTime;
@@ -69,7 +76,7 @@ void MovementSystem::UpdateDirectionAndRotation(TransformComponent* transform, R
 		std::copysign(1.0f, transform->vy)
 	);
 
-	if (transform->lastDirection == newDirection)
+	if (transform->lastDirection.x == newDirection.x)
 	{
 		return;
 	}

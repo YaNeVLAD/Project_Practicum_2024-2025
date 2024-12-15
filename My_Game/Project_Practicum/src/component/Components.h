@@ -555,4 +555,14 @@ struct DeathAnimationComponent : public Component
 */
 struct GameOverComponent : public Component {};
 
+/**
+* @brief Наличие компонента в игре означает победу
+*/
 struct VictoryComponent : public Component {};
+
+struct ParaboloidProjectileComponent : public Component
+{
+	ParaboloidProjectileComponent(float gravity) : gravity(gravity) {}
+
+	float gravity;
+};

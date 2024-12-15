@@ -23,6 +23,6 @@ public:
 
 	static std::vector<std::string> GetAllWeapons()
 	{
-		return { "Magic Charge", "Holy Book", "Fireball", "Lightning Strike"};
+		return { "Magic Charge", "Holy Book", "Fireball", "Lightning Strike", "Axe"};
 	}
 };
