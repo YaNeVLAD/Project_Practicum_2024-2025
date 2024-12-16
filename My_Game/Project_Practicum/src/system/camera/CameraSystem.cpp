@@ -9,7 +9,7 @@ void CameraSystem::Render(EntityManager& entityManager, float deltaTime)
 
 		sf::Vector2f targetPosition = { transform->x, transform->y };
 
-		mView.setCenter(mView.getCenter() + (targetPosition - mView.getCenter()) * 0.1f);
+		mView.setCenter(mView.getCenter() + (targetPosition - mView.getCenter()));
 
 		break;
 	}

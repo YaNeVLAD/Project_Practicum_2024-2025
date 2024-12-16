@@ -1,9 +1,27 @@
 #include "Game.h"
 
-#include <random>
-
-#include "Entity/Weapon/Weapon.h"
 #include "Factory/Factory.h"
+#include "../ui/Button/Button.h"
+#include "Entity/Weapon/Weapon.h"
+
+bool Game::CanPause()
+{
+	return mEntityManager.GetEntitiesWithComponents<DeathAnimationComponent>().empty();
+}
+
+void Game::InitKeyBindings()
+{
+	mScreen.AddKeyBinding(KeyBinding(sf::Keyboard::Escape, [this]()
+		{
+			if (!CanPause())
+			{
+				return;
+			}
+
+			mIsPaused = !mIsPaused;
+			RenderPauseScreen();
+		}));
+}
 
 void Game::InitSystems()
 {
@@ -18,6 +36,28 @@ void Game::InitPlayer()
 void Game::InitMap()
 {
 	mMap.Init("assets/map/Grass.png");
+}
+
+void Game::RenderPauseScreen()
+{
+	mScreen.Clear();
+	if (!mIsPaused)
+	{
+		return;
+	}
+
+	Button continueButton;
+	continueButton
+		.SetSize({ 200.f, 50.f })
+		.SetFillColor(sf::Color::Yellow)
+		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 300.f })
+		.SetOnClickListener([this]()
+			{
+				Resume();
+				mScreen.Clear();
+			});
+
+	mScreen.AddView(std::make_shared<Button>(continueButton));
 }
 
 void Game::RunFrame(float deltaTime)
@@ -37,18 +77,20 @@ void Game::RunFrame(float deltaTime)
 	mMap.UpdatePosition(mCamera);
 }
 
-void Game::PauseGame()
+void Game::Pause()
 {
 	mIsPaused = true;
 }
 
-void Game::ResumeGame()
+void Game::Resume()
 {
 	mIsPaused = false;
 }
 
 void Game::Reset()
 {
+	mScreen.Clear();
+	mScreen.ClearBindings();
 	mEntityManager.Clear();
 	mSystemManager.Clear();
 	mIsPaused = false;
@@ -65,18 +107,18 @@ void Game::Render(float deltaTime)
 	{
 		system->Render(mEntityManager, deltaTime);
 	}
+
+	mWindow.draw(mScreen);
 }
 
-void Game::ProcessEvents()
+void Game::ProcessEvents(const sf::Event& event)
 {
-	sf::Event event;
-	while (mWindow.pollEvent(event))
-	{
-		if (event.type == sf::Event::Closed)
-		{
-			mWindow.close();
-		}
-	}
+	mScreen.HandleEvents(mWindow, mCamera, event);
+}
+
+bool Game::IsBossDefeated()
+{
+	return mEntityManager.GetEntitiesWithComponents<VictoryComponent>().size();
 }
 
 bool Game::IsPlayerDefeated()
@@ -101,11 +143,6 @@ bool Game::HasPlayerLeveledUp()
 	}
 
 	return false;
-}
-
-bool Game::IsBossDefeated()
-{
-	return mEntityManager.GetEntitiesWithComponents<VictoryComponent>().size();
 }
 
 std::vector<std::string> Game::GetAvailableWeapons()

@@ -2,17 +2,34 @@
 
 void Screen::HandleEvents(const sf::RenderWindow& window, const sf::View& camera, const sf::Event& event)
 {
-	if (event.type == sf::Event::MouseButtonPressed)
-	{
-		sf::Vector2f worldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window), camera);
+	sf::Vector2f worldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window), camera);
 
+	switch (event.type)
+	{
+	case sf::Event::MouseButtonPressed:
 		for (const auto& view : mViews)
 		{
-			if (view->Contains(worldPos))
+			if (!view->Contains(worldPos))
 			{
-				view->Click();
+				continue;
 			}
+			view->Click();
 		}
+		break;
+
+	case sf::Event::KeyPressed:
+		for (auto& binding : mKeyBindings)
+		{
+			if (event.key.code != binding.GetKey())
+			{
+				continue;
+			}
+			binding.Press();
+		}
+		break;
+
+	default:
+		break;
 	}
 }
 

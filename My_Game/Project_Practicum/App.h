@@ -25,11 +25,11 @@ public:
 private:
 	enum class AppState
 	{
-		MainMenu,
+		Defeat,
 		Playing,
 		Victory,
-		Defeat,
-		WeaponUpgrade
+		MainMenu,
+		WeaponUpgrade,
 	};
 
 	std::vector<std::string> mAvailableWeapons;

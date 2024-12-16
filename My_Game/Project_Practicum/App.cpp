@@ -21,14 +21,14 @@ void App::ProcessEvents()
 	sf::Event event;
 	while (mWindow.pollEvent(event))
 	{
-		switch (event.type)
+		if (event.type == sf::Event::Closed)
 		{
-		case sf::Event::Closed: mWindow.close(); break;
+			mWindow.close();
 		}
 
 		if (mCurrentState == AppState::Playing)
 		{
-			mGame.ProcessEvents();
+			mGame.ProcessEvents(event);
 		}
 		else
 		{
@@ -42,20 +42,24 @@ void App::Update(float deltaTime)
 	if (mCurrentState == AppState::Playing)
 	{
 		mGame.RunFrame(deltaTime);
+
 		if (mGame.IsPlayerDefeated())
 		{
 			mCurrentState = AppState::Defeat;
+			return;
 		}
 
 		if (mGame.HasPlayerLeveledUp())
 		{
 			mAvailableWeapons = mGame.GetAvailableWeapons();
 			mCurrentState = AppState::WeaponUpgrade;
+			return;
 		}
 
 		if (mGame.IsBossDefeated())
 		{
 			mCurrentState = AppState::Victory;
+			return;
 		}
 	}
 }
@@ -93,13 +97,13 @@ void App::Render(float deltaTime)
 
 void App::InitUpgradeScreen()
 {
-	mGame.PauseGame();
+	mGame.Pause();
 
 	mScreen.Clear();
 
 	if (mAvailableWeapons.empty())
 	{
-		mGame.ResumeGame();
+		mGame.Resume();
 		mCurrentState = AppState::Playing;
 		return;
 	}
@@ -107,7 +111,7 @@ void App::InitUpgradeScreen()
 	sf::Vector2f buttonSize(200.0f, 50.0f);
 	float spacing = 10.0f;
 
-	for (size_t i = 0; i < mAvailableWeapons.size(); ++i)
+	for (int i = 0; i < mAvailableWeapons.size(); ++i)
 	{
 		Button button;
 		button
@@ -120,7 +124,7 @@ void App::InitUpgradeScreen()
 			{
 				mGame.UpgradeWeapon(weaponName);
 				mCurrentState = AppState::Playing;
-				mGame.ResumeGame();
+				mGame.Resume();
 			});
 
 		mScreen.AddView(std::make_shared<Button>(button));
