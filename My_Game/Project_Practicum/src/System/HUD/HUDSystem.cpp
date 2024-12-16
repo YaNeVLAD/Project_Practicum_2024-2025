@@ -16,6 +16,7 @@ void HUDSystem::Render(EntityManager& entityManager, float deltaTime)
 
 	RenderXPBar(player.front());
 	RenderPlayerHealth(player.front());
+	RenderAbility(player.front());
 
 	for (auto& entity : entityManager.GetEntities())
 	{
@@ -76,6 +77,10 @@ void HUDSystem::RenderPlayerHealth(Entity* player)
 void HUDSystem::RenderXPBar(Entity* player)
 {
 	auto experience = player->GetComponent<LevelComponent>();
+	if (experience == nullptr)
+	{
+		return;
+	}
 
 	mXpBar
 		.SetSize({ 800.f, 30.f })
@@ -90,6 +95,26 @@ void HUDSystem::RenderXPBar(Entity* player)
 
 	mScreen.AddView(std::make_shared<ProgressBar>(mXpBar));
 	mWindow.draw(levelText);
+}
+
+void HUDSystem::RenderAbility(Entity* player)
+{
+	auto ability = player->GetComponent<AbilityComponent>();
+	if (ability == nullptr)
+	{
+		return;
+	}
+
+	mCooldown
+		.SetSize({ 100.f, 10.f })
+		.SetBackgroundColor(sf::Color::Black)
+		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 200.f })
+		.SetProgress(ability->timer / ability->cooldown);
+
+	mCooldown
+		.SetProgressLineColor(ability->IsActive() ? sf::Color::Green : sf::Color::Yellow);
+
+	mScreen.AddView(std::make_shared<ProgressBar>(mCooldown));
 }
 
 void HUDSystem::LoadFont()

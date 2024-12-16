@@ -34,8 +34,8 @@ struct TransformComponent : public Component
 	* @param sf::Vector2f position - вектор позиции
 	* @param sf::Vector2f velocity - вектор скорости
 	*/
-	TransformComponent(sf::Vector2f position = { 0, 0 }, sf::Vector2f velocity = { 0, 0 })
-		: x(position.x), y(position.y), vx(velocity.x), vy(velocity.y) {
+	TransformComponent(sf::Vector2f position = { 0, 0 }, sf::Vector2f velocity = { 0, 0 }, sf::Vector2f multiplier = { 1, 1 })
+		: x(position.x), y(position.y), vx(velocity.x), vy(velocity.y), multiplier(multiplier) {
 	}
 
 	/**
@@ -57,6 +57,7 @@ struct TransformComponent : public Component
 	float x, y;
 	float vx, vy;
 	sf::Vector2f lastDirection = { 0.f, 0.f };
+	sf::Vector2f multiplier = { 1, 1 };
 };
 
 /**
@@ -560,9 +561,101 @@ struct GameOverComponent : public Component {};
 */
 struct VictoryComponent : public Component {};
 
+/**
+* @brief Компонент обозначает, что снаряд будет двигаться по параболе
+*/
 struct ParaboloidProjectileComponent : public Component
 {
+	/**
+	* @brief Основной конструктор
+	* @param float gravity - скорость падения снаряда
+	*/
 	ParaboloidProjectileComponent(float gravity) : gravity(gravity) {}
 
 	float gravity;
+};
+
+/**
+* @brief Компонент обозначает, что у сущности есть способности
+*/
+struct AbilityComponent : public Component
+{
+	enum AbilityType
+	{
+		Haste,
+		Heal,
+	};
+
+	AbilityType type;
+	float cooldown;
+	float duration;
+	float timer;
+
+	bool isActive = false;
+
+	sf::Keyboard::Key activationKey;
+
+	/**
+	* @brief Функция обнуляет таймер
+	*/
+	void Activate()
+	{
+		if (!CanBeUsed())
+		{
+			return;
+		}
+		isActive = true;
+		timer = duration;
+	}
+
+	void Deactivate()
+	{
+		isActive = false;
+		timer = cooldown;
+	}
+
+	/**
+	* @brief Функция обновляет таймер перезарядки
+	* @param float dt - время на которое обновится таймер
+	*/
+	void UpdateTimer(float dt)
+	{
+		if (timer < 0.f)
+		{
+			return;
+		}
+		timer -= dt;
+
+		if (isActive && timer <= 0.f)
+		{
+			Deactivate();
+		}
+	}
+
+	/**
+	* @brief Проверка, активна ли способность
+	* @return true, если способность активна, иначе false
+	*/
+	bool IsActive() const
+	{
+		return isActive;
+	}
+
+	/**
+	* @brief Функция проверяет, можно ли использовать способность
+	* @return true, если можно, иначе false
+	*/
+	bool CanBeUsed() const
+	{
+		return !isActive && timer <= 0.f;;
+	}
+
+	/**
+	* @brief Основной конструктор
+	* @param AbilityType ability - тип способности
+	* @param float cooldown - перезарядка способности
+	*/
+	AbilityComponent(AbilityType type, float cooldown, float duration, sf::Keyboard::Key activationKey)
+		: type(type), cooldown(cooldown), timer(0.f), activationKey(activationKey), duration(duration) {
+	}
 };

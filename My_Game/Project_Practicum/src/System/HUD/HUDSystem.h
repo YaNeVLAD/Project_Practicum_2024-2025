@@ -19,6 +19,7 @@ private:
 	Screen mScreen;
 
 	ProgressBar mXpBar;
+	ProgressBar mCooldown;
 	ProgressBar mPlayerHealth;
 
 	sf::Font mFont;
@@ -26,8 +27,10 @@ private:
 	sf::RenderWindow& mWindow;
 
 	void RenderHealth(Entity* entity);
-	void RenderPlayerHealth(Entity* player);
+
 	void RenderXPBar(Entity* player);
+	void RenderAbility(Entity* player);
+	void RenderPlayerHealth(Entity* player);
 
 	void LoadFont();
 };

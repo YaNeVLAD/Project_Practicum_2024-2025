@@ -142,6 +142,8 @@ void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 	player.AddComponent<PlayerHealthComponent>(100);
 
 	player.AddComponent<LevelComponent>(100);
+
+	player.AddComponent<AbilityComponent>(AbilityComponent::Haste, 3.f, 1.f, sf::Keyboard::Key::E);
 }
 
 void Factory::CreateHealthBonus(EntityManager& entityManager, sf::Vector2f pos)
