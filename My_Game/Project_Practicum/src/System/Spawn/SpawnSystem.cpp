@@ -8,12 +8,12 @@ void SpawnSystem::Update(EntityManager& entityManager, float deltaTime)
 {
 	mTimeSinceLastEnemySpawn += deltaTime;
 	mTimeSinceLastBonusSpawn += deltaTime;
+	mTimeSinceLastBossSpawn += deltaTime;
 
-	mElapsedTime += deltaTime;
-
-	if (!mIsBossSpawned && mElapsedTime >= BOSS_SPAWN_TIME)
+	if (mTimeSinceLastBossSpawn >= mBossSpawnInterval && mSpawnedBosses < mMaxBosses)
 	{
 		SpawnBoss(entityManager);
+		mTimeSinceLastBossSpawn = 0.f;
 	}
 
 	auto enemies = entityManager.GetEntitiesWithType(Enemy);
@@ -103,5 +103,5 @@ void SpawnSystem::SpawnBoss(EntityManager& em)
 {
 	sf::Vector2f pos = SelectSpawnPosition();
 	Factory::CreateBoss(em, pos);
-	mIsBossSpawned = true;
+	mSpawnedBosses++;
 }

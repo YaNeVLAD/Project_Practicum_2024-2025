@@ -5,14 +5,13 @@
 #include "Manager/System/SystemManager.h"
 #include "Manager/Entity/EntityManager.h"
 
-
 class Game
 {
 public:
 	Game(sf::RenderWindow& window, sf::View& camera) 
 		: mWindow(window), mCamera(camera) {}
 
-	void Reset();
+	void Reset(int bossCount);
 
 	void Init()
 	{
@@ -22,9 +21,9 @@ public:
 		InitMap();
 	}
 
-	void Restart()
+	void Restart(int bossCount = 1)
 	{
-		Reset();
+		Reset(bossCount);
 		Init();
 	}
 
@@ -34,7 +33,7 @@ public:
 	void Pause();
 	void Resume();
 	
-	bool IsBossDefeated();
+	bool IsBossDefeated() const;
 	bool IsPlayerDefeated();
 	bool HasPlayerLeveledUp();
 
@@ -45,7 +44,9 @@ public:
 		
 private:
 	bool mIsPaused = false;
-	bool mIsBossSpawned = false;
+	
+	size_t mDefeatedBosses = 0;
+	size_t mMaxBosses = 1;
 
 	Map mMap;
 

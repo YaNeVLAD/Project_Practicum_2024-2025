@@ -11,16 +11,16 @@
 #include "../Entity/Weapon/MagicCharge/MagicCharge.h"
 #include "../Entity/Weapon/LightningStrike/LightningStrike.h"
 
-void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera, bool& isBossSpawned, bool& isPaused)
+void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera, size_t* defeatedBosses, size_t* maxBosses, bool& isPaused)
 {
 	systemManager.AddSystem<InputSystem>();
 	systemManager.AddSystem<WeaponSystem>();
 	systemManager.AddSystem<MovementSystem>();
 	systemManager.AddSystem<CollisionSystem>();
-	systemManager.AddSystem<LifetimeSystem>(camera);
+	systemManager.AddSystem<LifetimeSystem>(camera, defeatedBosses);
 	systemManager.AddSystem<HomingProjectileSystem>();
 	systemManager.AddSystem<OrbitalProjectileSystem>();
-	systemManager.AddSystem<SpawnSystem>(camera, 1.0f, 1.0f, isBossSpawned);
+	systemManager.AddSystem<SpawnSystem>(camera, 0.1f, 1.f, 2.f, maxBosses);
 	systemManager.AddSystem<TrailSystem>();
 	systemManager.AddSystem<DamageSystem>();
 	systemManager.AddSystem<ContainerSystem>();
@@ -76,7 +76,7 @@ void Factory::CreateEnemy(EntityManager& entityManager, sf::Vector2f pos)
 
 	enemy.AddComponent<DrawableComponent>(walkFrames[0], sf::Vector2f(0.75f, 0.75f));
 
-	enemy.AddComponent<DamageComponent>(10, 1.f, Player);
+	enemy.AddComponent<DamageComponent>(1, 0.1f, Player);
 }
 
 void Factory::CreateBoss(EntityManager& entityManager, sf::Vector2f pos)
@@ -85,7 +85,7 @@ void Factory::CreateBoss(EntityManager& entityManager, sf::Vector2f pos)
 
 	boss.AddComponent<TransformComponent>(pos);
 	boss.AddComponent<BossHealthComponent>(300);
-	boss.AddComponent<DamageComponent>(20, 1.f, Player);
+	boss.AddComponent<DamageComponent>(2, 0.1f, Player);
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(40, 80));
 	collisionShape->setOrigin(20, 40);
@@ -168,8 +168,6 @@ void Factory::CreateBombBonus(EntityManager& entityManager, sf::Vector2f pos)
 
 	bonus.AddComponent<BonusComponent>(BonusComponent::BonusType::Bomb);
 
-	bonus.AddComponent<DamageComponent>(999, 0.f, Enemy);
-
 	bonus.AddComponent<TransformComponent>(pos);
 	bonus.AddComponent<DrawableComponent>(32, 32, sf::Color::Red);
 
@@ -177,7 +175,7 @@ void Factory::CreateBombBonus(EntityManager& entityManager, sf::Vector2f pos)
 	collisionShape->setOrigin(16, 16);
 	bonus.AddComponent<CollisionComponent>(std::move(collisionShape));
 
-	bonus.AddComponent<LifetimeComponent>(15.f);
+	bonus.AddComponent<LifetimeComponent>(30.f);
 }
 
 void Factory::CreateMagnetBonus(EntityManager& entityManager, sf::Vector2f pos)
@@ -193,7 +191,7 @@ void Factory::CreateMagnetBonus(EntityManager& entityManager, sf::Vector2f pos)
 	collisionShape->setOrigin(16, 16);
 	magnet.AddComponent<CollisionComponent>(std::move(collisionShape));
 
-	magnet.AddComponent<LifetimeComponent>(15.f);
+	magnet.AddComponent<LifetimeComponent>(30.f);
 }
 
 void Factory::CreateContainer(EntityManager& entityManager, sf::Vector2f pos)
@@ -226,7 +224,7 @@ void Factory::CreateExperience(EntityManager& entityManager, sf::Vector2f pos)
 	collisionShape->setOrigin(16, 16);
 	experience.AddComponent<CollisionComponent>(std::move(collisionShape));
 
-	experience.AddComponent<LifetimeComponent>(30.f);
+	experience.AddComponent<LifetimeComponent>(60.f);
 }
 
 void Factory::LoadTextures()

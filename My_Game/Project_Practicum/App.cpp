@@ -144,7 +144,7 @@ void App::InitMainMenuScreen()
 
 	startButton.SetOnClickListener([this]()
 		{
-			mGame.Restart();
+			mGame.Restart(2);
 			mCurrentState = AppState::Playing;
 		});
 

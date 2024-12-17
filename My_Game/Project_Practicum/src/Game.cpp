@@ -3,6 +3,7 @@
 #include "Factory/Factory.h"
 #include "../ui/Button/Button.h"
 #include "Entity/Weapon/Weapon.h"
+#include <iostream>
 
 bool Game::CanPause()
 {
@@ -25,7 +26,7 @@ void Game::InitKeyBindings()
 
 void Game::InitSystems()
 {
-	Factory::InitSystems(mSystemManager, mWindow, mCamera, mIsBossSpawned, mIsPaused);
+	Factory::InitSystems(mSystemManager, mWindow, mCamera, &mDefeatedBosses, &mMaxBosses, mIsPaused);
 }
 
 void Game::InitPlayer()
@@ -87,14 +88,15 @@ void Game::Resume()
 	mIsPaused = false;
 }
 
-void Game::Reset()
+void Game::Reset(int bossCount = 1)
 {
 	mScreen.Clear();
 	mScreen.ClearBindings();
 	mEntityManager.Clear();
 	mSystemManager.Clear();
 	mIsPaused = false;
-	mIsBossSpawned = false;
+	mMaxBosses = bossCount;
+	mDefeatedBosses = 0;
 }
 
 void Game::Render(float deltaTime)
@@ -116,9 +118,9 @@ void Game::ProcessEvents(const sf::Event& event)
 	mScreen.HandleEvents(mWindow, mCamera, event);
 }
 
-bool Game::IsBossDefeated()
+bool Game::IsBossDefeated() const
 {
-	return mEntityManager.GetEntitiesWithComponents<VictoryComponent>().size();
+	return mDefeatedBosses >= mMaxBosses;
 }
 
 bool Game::IsPlayerDefeated()

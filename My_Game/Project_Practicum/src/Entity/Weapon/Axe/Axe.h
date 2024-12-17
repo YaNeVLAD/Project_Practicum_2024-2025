@@ -11,7 +11,7 @@ public:
 		projectileSpeed = 300.f;
 		fireRate = 1.5f;
 		cooldown = 0.f;
-		damage = 10;
+		damage = 100;
 		mGravity = projectileSpeed / 3;
 
 		LoadTextures();

@@ -7,11 +7,12 @@
 class SpawnSystem : public IUpdateSystem
 {
 public:
-	SpawnSystem(sf::View& camera, float enemySpawnInterval, float bonusSpawnInterval, bool& isBossSpawned)
+	SpawnSystem(sf::View& camera, float enemySpawnInterval, float bonusSpawnInterval, float bossSpawnInterval, size_t* maxBosses)
 		: mCamera(camera),
 		mEnemySpawnInterval(enemySpawnInterval),
 		mBonusSpawnInterval(bonusSpawnInterval),
-		mIsBossSpawned(isBossSpawned),
+		mBossSpawnInterval(bossSpawnInterval),
+		mMaxBosses(*maxBosses),
 		mGenerator(mRd()) {}
 
 	void Update(EntityManager& entityManager, float deltaTime) override;
@@ -22,13 +23,16 @@ private:
 	sf::View& mCamera;
 	float mEnemySpawnInterval;
 	float mBonusSpawnInterval;
+	float mBossSpawnInterval;
+
+	size_t mMaxBosses;
+	size_t mSpawnedBosses = 0;
 
 	float mTimeSinceLastEnemySpawn = 0.f;
 	float mTimeSinceLastBonusSpawn = 0.f;
+	float mTimeSinceLastBossSpawn = 0.f;
 
 	float mElapsedTime = 0.0f;
-	const float BOSS_SPAWN_TIME = 3.f;
-	bool& mIsBossSpawned;
 
 	const int MAX_ENEMIES_ON_SCREEN = 100;
 	const int MAX_CONTAINERS_ON_SCREEN = 10;

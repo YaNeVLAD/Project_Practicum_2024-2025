@@ -5,7 +5,7 @@
 class DeathAnimationSystem : public IRenderSystem
 {
 public:
-	DeathAnimationSystem(sf::View& camera, bool& isPaused) 
+	DeathAnimationSystem(sf::View& camera, bool& isPaused)
 		: mCamera(camera), mIsPaused(isPaused), mInitialSize(camera.getSize()) {}
 
 	void Render(EntityManager& entityManager, float deltaTime) override;
@@ -23,6 +23,7 @@ private:
 
 	void RestoreInitialZoom();
 	void ChangeCameraTarget(EntityManager& em);
+	void RestoreCameraTarget(EntityManager& em);
 
 	void StartAnimation(Entity* entity);
 	void ZoomIn(Entity* entity, float dt);

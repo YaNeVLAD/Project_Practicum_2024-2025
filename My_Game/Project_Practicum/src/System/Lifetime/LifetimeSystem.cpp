@@ -9,7 +9,7 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 	{
 		if (auto health = player->GetComponent<PlayerHealthComponent>())
 		{
-			TryApplyDeathAnimation(player, health);
+			TryApplyDeathAnimation(entityManager, player, health);
 		}
 	}
 
@@ -17,7 +17,7 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 	{
 		if (auto health = boss->GetComponent<BossHealthComponent>())
 		{
-			TryApplyDeathAnimation(boss, health);
+			TryApplyDeathAnimation(entityManager, boss, health);
 		}
 	}
 
@@ -57,11 +57,18 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 	}
 }
 
-void LifetimeSystem::TryApplyDeathAnimation(Entity* entity, auto* health)
+void LifetimeSystem::TryApplyDeathAnimation(EntityManager& em, Entity* entity, auto* health)
 {
 	auto animation = entity->GetComponent<AnimationComponent>();
 	auto deathAnimation = entity->GetComponent<DeathAnimationComponent>();
+	auto bossDeath = entity->GetComponent<VictoryComponent>();
 
+	if (bossDeath != nullptr)
+	{
+		em.RemoveEntity(entity->GetId());
+		(*mDefeatedBosses)++;
+		return;
+	}
 	if (health != nullptr && !health->IsAlive() && deathAnimation == nullptr)
 	{
 		animation->SetState(AnimationComponent::DEAD);

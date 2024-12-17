@@ -103,13 +103,6 @@ void CollisionSystem::ApplyBonus(Entity* player, Entity* bonus)
 	}
 	else if (bonusComponent->type == BonusComponent::BonusType::Bomb)
 	{
-		auto damage = bonus->GetComponent<DamageComponent>();
-
-		if (damage == nullptr)
-		{
-			return;
-		}
-
 		for (auto& enemy : mEntityManager->GetEntitiesWithType(EntityType::Enemy))
 		{
 			auto health = enemy->GetComponent<HealthComponent>();
@@ -117,7 +110,7 @@ void CollisionSystem::ApplyBonus(Entity* player, Entity* bonus)
 			{
 				continue;
 			}
-			damage->DealDamage(health);
+			health->Kill();
 		}
 	}
 	else if (bonusComponent->type == BonusComponent::BonusType::Magnet)
