@@ -5,15 +5,20 @@ void DeathAnimationSystem::Render(EntityManager& entityManager, float deltaTime)
 	for (auto& entity : entityManager.GetEntitiesWithComponents<AnimationComponent, DeathAnimationComponent>())
 	{
 		auto deathAnimation = entity->GetComponent<DeathAnimationComponent>();
-		auto animation = entity->GetComponent<AnimationComponent>();
+		auto playerHealth = entity->GetComponent<PlayerHealthComponent>();
 
 		if (!deathAnimation->isCompleted)
 		{
-			ChangeCameraTarget(entityManager);
+			if (mNeedToChangeCamera || playerHealth != nullptr) {
+				ChangeCameraTarget(entityManager);
+			}
 			StartAnimation(entity);
-			ZoomIn(entity, deltaTime);
-			ZoomOut(entity);
-			RestoreCameraTarget(entityManager);
+			if (mNeedToChangeCamera || playerHealth != nullptr)
+			{
+				ZoomIn(entity, deltaTime);
+				ZoomOut(entity);
+				RestoreCameraTarget(entityManager);
+			}
 			EndAnimation(entity);
 		}
 	}
@@ -26,47 +31,61 @@ void DeathAnimationSystem::RestoreInitialZoom()
 
 void DeathAnimationSystem::ChangeCameraTarget(EntityManager& em)
 {
-	auto targets = em.GetEntitiesWithComponents<CameraComponent>();
+	auto players = em.GetEntitiesWithType(Player);
 
-	for (auto& target : targets)
+	for (auto& player : players)
 	{
-		target->RemoveComponent<CameraComponent>();
+		player->RemoveComponent<CameraComponent>();
 	}
 
-	auto entities = em.GetEntitiesWithComponents<DeathAnimationComponent>();
-
-	if (entities.empty())
+	for (auto& dyingEntity : em.GetEntitiesWithComponents<DeathAnimationComponent>())
 	{
-		return;
+		dyingEntity->AddComponent<CameraComponent>();
 	}
-
-	entities.front()->AddComponent<CameraComponent>();
 }
 
 void DeathAnimationSystem::RestoreCameraTarget(EntityManager& em)
 {
-	auto player = em.GetEntitiesWithType(Player);
-	if (player.empty())
+	auto entities = em.GetEntitiesWithComponents<DeathAnimationComponent>();
+	if (!entities.empty())
 	{
 		return;
 	}
+
 	for (auto& entity : em.GetEntitiesWithComponents<CameraComponent>())
 	{
 		entity->RemoveComponent<CameraComponent>();
 	}
-	player.front()->AddComponent<CameraComponent>();
+	for (auto& player : em.GetEntitiesWithType(Player))
+	{
+		player->AddComponent<CameraComponent>();
+	}
 }
 
 void DeathAnimationSystem::StartAnimation(Entity* entity)
 {
 	auto animation = entity->GetComponent<AnimationComponent>();
 	auto deathAnimation = entity->GetComponent<DeathAnimationComponent>();
+	auto transform = entity->GetComponent<TransformComponent>();
 
-	if (animation->currentFrameIndex == 0 && deathAnimation->elapsedTime == 0.0f)
+	auto playerHealth = entity->GetComponent<PlayerHealthComponent>();
+
+	if (animation->currentFrameIndex != 0 || deathAnimation->elapsedTime != 0.f)
+	{
+		return;
+	}
+
+	if (transform)
+	{
+		transform->multiplier = { 0, 0 };
+	}
+	entity->RemoveComponent<CollisionComponent>();
+
+	if (mNeedToChangeCamera || playerHealth != nullptr)
 	{
 		mIsPaused = true;
-		deathAnimation->currentZoom = INITIAL_ZOOM;
 	}
+	deathAnimation->currentZoom = INITIAL_ZOOM;
 }
 
 void DeathAnimationSystem::ZoomIn(Entity* entity, float dt)
@@ -102,11 +121,14 @@ void DeathAnimationSystem::EndAnimation(Entity* entity)
 
 	if (animation->currentFrameIndex == animation->animations[AnimationComponent::DEAD].size())
 	{
-		mIsPaused = false;
-		deathAnimation->isCompleted = true;
-
 		auto playerHealth = entity->GetComponent<PlayerHealthComponent>();
 		auto bossHealth = entity->GetComponent<BossHealthComponent>();
+
+		if (mNeedToChangeCamera || playerHealth != nullptr)
+		{
+			mIsPaused = false;
+		}
+		deathAnimation->isCompleted = true;
 
 		(playerHealth == nullptr)
 			? entity->AddComponent<VictoryComponent>()

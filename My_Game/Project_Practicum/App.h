@@ -29,6 +29,7 @@ private:
 		Playing,
 		Victory,
 		MainMenu,
+		GameSetup,
 		WeaponUpgrade,
 	};
 
@@ -49,10 +50,11 @@ private:
 	void Update(float deltaTime);
 	void Render(float deltaTime);
 
-	void InitUpgradeScreen();
-	void InitMainMenuScreen();
-	void InitVictoryScreen();
-	void InitDefeatScreen();
+	void RenderDefeatScreen();
+	void RenderVictoryScreen();
+	void RenderUpgradeScreen();
+	void RenderMainMenuScreen();
+	void RenderGameSetupScreen();
 
 	void LoadFont();
 	void LoadTextures();

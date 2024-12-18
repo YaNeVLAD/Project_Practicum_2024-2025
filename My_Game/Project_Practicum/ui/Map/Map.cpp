@@ -13,9 +13,9 @@ void Map::Init(const std::string& textureFile)
 
 	mMapSize = mBgTexture.getSize();
 
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < mVerticalSprites; ++i)
 	{
-		for (int j = 0; j < 3; ++j)
+		for (int j = 0; j < mHorizontalSprites; ++j)
 		{
 			sf::Sprite sprite;
 			sprite.setTexture(mBgTexture);
@@ -32,9 +32,9 @@ bool Map::Contains(const sf::Vector2f& point) const
 
 void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < mVerticalSprites; ++i)
 	{
-		for (int j = 0; j < 3; ++j)
+		for (int j = 0; j < mHorizontalSprites; ++j)
 		{
 			target.draw(mBackgrounds[i][j]);
 		}
@@ -55,9 +55,9 @@ void Map::UpdatePosition(const sf::View& camera)
 	float startX = viewCenter.x - offsetX - mMapSize.x;
 	float startY = viewCenter.y - offsetY - mMapSize.y;
 
-	for (int i = 0; i < 3; ++i) 
+	for (int i = 0; i < mVerticalSprites; ++i) 
 	{
-		for (int j = 0; j < 3; ++j) 
+		for (int j = 0; j < mHorizontalSprites; ++j) 
 		{
 			float xPos = startX + i * mMapSize.x;
 			float yPos = startY + j * mMapSize.y;

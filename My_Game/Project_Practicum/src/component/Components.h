@@ -7,7 +7,7 @@ enum EntityType;
 class Weapon;
 
 /**
-* @brief Общая структура-прародитель для любых компонентов
+* @brief РћР±С‰Р°СЏ СЃС‚СЂСѓРєС‚СѓСЂР°-РїСЂР°СЂРѕРґРёС‚РµР»СЊ РґР»СЏ Р»СЋР±С‹С… РєРѕРјРїРѕРЅРµРЅС‚РѕРІ
 */
 struct Component
 {
@@ -15,31 +15,31 @@ struct Component
 };
 
 /**
-* @brief Компонент отвечает за поведение фигуры при нажатии клавиш
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕС‚РІРµС‡Р°РµС‚ Р·Р° РїРѕРІРµРґРµРЅРёРµ С„РёРіСѓСЂС‹ РїСЂРё РЅР°Р¶Р°С‚РёРё РєР»Р°РІРёС€
 */
 struct InputComponent : public Component {};
 
 /**
-* @brief Компонент отвечает за поведение камеры
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕС‚РІРµС‡Р°РµС‚ Р·Р° РїРѕРІРµРґРµРЅРёРµ РєР°РјРµСЂС‹
 */
 struct CameraComponent : public Component {};
 
 /**
-* @brief Компонент хранит положение сущности в пространстве
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ С…СЂР°РЅРёС‚ РїРѕР»РѕР¶РµРЅРёРµ СЃСѓС‰РЅРѕСЃС‚Рё РІ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ
 */
 struct TransformComponent : public Component
 {
 	/**
-	* @brief Основной конструктор
-	* @param sf::Vector2f position - вектор позиции
-	* @param sf::Vector2f velocity - вектор скорости
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	* @param sf::Vector2f position - РІРµРєС‚РѕСЂ РїРѕР·РёС†РёРё
+	* @param sf::Vector2f velocity - РІРµРєС‚РѕСЂ СЃРєРѕСЂРѕСЃС‚Рё
 	*/
 	TransformComponent(sf::Vector2f position = { 0, 0 }, sf::Vector2f velocity = { 0, 0 }, sf::Vector2f multiplier = { 1, 1 })
 		: x(position.x), y(position.y), vx(velocity.x), vy(velocity.y), multiplier(multiplier) {
 	}
 
 	/**
-	* @brief Функция получения вектора позиции
+	* @brief Р¤СѓРЅРєС†РёСЏ РїРѕР»СѓС‡РµРЅРёСЏ РІРµРєС‚РѕСЂР° РїРѕР·РёС†РёРё
 	*/
 	sf::Vector2f GetPosition()
 	{
@@ -47,7 +47,7 @@ struct TransformComponent : public Component
 	}
 
 	/**
-	* @brief Функция получения вектора скорости
+	* @brief Р¤СѓРЅРєС†РёСЏ РїРѕР»СѓС‡РµРЅРёСЏ РІРµРєС‚РѕСЂР° СЃРєРѕСЂРѕСЃС‚Рё
 	*/
 	sf::Vector2f GetVelocity()
 	{
@@ -61,14 +61,14 @@ struct TransformComponent : public Component
 };
 
 /**
-* @brief Компонент хранит угол наклона сущности
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ С…СЂР°РЅРёС‚ СѓРіРѕР» РЅР°РєР»РѕРЅР° СЃСѓС‰РЅРѕСЃС‚Рё
 */
 
 struct RotationComponent : public Component
 {
 	/**
-	* @brief Основной конструктор
-	* @param float angle - угол наклона сущности
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	* @param float angle - СѓРіРѕР» РЅР°РєР»РѕРЅР° СЃСѓС‰РЅРѕСЃС‚Рё
 	*/
 	RotationComponent(float angle = 0.0f) : angle(angle) {}
 
@@ -76,15 +76,15 @@ struct RotationComponent : public Component
 };
 
 /**
-* @brief Компонент хранит коллизионную фигуру сущности
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ С…СЂР°РЅРёС‚ РєРѕР»Р»РёР·РёРѕРЅРЅСѓСЋ С„РёРіСѓСЂСѓ СЃСѓС‰РЅРѕСЃС‚Рё
 */
 struct CollisionComponent : public Component
 {
 	/**
-	* @brief Основной конструктор
-	* @param std::unique_ptr<sf::Shape> shape - указатель на фигуру коллизии
-	* @param sf::Vector2f offset - смещение относительно центра сущности
-	* @param float cooldown - перезарядка коллизии
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	* @param std::unique_ptr<sf::Shape> shape - СѓРєР°Р·Р°С‚РµР»СЊ РЅР° С„РёРіСѓСЂСѓ РєРѕР»Р»РёР·РёРё
+	* @param sf::Vector2f offset - СЃРјРµС‰РµРЅРёРµ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ С†РµРЅС‚СЂР° СЃСѓС‰РЅРѕСЃС‚Рё
+	* @param float cooldown - РїРµСЂРµР·Р°СЂСЏРґРєР° РєРѕР»Р»РёР·РёРё
 	*/
 	CollisionComponent(std::unique_ptr<sf::RectangleShape> shape, sf::Vector2f offset = sf::Vector2f(0.0f, 0.0f), float cooldown = 0.0f)
 		: shape(std::move(shape)), offset(offset), cooldown(cooldown) {
@@ -96,7 +96,7 @@ struct CollisionComponent : public Component
 	float cooldown;
 
 	/**
-	* @brief Метод для получения размеров зоны коллизии
+	* @brief РњРµС‚РѕРґ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЂР°Р·РјРµСЂРѕРІ Р·РѕРЅС‹ РєРѕР»Р»РёР·РёРё
 	*/
 	sf::FloatRect getRect() const
 	{
@@ -104,9 +104,9 @@ struct CollisionComponent : public Component
 	}
 
 	/**
-	* @brief Метод для обновления позиции зоны коллизии
-	* @param float x - координата x
-	* @param float y - координата y
+	* @brief РњРµС‚РѕРґ РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РїРѕР·РёС†РёРё Р·РѕРЅС‹ РєРѕР»Р»РёР·РёРё
+	* @param float x - РєРѕРѕСЂРґРёРЅР°С‚Р° x
+	* @param float y - РєРѕРѕСЂРґРёРЅР°С‚Р° y
 	*/
 	void UpdatePosition(float x, float y) const
 	{
@@ -115,15 +115,15 @@ struct CollisionComponent : public Component
 };
 
 /**
-* @brief Компонент отвечает за вид объекта на сцене
-* @brief Может быть создан без текстуры, в таком случае необходимо задать размер и цвет прямоугольника
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕС‚РІРµС‡Р°РµС‚ Р·Р° РІРёРґ РѕР±СЉРµРєС‚Р° РЅР° СЃС†РµРЅРµ
+* @brief РњРѕР¶РµС‚ Р±С‹С‚СЊ СЃРѕР·РґР°РЅ Р±РµР· С‚РµРєСЃС‚СѓСЂС‹, РІ С‚Р°РєРѕРј СЃР»СѓС‡Р°Рµ РЅРµРѕР±С…РѕРґРёРјРѕ Р·Р°РґР°С‚СЊ СЂР°Р·РјРµСЂ Рё С†РІРµС‚ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
 */
 struct DrawableComponent : public Component
 {
 	/**
-	* @brief Конструктор для текстуры
-	* @param const sf::Texture& texture - опциональный, компонент будет отображать переданную текстуру
-	* @param sf::Vector2f scale - масштаб объекта
+	* @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ С‚РµРєСЃС‚СѓСЂС‹
+	* @param const sf::Texture& texture - РѕРїС†РёРѕРЅР°Р»СЊРЅС‹Р№, РєРѕРјРїРѕРЅРµРЅС‚ Р±СѓРґРµС‚ РѕС‚РѕР±СЂР°Р¶Р°С‚СЊ РїРµСЂРµРґР°РЅРЅСѓСЋ С‚РµРєСЃС‚СѓСЂСѓ
+	* @param sf::Vector2f scale - РјР°СЃС€С‚Р°Р± РѕР±СЉРµРєС‚Р°
 	*/
 	DrawableComponent(const sf::Texture& texture, sf::Vector2f scale = { 1, 1 }) : texture(texture)
 	{
@@ -133,10 +133,10 @@ struct DrawableComponent : public Component
 	}
 
 	/**
-	* @brief Конструктор для цветного прямоугольника
-	* @param int width - ширина прямоугольника
-	* @param int height - высота прямоугольника
-	* @param sf::Color color - цвет прямоугольника
+	* @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ С†РІРµС‚РЅРѕРіРѕ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
+	* @param int width - С€РёСЂРёРЅР° РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
+	* @param int height - РІС‹СЃРѕС‚Р° РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
+	* @param sf::Color color - С†РІРµС‚ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
 	*/
 	DrawableComponent(int width = 128, int height = 128, sf::Color color = sf::Color::White)
 	{
@@ -155,25 +155,25 @@ struct DrawableComponent : public Component
 };
 
 /**
-* @brief Компонент хранит переданное оружие
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ С…СЂР°РЅРёС‚ РїРµСЂРµРґР°РЅРЅРѕРµ РѕСЂСѓР¶РёРµ
 */
 struct WeaponComponent : public Component
 {
 	/**
-	* @brief Функция добавляет оружие в список оружия сущности
+	* @brief Р¤СѓРЅРєС†РёСЏ РґРѕР±Р°РІР»СЏРµС‚ РѕСЂСѓР¶РёРµ РІ СЃРїРёСЃРѕРє РѕСЂСѓР¶РёСЏ СЃСѓС‰РЅРѕСЃС‚Рё
 	*/
 	void AddWeapon(std::unique_ptr<Weapon> weapon);
 	std::vector<std::unique_ptr<Weapon>> weapons;
 };
 
 /**
-* @brief Компонент обозначает что сущность имеет время жизни и будет удалена по его окончанию
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕР±РѕР·РЅР°С‡Р°РµС‚ С‡С‚Рѕ СЃСѓС‰РЅРѕСЃС‚СЊ РёРјРµРµС‚ РІСЂРµРјСЏ Р¶РёР·РЅРё Рё Р±СѓРґРµС‚ СѓРґР°Р»РµРЅР° РїРѕ РµРіРѕ РѕРєРѕРЅС‡Р°РЅРёСЋ
 */
 struct LifetimeComponent : public Component
 {
 	/**
-	* @brief Основной конструктор
-	* @param float maxLifetime - максимальное время жизни, по истечению которого сущность будет удалена
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	* @param float maxLifetime - РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РІСЂРµРјСЏ Р¶РёР·РЅРё, РїРѕ РёСЃС‚РµС‡РµРЅРёСЋ РєРѕС‚РѕСЂРѕРіРѕ СЃСѓС‰РЅРѕСЃС‚СЊ Р±СѓРґРµС‚ СѓРґР°Р»РµРЅР°
 	*/
 	LifetimeComponent(float maxLifeTime) : maxLifeTime(maxLifeTime), time(maxLifeTime) {}
 
@@ -182,14 +182,14 @@ struct LifetimeComponent : public Component
 };
 
 /**
-* @brief Компонент обозначает что сущность будет наводиться на ближайшего врага
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕР±РѕР·РЅР°С‡Р°РµС‚ С‡С‚Рѕ СЃСѓС‰РЅРѕСЃС‚СЊ Р±СѓРґРµС‚ РЅР°РІРѕРґРёС‚СЊСЃСЏ РЅР° Р±Р»РёР¶Р°Р№С€РµРіРѕ РІСЂР°РіР°
 */
 struct HomingProjectileComponent : public Component
 {
 	/**
-	* @brief Основной конструктор
-	* @param float speed - скорость снаряда
-	* @param EntityType targetType - тип сущности, на которые будет наводиться снаряд
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	* @param float speed - СЃРєРѕСЂРѕСЃС‚СЊ СЃРЅР°СЂСЏРґР°
+	* @param EntityType targetType - С‚РёРї СЃСѓС‰РЅРѕСЃС‚Рё, РЅР° РєРѕС‚РѕСЂС‹Рµ Р±СѓРґРµС‚ РЅР°РІРѕРґРёС‚СЊСЃСЏ СЃРЅР°СЂСЏРґ
 	*/
 	HomingProjectileComponent(float speed, EntityType targetType)
 		: speed(speed), targetType(targetType) {
@@ -200,15 +200,15 @@ struct HomingProjectileComponent : public Component
 };
 
 /**
-* @brief Компонент обозначает что сущность будет вращаться по орбите вокруг другой сущности
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕР±РѕР·РЅР°С‡Р°РµС‚ С‡С‚Рѕ СЃСѓС‰РЅРѕСЃС‚СЊ Р±СѓРґРµС‚ РІСЂР°С‰Р°С‚СЊСЃСЏ РїРѕ РѕСЂР±РёС‚Рµ РІРѕРєСЂСѓРі РґСЂСѓРіРѕР№ СЃСѓС‰РЅРѕСЃС‚Рё
 */
 struct OrbitalProjectileComponent : public Component
 {
 	/**
-	* @brief Основной конструктов
-	* @param float radius - радиус орбиты
-	* @param float speed - угловая скорость
-	* @param TransformComponent* parent - указатель на TransformComponent родителя
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕРІ
+	* @param float radius - СЂР°РґРёСѓСЃ РѕСЂР±РёС‚С‹
+	* @param float speed - СѓРіР»РѕРІР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ
+	* @param TransformComponent* parent - СѓРєР°Р·Р°С‚РµР»СЊ РЅР° TransformComponent СЂРѕРґРёС‚РµР»СЏ
 	*/
 	OrbitalProjectileComponent(float radius, float speed, TransformComponent* parent)
 		: orbitRadius(radius), orbitSpeed(speed), parentTransform(parent) {
@@ -221,7 +221,7 @@ struct OrbitalProjectileComponent : public Component
 };
 
 /**
-* @brief Компонент хранит данные, необходимые для анимации спрайта
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ С…СЂР°РЅРёС‚ РґР°РЅРЅС‹Рµ, РЅРµРѕР±С…РѕРґРёРјС‹Рµ РґР»СЏ Р°РЅРёРјР°С†РёРё СЃРїСЂР°Р№С‚Р°
 */
 struct AnimationComponent : public Component
 {
@@ -235,11 +235,11 @@ struct AnimationComponent : public Component
 	};
 
 	/**
-	* @brief Основной конструктор
-	* @param std::vector<sf::Texture> frames - набор картинок для покадровой анимации
-	* @param float frameTime - время отображения каждого кадра
-	* @param bool loop - флаг, указывает на необходимость зациклить анимацию
-	* @param float duration - время всей анимации
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	* @param std::vector<sf::Texture> frames - РЅР°Р±РѕСЂ РєР°СЂС‚РёРЅРѕРє РґР»СЏ РїРѕРєР°РґСЂРѕРІРѕР№ Р°РЅРёРјР°С†РёРё
+	* @param float frameTime - РІСЂРµРјСЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РєР°Р¶РґРѕРіРѕ РєР°РґСЂР°
+	* @param bool loop - С„Р»Р°Рі, СѓРєР°Р·С‹РІР°РµС‚ РЅР° РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚СЊ Р·Р°С†РёРєР»РёС‚СЊ Р°РЅРёРјР°С†РёСЋ
+	* @param float duration - РІСЂРµРјСЏ РІСЃРµР№ Р°РЅРёРјР°С†РёРё
 	*/
 	AnimationComponent(
 		float frameTime,
@@ -287,13 +287,13 @@ struct AnimationComponent : public Component
 };
 
 /**
-* @brief Компонент хранит данные, необходимые для получения урона по здоровью
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ С…СЂР°РЅРёС‚ РґР°РЅРЅС‹Рµ, РЅРµРѕР±С…РѕРґРёРјС‹Рµ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СѓСЂРѕРЅР° РїРѕ Р·РґРѕСЂРѕРІСЊСЋ
 */
 struct HealthComponent : public Component
 {
 	/**
-	* @brief Основной конструктов
-	* @param int maxHealth - максимальное здоровье сущности
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕРІ
+	* @param int maxHealth - РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РґРѕСЂРѕРІСЊРµ СЃСѓС‰РЅРѕСЃС‚Рё
 	*/
 	HealthComponent(int maxHealth) : maxHealth(maxHealth), currentHealth(maxHealth) {}
 
@@ -301,8 +301,8 @@ struct HealthComponent : public Component
 	int currentHealth;
 
 	/**
-	* @brief Функция вычитает здоровье из текущего
-	* @param int amount - количество вычитаемого здоровья
+	* @brief Р¤СѓРЅРєС†РёСЏ РІС‹С‡РёС‚Р°РµС‚ Р·РґРѕСЂРѕРІСЊРµ РёР· С‚РµРєСѓС‰РµРіРѕ
+	* @param int amount - РєРѕР»РёС‡РµСЃС‚РІРѕ РІС‹С‡РёС‚Р°РµРјРѕРіРѕ Р·РґРѕСЂРѕРІСЊСЏ
 	*/
 	void RemoveHealth(int amount)
 	{
@@ -310,8 +310,8 @@ struct HealthComponent : public Component
 	}
 
 	/**
-	* @brief Функция добавляет здоровье, не увеличивая его максимум
-	* @param int amount - количество добавляемого здоровья
+	* @brief Р¤СѓРЅРєС†РёСЏ РґРѕР±Р°РІР»СЏРµС‚ Р·РґРѕСЂРѕРІСЊРµ, РЅРµ СѓРІРµР»РёС‡РёРІР°СЏ РµРіРѕ РјР°РєСЃРёРјСѓРј
+	* @param int amount - РєРѕР»РёС‡РµСЃС‚РІРѕ РґРѕР±Р°РІР»СЏРµРјРѕРіРѕ Р·РґРѕСЂРѕРІСЊСЏ
 	*/
 	void AddHealth(int amount)
 	{
@@ -321,7 +321,7 @@ struct HealthComponent : public Component
 	}
 
 	/**
-	* @brief Функция определяет жива сущность или нет
+	* @brief Р¤СѓРЅРєС†РёСЏ РѕРїСЂРµРґРµР»СЏРµС‚ Р¶РёРІР° СЃСѓС‰РЅРѕСЃС‚СЊ РёР»Рё РЅРµС‚
 	*/
 	bool IsAlive() const
 	{
@@ -329,7 +329,7 @@ struct HealthComponent : public Component
 	}
 
 	/**
-	* @brief Функция мгновенно убивает сущность
+	* @brief Р¤СѓРЅРєС†РёСЏ РјРіРЅРѕРІРµРЅРЅРѕ СѓР±РёРІР°РµС‚ СЃСѓС‰РЅРѕСЃС‚СЊ
 	*/
 	void Kill()
 	{
@@ -337,8 +337,8 @@ struct HealthComponent : public Component
 	}
 
 	/**
-	* @brief Функция увеличивает максимальное здоровье, сохраняя соотношение текущего здоровья к максимальному
-	* @param int amount - количество добавляемого здоровья
+	* @brief Р¤СѓРЅРєС†РёСЏ СѓРІРµР»РёС‡РёРІР°РµС‚ РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РґРѕСЂРѕРІСЊРµ, СЃРѕС…СЂР°РЅСЏСЏ СЃРѕРѕС‚РЅРѕС€РµРЅРёРµ С‚РµРєСѓС‰РµРіРѕ Р·РґРѕСЂРѕРІСЊСЏ Рє РјР°РєСЃРёРјР°Р»СЊРЅРѕРјСѓ
+	* @param int amount - РєРѕР»РёС‡РµСЃС‚РІРѕ РґРѕР±Р°РІР»СЏРµРјРѕРіРѕ Р·РґРѕСЂРѕРІСЊСЏ
 	*/
 	void IncreaseHealth(int amount)
 	{
@@ -349,39 +349,39 @@ struct HealthComponent : public Component
 };
 
 /**
-* @brief Компонент хранит данные, необходимые для получения урона по здоровью босса
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ С…СЂР°РЅРёС‚ РґР°РЅРЅС‹Рµ, РЅРµРѕР±С…РѕРґРёРјС‹Рµ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СѓСЂРѕРЅР° РїРѕ Р·РґРѕСЂРѕРІСЊСЋ Р±РѕСЃСЃР°
 */
 struct PlayerHealthComponent : public HealthComponent
 {
 	/**
-	* @brief Основной конструктов
-	* @param int maxHealth - максимальное здоровье сущности
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕРІ
+	* @param int maxHealth - РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РґРѕСЂРѕРІСЊРµ СЃСѓС‰РЅРѕСЃС‚Рё
 	*/
 	PlayerHealthComponent(int maxHealth) : HealthComponent(maxHealth) {}
 };
 
 /**
-* @brief Компонент хранит данные, необходимые для получения урона по здоровью игрока
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ С…СЂР°РЅРёС‚ РґР°РЅРЅС‹Рµ, РЅРµРѕР±С…РѕРґРёРјС‹Рµ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СѓСЂРѕРЅР° РїРѕ Р·РґРѕСЂРѕРІСЊСЋ РёРіСЂРѕРєР°
 */
 struct BossHealthComponent : public HealthComponent
 {
 	/**
-	* @brief Основной конструктов
-	* @param int maxHealth - максимальное здоровье сущности
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕРІ
+	* @param int maxHealth - РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РґРѕСЂРѕРІСЊРµ СЃСѓС‰РЅРѕСЃС‚Рё
 	*/
 	BossHealthComponent(int maxHealth) : HealthComponent(maxHealth) {}
 };
 
 /**
-* @brief Компонент показывает, сколько урона наносит сущность
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РїРѕРєР°Р·С‹РІР°РµС‚, СЃРєРѕР»СЊРєРѕ СѓСЂРѕРЅР° РЅР°РЅРѕСЃРёС‚ СЃСѓС‰РЅРѕСЃС‚СЊ
 */
 struct DamageComponent : public Component
 {
 	/**
-	* @brief Основной конструктор
-	* @param int amount - количество наносимого урона
-	* @param float cooldown - время перезарядки между атаками
-	* @param EntityType targetType - тип сущности, которой будет наноситься урон
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	* @param int amount - РєРѕР»РёС‡РµСЃС‚РІРѕ РЅР°РЅРѕСЃРёРјРѕРіРѕ СѓСЂРѕРЅР°
+	* @param float cooldown - РІСЂРµРјСЏ РїРµСЂРµР·Р°СЂСЏРґРєРё РјРµР¶РґСѓ Р°С‚Р°РєР°РјРё
+	* @param EntityType targetType - С‚РёРї СЃСѓС‰РЅРѕСЃС‚Рё, РєРѕС‚РѕСЂРѕР№ Р±СѓРґРµС‚ РЅР°РЅРѕСЃРёС‚СЊСЃСЏ СѓСЂРѕРЅ
 	*/
 	DamageComponent(int amount, float cooldown, EntityType targetType)
 		: amount(amount), cooldown(cooldown), timer(0.f), targetType(targetType) {
@@ -393,8 +393,8 @@ struct DamageComponent : public Component
 	EntityType targetType;
 
 	/**
-	* @brief Функция обновляет таймер перезарядки
-	* @param float dt - время на которое уменьшается таймер
+	* @brief Р¤СѓРЅРєС†РёСЏ РѕР±РЅРѕРІР»СЏРµС‚ С‚Р°Р№РјРµСЂ РїРµСЂРµР·Р°СЂСЏРґРєРё
+	* @param float dt - РІСЂРµРјСЏ РЅР° РєРѕС‚РѕСЂРѕРµ СѓРјРµРЅСЊС€Р°РµС‚СЃСЏ С‚Р°Р№РјРµСЂ
 	*/
 	void UpdateCooldown(float dt)
 	{
@@ -402,8 +402,8 @@ struct DamageComponent : public Component
 	}
 
 	/**
-	* @brief Функция проверяет, готово ли оружие для нанесения урона
-	* @return true, если можно наносить урон, иначе false
+	* @brief Р¤СѓРЅРєС†РёСЏ РїСЂРѕРІРµСЂСЏРµС‚, РіРѕС‚РѕРІРѕ Р»Рё РѕСЂСѓР¶РёРµ РґР»СЏ РЅР°РЅРµСЃРµРЅРёСЏ СѓСЂРѕРЅР°
+	* @return true, РµСЃР»Рё РјРѕР¶РЅРѕ РЅР°РЅРѕСЃРёС‚СЊ СѓСЂРѕРЅ, РёРЅР°С‡Рµ false
 	*/
 	bool CanDealDamage() const
 	{
@@ -411,8 +411,8 @@ struct DamageComponent : public Component
 	}
 
 	/**
-	* @brief Функция наносит урон компоненту здоровья
-	* @param HealthComponent* targetHealth - компонент здоровья атакуемой сущности
+	* @brief Р¤СѓРЅРєС†РёСЏ РЅР°РЅРѕСЃРёС‚ СѓСЂРѕРЅ РєРѕРјРїРѕРЅРµРЅС‚Сѓ Р·РґРѕСЂРѕРІСЊСЏ
+	* @param HealthComponent* targetHealth - РєРѕРјРїРѕРЅРµРЅС‚ Р·РґРѕСЂРѕРІСЊСЏ Р°С‚Р°РєСѓРµРјРѕР№ СЃСѓС‰РЅРѕСЃС‚Рё
 	*/
 	void DealDamage(HealthComponent* targetHealth) const
 	{
@@ -425,7 +425,7 @@ struct DamageComponent : public Component
 	}
 
 	/**
-	* @brief Начинает перезарядку после нанесения урона
+	* @brief РќР°С‡РёРЅР°РµС‚ РїРµСЂРµР·Р°СЂСЏРґРєСѓ РїРѕСЃР»Рµ РЅР°РЅРµСЃРµРЅРёСЏ СѓСЂРѕРЅР°
 	*/
 	void StartCooldown()
 	{
@@ -434,13 +434,13 @@ struct DamageComponent : public Component
 };
 
 /**
-* @brief Компонент хранит данные, необходимые для получения опыта сущности
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ С…СЂР°РЅРёС‚ РґР°РЅРЅС‹Рµ, РЅРµРѕР±С…РѕРґРёРјС‹Рµ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РѕРїС‹С‚Р° СЃСѓС‰РЅРѕСЃС‚Рё
 */
 struct LevelComponent : public Component
 {
 	/**
-	* @brief Основной конструктов
-	* @param int maxExperience - максимальное количество опыта на первом уровне
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕРІ
+	* @param int maxExperience - РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РѕРїС‹С‚Р° РЅР° РїРµСЂРІРѕРј СѓСЂРѕРІРЅРµ
 	*/
 	LevelComponent(int maxExperience) : maxExperience(maxExperience) {}
 
@@ -452,8 +452,8 @@ struct LevelComponent : public Component
 	bool levelUpFlag = false;
 
 	/**
-	* @brief Функция добавления опыта. При достаточном количестве опыта уровень повысится автоматически
-	* @param int xpAmount - количество полученного опыта
+	* @brief Р¤СѓРЅРєС†РёСЏ РґРѕР±Р°РІР»РµРЅРёСЏ РѕРїС‹С‚Р°. РџСЂРё РґРѕСЃС‚Р°С‚РѕС‡РЅРѕРј РєРѕР»РёС‡РµСЃС‚РІРµ РѕРїС‹С‚Р° СѓСЂРѕРІРµРЅСЊ РїРѕРІС‹СЃРёС‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё
+	* @param int xpAmount - РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕР»СѓС‡РµРЅРЅРѕРіРѕ РѕРїС‹С‚Р°
 	*/
 	void GainExperience(int amount)
 	{
@@ -462,7 +462,7 @@ struct LevelComponent : public Component
 	}
 
 	/**
-	* @brief Функция условного повышения уровня
+	* @brief Р¤СѓРЅРєС†РёСЏ СѓСЃР»РѕРІРЅРѕРіРѕ РїРѕРІС‹С€РµРЅРёСЏ СѓСЂРѕРІРЅСЏ
 	*/
 	bool TryLevelUp()
 	{
@@ -475,7 +475,7 @@ struct LevelComponent : public Component
 	}
 
 	/**
-	* @brief Функция принудительного повышения уровня
+	* @brief Р¤СѓРЅРєС†РёСЏ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕРіРѕ РїРѕРІС‹С€РµРЅРёСЏ СѓСЂРѕРІРЅСЏ
 	*/
 	void LevelUp()
 	{
@@ -487,14 +487,14 @@ struct LevelComponent : public Component
 };
 
 /**
-* @brief Компонент обозначает, что за сущностью будет оставаться след из проджектайлов
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕР±РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ Р·Р° СЃСѓС‰РЅРѕСЃС‚СЊСЋ Р±СѓРґРµС‚ РѕСЃС‚Р°РІР°С‚СЊСЃСЏ СЃР»РµРґ РёР· РїСЂРѕРґР¶РµРєС‚Р°Р№Р»РѕРІ
 */
 struct TrailComponent : public Component
 {
 	/**
-	* @brief Основной конструктор
-	* @param int damage - количество урона проджектайла следа
-	* @param float interval - задержка перед созданием нового проджектайла следа
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	* @param int damage - РєРѕР»РёС‡РµСЃС‚РІРѕ СѓСЂРѕРЅР° РїСЂРѕРґР¶РµРєС‚Р°Р№Р»Р° СЃР»РµРґР°
+	* @param float interval - Р·Р°РґРµСЂР¶РєР° РїРµСЂРµРґ СЃРѕР·РґР°РЅРёРµРј РЅРѕРІРѕРіРѕ РїСЂРѕРґР¶РµРєС‚Р°Р№Р»Р° СЃР»РµРґР°
 	*/
 	TrailComponent(int damage, float interval) : damage(damage), spawnInterval(interval) {}
 
@@ -504,7 +504,7 @@ struct TrailComponent : public Component
 };
 
 /**
-* @brief Компонент обозначает что сущность является бонусом
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕР±РѕР·РЅР°С‡Р°РµС‚ С‡С‚Рѕ СЃСѓС‰РЅРѕСЃС‚СЊ СЏРІР»СЏРµС‚СЃСЏ Р±РѕРЅСѓСЃРѕРј
 */
 struct BonusComponent : public Component
 {
@@ -517,19 +517,19 @@ struct BonusComponent : public Component
 	BonusType type;
 
 	/**
-	* @brief Основной конструктор
-	* @BonusType type - тип бонуса
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	* @BonusType type - С‚РёРї Р±РѕРЅСѓСЃР°
 	*/
 	BonusComponent(BonusType type) : type(type) {}
 };
 
 /**
-* @brief Компонент обозначает что сущность является контейнером
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕР±РѕР·РЅР°С‡Р°РµС‚ С‡С‚Рѕ СЃСѓС‰РЅРѕСЃС‚СЊ СЏРІР»СЏРµС‚СЃСЏ РєРѕРЅС‚РµР№РЅРµСЂРѕРј
 */
 struct ContainerComponent : public Component
 {
 	/**
-	* @brief Основной конструктор
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 	*/
 	ContainerComponent() {}
 
@@ -537,12 +537,12 @@ struct ContainerComponent : public Component
 };
 
 /**
-* @brief Компонент обозначает что сущность является опытом
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕР±РѕР·РЅР°С‡Р°РµС‚ С‡С‚Рѕ СЃСѓС‰РЅРѕСЃС‚СЊ СЏРІР»СЏРµС‚СЃСЏ РѕРїС‹С‚РѕРј
 */
 struct ExperienceComponent : public Component
 {
 	/**
-	* @brief Основной конструктор
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 	*/
 	ExperienceComponent(int amount) : amount(amount) {}
 
@@ -550,7 +550,7 @@ struct ExperienceComponent : public Component
 };
 
 /**
-* @brief Компонент обозначает что сущность проигрывает последнюю анимацию смерти
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕР±РѕР·РЅР°С‡Р°РµС‚ С‡С‚Рѕ СЃСѓС‰РЅРѕСЃС‚СЊ РїСЂРѕРёРіСЂС‹РІР°РµС‚ РїРѕСЃР»РµРґРЅСЋСЋ Р°РЅРёРјР°С†РёСЋ СЃРјРµСЂС‚Рё
 */
 struct DeathAnimationComponent : public Component
 {
@@ -560,23 +560,23 @@ struct DeathAnimationComponent : public Component
 };
 
 /**
-* @brief Наличие компонента в игре означает поражение
+* @brief РќР°Р»РёС‡РёРµ РєРѕРјРїРѕРЅРµРЅС‚Р° РІ РёРіСЂРµ РѕР·РЅР°С‡Р°РµС‚ РїРѕСЂР°Р¶РµРЅРёРµ
 */
 struct GameOverComponent : public Component {};
 
 /**
-* @brief Наличие компонента в игре означает победу
+* @brief РќР°Р»РёС‡РёРµ РєРѕРјРїРѕРЅРµРЅС‚Р° РІ РёРіСЂРµ РѕР·РЅР°С‡Р°РµС‚ РїРѕР±РµРґСѓ
 */
 struct VictoryComponent : public Component {};
 
 /**
-* @brief Компонент обозначает, что снаряд будет двигаться по параболе
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕР±РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ СЃРЅР°СЂСЏРґ Р±СѓРґРµС‚ РґРІРёРіР°С‚СЊСЃСЏ РїРѕ РїР°СЂР°Р±РѕР»Рµ
 */
 struct ParaboloidProjectileComponent : public Component
 {
 	/**
-	* @brief Основной конструктор
-	* @param float gravity - скорость падения снаряда
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	* @param float gravity - СЃРєРѕСЂРѕСЃС‚СЊ РїР°РґРµРЅРёСЏ СЃРЅР°СЂСЏРґР°
 	*/
 	ParaboloidProjectileComponent(float gravity) : gravity(gravity) {}
 
@@ -584,7 +584,7 @@ struct ParaboloidProjectileComponent : public Component
 };
 
 /**
-* @brief Компонент обозначает, что у сущности есть способности
+* @brief РљРѕРјРїРѕРЅРµРЅС‚ РѕР±РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ Сѓ СЃСѓС‰РЅРѕСЃС‚Рё РµСЃС‚СЊ СЃРїРѕСЃРѕР±РЅРѕСЃС‚Рё
 */
 struct AbilityComponent : public Component
 {
@@ -604,7 +604,7 @@ struct AbilityComponent : public Component
 	sf::Keyboard::Key activationKey;
 
 	/**
-	* @brief Функция обнуляет таймер
+	* @brief Р¤СѓРЅРєС†РёСЏ РѕР±РЅСѓР»СЏРµС‚ С‚Р°Р№РјРµСЂ
 	*/
 	void Activate()
 	{
@@ -623,8 +623,8 @@ struct AbilityComponent : public Component
 	}
 
 	/**
-	* @brief Функция обновляет таймер перезарядки
-	* @param float dt - время на которое обновится таймер
+	* @brief Р¤СѓРЅРєС†РёСЏ РѕР±РЅРѕРІР»СЏРµС‚ С‚Р°Р№РјРµСЂ РїРµСЂРµР·Р°СЂСЏРґРєРё
+	* @param float dt - РІСЂРµРјСЏ РЅР° РєРѕС‚РѕСЂРѕРµ РѕР±РЅРѕРІРёС‚СЃСЏ С‚Р°Р№РјРµСЂ
 	*/
 	void UpdateTimer(float dt)
 	{
@@ -641,8 +641,8 @@ struct AbilityComponent : public Component
 	}
 
 	/**
-	* @brief Проверка, активна ли способность
-	* @return true, если способность активна, иначе false
+	* @brief РџСЂРѕРІРµСЂРєР°, Р°РєС‚РёРІРЅР° Р»Рё СЃРїРѕСЃРѕР±РЅРѕСЃС‚СЊ
+	* @return true, РµСЃР»Рё СЃРїРѕСЃРѕР±РЅРѕСЃС‚СЊ Р°РєС‚РёРІРЅР°, РёРЅР°С‡Рµ false
 	*/
 	bool IsActive() const
 	{
@@ -650,8 +650,8 @@ struct AbilityComponent : public Component
 	}
 
 	/**
-	* @brief Функция проверяет, можно ли использовать способность
-	* @return true, если можно, иначе false
+	* @brief Р¤СѓРЅРєС†РёСЏ РїСЂРѕРІРµСЂСЏРµС‚, РјРѕР¶РЅРѕ Р»Рё РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃРїРѕСЃРѕР±РЅРѕСЃС‚СЊ
+	* @return true, РµСЃР»Рё РјРѕР¶РЅРѕ, РёРЅР°С‡Рµ false
 	*/
 	bool CanBeUsed() const
 	{
@@ -659,11 +659,18 @@ struct AbilityComponent : public Component
 	}
 
 	/**
-	* @brief Основной конструктор
-	* @param AbilityType ability - тип способности
-	* @param float cooldown - перезарядка способности
+	* @brief РћСЃРЅРѕРІРЅРѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	* @param AbilityType ability - С‚РёРї СЃРїРѕСЃРѕР±РЅРѕСЃС‚Рё
+	* @param float cooldown - РїРµСЂРµР·Р°СЂСЏРґРєР° СЃРїРѕСЃРѕР±РЅРѕСЃС‚Рё
 	*/
 	AbilityComponent(AbilityType type, float cooldown, float duration, sf::Keyboard::Key activationKey)
 		: type(type), cooldown(cooldown), timer(0.f), activationKey(activationKey), duration(duration) {
 	}
+};
+
+struct NameComponent : public Component
+{
+	NameComponent(std::string name) : name(name) {}
+
+	std::string name;
 };

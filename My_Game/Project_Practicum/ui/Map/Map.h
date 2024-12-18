@@ -14,6 +14,9 @@ public:
 	bool Contains(const sf::Vector2f& point) const override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
+	static const int mVerticalSprites = 3;
+	static const int mHorizontalSprites = 3;
+
 	std::string mTextureFile;
 	sf::Texture mBgTexture;
 	sf::Sprite mBackgrounds[3][3];

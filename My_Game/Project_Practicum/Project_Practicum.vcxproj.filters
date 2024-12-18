@@ -90,9 +90,6 @@
     <ClCompile Include="src\Entity\Weapon\MagicCharge\MagicCharge.cpp">
       <Filter>Исходные файлы\src\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="utils\SpriteSheet.cpp">
-      <Filter>Исходные файлы\utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\Manager\System\SystemManager.cpp">
       <Filter>Исходные файлы\src\Managers</Filter>
     </ClCompile>
@@ -177,6 +174,9 @@
     <ClCompile Include="src\Entity\Weapon\Axe\Axe.cpp">
       <Filter>Исходные файлы\src\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="ui\Text\Text.cpp">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -206,7 +206,7 @@
     <ClInclude Include="src\System\System.h">
       <Filter>Файлы заголовков\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="utils\SpriteSheet.h">
+    <ClInclude Include="utils\SpriteSheet.hpp">
       <Filter>Файлы заголовков\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\System\Camera\CameraSystem.h">
@@ -289,6 +289,12 @@
     </ClInclude>
     <ClInclude Include="src\Entity\Weapon\Axe\Axe.h">
       <Filter>Файлы заголовков\Entity\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\Text\Text.h">
+      <Filter>Файлы заголовков\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Utils.hpp">
+      <Filter>Файлы заголовков\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

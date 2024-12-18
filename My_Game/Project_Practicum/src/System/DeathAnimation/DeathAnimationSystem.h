@@ -5,8 +5,11 @@
 class DeathAnimationSystem : public IRenderSystem
 {
 public:
-	DeathAnimationSystem(sf::View& camera, bool& isPaused)
-		: mCamera(camera), mIsPaused(isPaused), mInitialSize(camera.getSize()) {}
+	DeathAnimationSystem(sf::View& camera, bool& isPaused, bool needToChangeCamera)
+		: mCamera(camera),
+		mIsPaused(isPaused),
+		mInitialSize(camera.getSize()),
+		mNeedToChangeCamera(needToChangeCamera) {}
 
 	void Render(EntityManager& entityManager, float deltaTime) override;
 
@@ -18,6 +21,7 @@ private:
 	const float ZOOM_DURATION = 0.5f;
 
 	bool& mIsPaused;
+	bool mNeedToChangeCamera;
 
 	sf::View& mCamera;
 

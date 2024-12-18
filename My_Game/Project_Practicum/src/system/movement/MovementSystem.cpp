@@ -25,7 +25,7 @@ void MovementSystem::Update(EntityManager& entityManager, float deltaTime)
 
 		if (entity->GetType() & EntityType::Enemy && container == nullptr)
 		{
-			MoveTowardsTarget(*transform, playerPosition, 100.0f, deltaTime);
+			MoveTowardsTarget(*transform, playerPosition, 50.0f, deltaTime);
 		}
 
 		if (collision != nullptr)
@@ -43,12 +43,12 @@ void MovementSystem::Update(EntityManager& entityManager, float deltaTime)
 			transform->vy += parabolic->gravity * deltaTime;
 		}
 
-		transform->x += transform->vx * deltaTime;
-		transform->y += transform->vy * deltaTime;
+		transform->x += (transform->vx * transform->multiplier.x) * deltaTime;
+		transform->y += (transform->vy * transform->multiplier.y) * deltaTime;
 
 		if (animation != nullptr)
 		{
-			(transform->vx == 0 && transform->vy == 0)
+			(transform->vx * transform->multiplier.x == 0 && transform->vy * transform->multiplier.y == 0)
 				? animation->SetState(AnimationComponent::IDLE)
 				: animation->SetState(AnimationComponent::WALK);
 		}

@@ -8,11 +8,11 @@ class Axe : public Weapon
 public:
 	Axe()
 	{
-		projectileSpeed = 300.f;
+		projectileSpeed = 800.f;
 		fireRate = 1.5f;
-		cooldown = 0.f;
-		damage = 100;
-		mGravity = projectileSpeed / 3;
+		cooldown = fireRate;
+		damage = 8;
+		mGravity = projectileSpeed;
 
 		LoadTextures();
 	}

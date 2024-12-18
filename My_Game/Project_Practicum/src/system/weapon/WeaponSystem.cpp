@@ -17,7 +17,6 @@ void WeaponSystem::Update(EntityManager& entityManager, float deltaTime)
     }
 
     std::vector<Weapon*> weaponsToAttack;
-    TransformComponent* entityTransform = nullptr;
 
     for (auto& entity : entityManager.GetEntitiesWithComponents<WeaponComponent, TransformComponent>())
     {
@@ -26,8 +25,6 @@ void WeaponSystem::Update(EntityManager& entityManager, float deltaTime)
 
         if (weaponComponent != nullptr && transform != nullptr)
         {
-            entityTransform = transform;
-
             if (weaponComponent->weapons.empty())
             {
                 continue;
@@ -43,14 +40,9 @@ void WeaponSystem::Update(EntityManager& entityManager, float deltaTime)
                 if (weapon->cooldown <= 0)
                 {
                     weapon->cooldown = weapon->fireRate;
-                    weaponsToAttack.push_back(weapon.get());
+                    weapon->Attack(entityManager, transform, playerTransform);
                 }
             }
         }
-    }
-
-    for (auto& weapon : weaponsToAttack)
-    {
-        weapon->Attack(entityManager, entityTransform, playerTransform);
     }
 }

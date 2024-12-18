@@ -1,6 +1,6 @@
 #include <iostream>
 #include "TextureManager.h"
-#include "../../../utils/SpriteSheet.h"
+#include "../../../utils/SpriteSheet.hpp"
 
 std::unordered_map<std::string, std::vector<sf::Texture>> TextureManager::mTextureCache;
 std::unordered_map<std::string, sf::Font> TextureManager::mFonts;

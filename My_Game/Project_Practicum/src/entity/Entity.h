@@ -23,11 +23,11 @@ public:
 
     explicit Entity(IdType id, EntityType type) : mId(id), mType(type) {}
 
-    // Запрещаем копирование
+    // Р—Р°РїСЂРµС‰Р°РµРј РєРѕРїРёСЂРѕРІР°РЅРёРµ
     Entity(const Entity&) = delete;
     Entity& operator=(const Entity&) = delete;
 
-    // Разрешаем перемещение
+    // Р Р°Р·СЂРµС€Р°РµРј РїРµСЂРµРјРµС‰РµРЅРёРµ
     Entity(Entity&&) noexcept = default;
     Entity& operator=(Entity&&) noexcept = default;
 

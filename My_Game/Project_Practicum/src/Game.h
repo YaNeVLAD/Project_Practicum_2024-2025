@@ -11,8 +11,6 @@ public:
 	Game(sf::RenderWindow& window, sf::View& camera) 
 		: mWindow(window), mCamera(camera) {}
 
-	void Reset(int bossCount);
-
 	void Init()
 	{
 		InitKeyBindings();
@@ -21,7 +19,7 @@ public:
 		InitMap();
 	}
 
-	void Restart(int bossCount = 1)
+	void Restart(int bossCount = -1)
 	{
 		Reset(bossCount);
 		Init();
@@ -41,7 +39,7 @@ public:
 	void UpgradeWeapon(std::string name);
 
 	void ProcessEvents(const sf::Event& event);
-		
+
 private:
 	bool mIsPaused = false;
 	
@@ -58,6 +56,8 @@ private:
 	EntityManager mEntityManager;
 
 	bool CanPause();
+
+	void Reset(int bossCount);
 
 	void InitKeyBindings();
 	void InitSystems();

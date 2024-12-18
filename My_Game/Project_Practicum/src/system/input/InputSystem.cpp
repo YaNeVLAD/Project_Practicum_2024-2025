@@ -19,19 +19,19 @@ void InputSystem::Update(EntityManager& entityManager, float deltaTime)
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			transform->vy = -200 * transform->multiplier.y;
+			transform->vy = -200;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			transform->vy = 200 * transform->multiplier.y;
+			transform->vy = 200;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
-			transform->vx = -200 * transform->multiplier.x;
+			transform->vx = -200;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			transform->vx = 200 * transform->multiplier.x;
+			transform->vx = 200;
 		}
 	}
 }

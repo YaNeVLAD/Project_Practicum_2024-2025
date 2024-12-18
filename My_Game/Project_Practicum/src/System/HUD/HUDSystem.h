@@ -31,6 +31,7 @@ private:
 	void RenderXPBar(Entity* player);
 	void RenderAbility(Entity* player);
 	void RenderPlayerHealth(Entity* player);
+	void RenderBossesHealth(const std::vector<Entity*>& bosses);
 
 	void LoadFont();
 };

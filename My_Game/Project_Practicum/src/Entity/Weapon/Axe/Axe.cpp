@@ -8,7 +8,7 @@ void Axe::Attack(EntityManager& entityManager, TransformComponent* parentTransfo
 {
     Entity& projectile = entityManager.CreateEntity(EntityType::Projectile);
 
-    float angle = 45.f;
+    float angle = 75.f;
 
     float angleRad = angle * 3.14159f / 180.f;
 
@@ -22,7 +22,7 @@ void Axe::Attack(EntityManager& entityManager, TransformComponent* parentTransfo
 
     projectile.AddComponent<ParaboloidProjectileComponent>(mGravity);
 
-    projectile.AddComponent<DamageComponent>(damage, 0.3f, EntityType::Enemy);
+    projectile.AddComponent<DamageComponent>(damage, 0.1f, EntityType::Enemy);
 
     auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(64, 64));
     collisionShape->setOrigin(32, 32);
@@ -41,7 +41,7 @@ void Axe::Upgrade(int level)
     if (CanUpgrade())
     {
         mLevel++;
-        damage += 5;
+        damage += 2;
         fireRate -= 0.1f;
     }
 }

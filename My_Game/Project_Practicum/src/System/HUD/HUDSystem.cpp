@@ -1,7 +1,10 @@
 #include "HUDSystem.h"
 
+#include <Windows.h>
+
 #include "../../Manager/Entity/EntityManager.h"
 #include "../../Manager/Texture/TextureManager.h"
+#include "../../../ui/Text/Text.h"
 
 void HUDSystem::Render(EntityManager& entityManager, float deltaTime)
 {
@@ -14,14 +17,15 @@ void HUDSystem::Render(EntityManager& entityManager, float deltaTime)
 		return;
 	}
 
+	for (auto& entity : entityManager.GetEntitiesWithComponents<HealthComponent, TransformComponent>())
+	{
+		RenderHealth(entity);
+	}
+
 	RenderXPBar(player.front());
 	RenderPlayerHealth(player.front());
 	RenderAbility(player.front());
-
-	for (auto& entity : entityManager.GetEntities())
-	{
-		RenderHealth(&entity);
-	}
+	RenderBossesHealth(entityManager.GetEntitiesWithComponents<BossHealthComponent>());
 
 	mWindow.draw(mScreen);
 }
@@ -30,11 +34,6 @@ void HUDSystem::RenderHealth(Entity* entity)
 {
 	auto health = entity->GetComponent<HealthComponent>();
 	auto transform = entity->GetComponent<TransformComponent>();
-
-	if (health == nullptr || transform == nullptr)
-	{
-		return;
-	}
 
 	float healthProgress = static_cast<float>(health->currentHealth) / health->maxHealth;
 
@@ -72,6 +71,33 @@ void HUDSystem::RenderPlayerHealth(Entity* player)
 		.SetPosition(View::Alignment::Default, mCamera, position);
 
 	mScreen.AddView(std::make_shared<ProgressBar>(mPlayerHealth));
+}
+
+void HUDSystem::RenderBossesHealth(const std::vector<Entity*>& bosses)
+{
+	float heathBarOffset = 30.f;
+	for (size_t i = 0; i < bosses.size() && i < 10; ++i)
+	{
+		auto bossHealth = bosses[i]->GetComponent<BossHealthComponent>();
+		auto name = bosses[i]->GetComponent<NameComponent>();
+
+		ProgressBar bossHeathBar;
+		bossHeathBar
+			.SetSize({ 300.f, 25.f })
+			.SetBackgroundColor(sf::Color::Red)
+			.SetProgressLineColor(sf::Color::Green)
+			.SetPosition(View::Alignment::Center, mCamera, { 790.f, (-mCamera.getSize().y / 2) + 60.f + (heathBarOffset * i) })
+			.SetProgress(static_cast<float>(bossHealth->currentHealth) / bossHealth->maxHealth);
+
+		Text bossName;
+		bossName
+			.SetText(name->name, mFont, 20)
+			.SetTextAlignment(Text::TextAlignment::Right)
+			.SetPosition(View::Alignment::Default, mCamera, { bossHeathBar.GetPosition().x - 10.f, bossHeathBar.GetPosition().y });
+
+		mScreen.AddView(std::make_shared<ProgressBar>(bossHeathBar));
+		mScreen.AddView(std::make_shared<Text>(bossName));
+	}
 }
 
 void HUDSystem::RenderXPBar(Entity* player)

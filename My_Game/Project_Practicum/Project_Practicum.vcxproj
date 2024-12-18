@@ -141,6 +141,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="src\Entity\Weapon\Axe\Axe.cpp" />
     <ClCompile Include="src\System\DeathAnimation\DeathAnimationSystem.cpp" />
+    <ClCompile Include="ui\Text\Text.cpp" />
     <ClCompile Include="ui\Map\Map.cpp" />
     <ClCompile Include="src\System\Damage\DamageSystem.cpp" />
     <ClCompile Include="src\System\Container\ContainerSystem.cpp" />
@@ -169,7 +170,6 @@
     <ClCompile Include="src\System\Lifetime\LifetimeSystem.cpp" />
     <ClCompile Include="src\System\Render\RenderSystem.cpp" />
     <ClCompile Include="src\Manager\Texture\TextureManager.cpp" />
-    <ClCompile Include="utils\SpriteSheet.cpp" />
     <ClCompile Include="src\Manager\System\SystemManager.cpp" />
     <ClCompile Include="src\System\Weapon\WeaponSystem.cpp" />
   </ItemGroup>
@@ -177,6 +177,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="src\Entity\Weapon\Axe\Axe.h" />
     <ClInclude Include="src\System\DeathAnimation\DeathAnimationSystem.h" />
+    <ClInclude Include="ui\Text\Text.h" />
     <ClInclude Include="ui\Map\Map.h" />
     <ClInclude Include="src\System\Damage\DamageSystem.h" />
     <ClInclude Include="src\System\Container\ContainerSystem.h" />
@@ -206,7 +207,8 @@
     <ClInclude Include="src\System\Render\RenderSystem.h" />
     <ClInclude Include="src\Manager\Texture\TextureManager.h" />
     <ClInclude Include="ui\View.h" />
-    <ClInclude Include="utils\SpriteSheet.h" />
+    <ClInclude Include="utils\Utils.hpp" />
+    <ClInclude Include="utils\SpriteSheet.hpp" />
     <ClInclude Include="src\System\System.h" />
     <ClInclude Include="src\Manager\System\SystemManager.h" />
     <ClInclude Include="src\Entity\Weapon\Weapon.h" />

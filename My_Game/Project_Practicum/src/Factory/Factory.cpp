@@ -1,5 +1,7 @@
 #include "Factory.h"
 
+#include <random>
+
 #include "../Entity/Weapon/Weapon.h"
 #include "../Entity/Weapon/Axe/Axe.h"
 #include "../Entity/Weapon/Book/Book.h"
@@ -11,6 +13,33 @@
 #include "../Entity/Weapon/MagicCharge/MagicCharge.h"
 #include "../Entity/Weapon/LightningStrike/LightningStrike.h"
 
+std::vector<std::string> names = { 
+	"Влад", "Кирилл", "Максим", "Дима", "Илья", "Елисей", 
+	"Степан", "Мирослав", "Данил", "Константин", "Михаил", 
+	"Богдан", "Андрей", "Денис", "Антон", "Александр", "Тимофей", 
+	"Григорий", "Арсений", "Владимир"
+};
+
+std::vector<std::string> titles = {
+	"Повелитель", "Хранитель", "Защитник", "Мастер", "Поборник", "Убийца",
+	"Созидатель", "Ценитель", "Гений", "Король", "Воин", "Покоритель", "Титан",
+	"Звезда", "Пророк", "Исцелитель", "Легенда", "Странник", "Владыка",
+	"Мудрец", "Строитель", "Чародей", "Охотник", "Скиталец", "Чемпион"
+};
+
+std::vector<std::string> objects = {
+	"Ночи", "Мечей", "Мудрости", "Тьмы", "Ветров", "Травы", "Огня", "Дыма",
+	"С++", "Жизни", "Смерти", "Молнии", "Теней", "Света", "Льда", "Железа",
+	"Лавы", "Водопадов", "Старого мира", "Леса", "Песков", "Скалы", "Древности",
+	"Чудес", "Травы", "Судьбы", "Души", "Пламени", "Звезд"
+};
+
+std::random_device rd;
+std::mt19937 rg(rd());
+std::uniform_int_distribution<size_t> nd(0, names.size() -1);
+std::uniform_int_distribution<size_t> td(0, titles.size() -1);
+std::uniform_int_distribution<size_t> od(0, objects.size() -1);
+
 void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera, size_t* defeatedBosses, size_t* maxBosses, bool& isPaused)
 {
 	systemManager.AddSystem<InputSystem>();
@@ -20,11 +49,11 @@ void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window
 	systemManager.AddSystem<LifetimeSystem>(camera, defeatedBosses);
 	systemManager.AddSystem<HomingProjectileSystem>();
 	systemManager.AddSystem<OrbitalProjectileSystem>();
-	systemManager.AddSystem<SpawnSystem>(camera, 0.1f, 1.f, 2.f, maxBosses);
+	systemManager.AddSystem<SpawnSystem>(camera, 0.5f, 1.f, 2.f, maxBosses);
 	systemManager.AddSystem<TrailSystem>();
 	systemManager.AddSystem<DamageSystem>();
 	systemManager.AddSystem<ContainerSystem>();
-	systemManager.AddSystem<DeathAnimationSystem>(camera, isPaused);
+	systemManager.AddSystem<DeathAnimationSystem>(camera, isPaused, *maxBosses == 1);
 
 	systemManager.AddSystem<RenderSystem>(window);
 	systemManager.AddSystem<CameraSystem>(camera);
@@ -105,8 +134,11 @@ void Factory::CreateBoss(EntityManager& entityManager, sf::Vector2f pos)
 	animation->AddAnimation(AnimationComponent::WALK, walkFrames);
 	animation->AddAnimation(AnimationComponent::HURT, hurtFrames);
 	animation->AddAnimation(AnimationComponent::DEAD, deadFrames);
+	animation->AddAnimation(AnimationComponent::IDLE, deadFrames);
 
 	boss.AddComponent<DrawableComponent>(walkFrames[0], sf::Vector2f(1, 1));
+
+	boss.AddComponent<NameComponent>(CreateRandomName());
 }
 
 void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
@@ -227,8 +259,27 @@ void Factory::CreateExperience(EntityManager& entityManager, sf::Vector2f pos)
 	experience.AddComponent<LifetimeComponent>(60.f);
 }
 
+std::string Factory::CreateRandomName()
+{
+	std::vector<std::string> namesCopy = names;
+	std::vector<std::string> titlesCopy = titles;
+	std::vector<std::string> objectsCopy = objects;
+
+	std::shuffle(names.begin(), names.end(), rg);
+	std::shuffle(titles.begin(), titles.end(), rg);
+	std::shuffle(objects.begin(), objects.end(), rg);
+
+	std::string randomName = names[nd(rg)];
+	std::string randomTitle = titles[td(rg)];
+	std::string randomObject = objects[od(rg)];
+
+	return randomName + ", " + randomTitle + " " + randomObject;
+}
+
 void Factory::LoadTextures()
 {
+	TextureManager::GetFont("assets/font/Roboto-Bold.ttf");
+
 	TextureManager::GetTextures("assets/weapon/Axe.png", 64, 64);
 	TextureManager::GetTextures("assets/weapon/Book.png", 95, 128);
 	TextureManager::GetTextures("assets/weapon/Charge.png", 64, 64);

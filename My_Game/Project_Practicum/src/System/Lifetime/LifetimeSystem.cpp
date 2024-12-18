@@ -5,7 +5,7 @@
 
 void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 {
-	for (auto& player : entityManager.GetEntitiesWithType(Player))
+	for (auto& player : entityManager.GetEntitiesWithComponents<PlayerHealthComponent>())
 	{
 		if (auto health = player->GetComponent<PlayerHealthComponent>())
 		{
@@ -62,12 +62,16 @@ void LifetimeSystem::TryApplyDeathAnimation(EntityManager& em, Entity* entity, a
 	auto animation = entity->GetComponent<AnimationComponent>();
 	auto deathAnimation = entity->GetComponent<DeathAnimationComponent>();
 	auto bossDeath = entity->GetComponent<VictoryComponent>();
+	auto playerDeath = entity->GetComponent<GameOverComponent>();
+
+	if (playerDeath != nullptr || bossDeath != nullptr)
+	{
+		em.RemoveEntity(entity->GetId());
+	}
 
 	if (bossDeath != nullptr)
 	{
-		em.RemoveEntity(entity->GetId());
 		(*mDefeatedBosses)++;
-		return;
 	}
 	if (health != nullptr && !health->IsAlive() && deathAnimation == nullptr)
 	{

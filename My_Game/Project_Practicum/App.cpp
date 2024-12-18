@@ -71,31 +71,32 @@ void App::Render(float deltaTime)
 	switch (mCurrentState)
 	{
 	case AppState::MainMenu:
-		InitMainMenuScreen();
-		mWindow.draw(mScreen);
+		RenderMainMenuScreen();
 		break;
 	case AppState::Victory:
-		InitVictoryScreen();
-		mWindow.draw(mScreen);
+		RenderVictoryScreen();
 		break;
 	case AppState::Defeat:
-		InitDefeatScreen();
-		mWindow.draw(mScreen);
+		RenderDefeatScreen();
 		break;
 	case AppState::WeaponUpgrade:
 		mGame.Render(0.0f);
-		InitUpgradeScreen();
-		mWindow.draw(mScreen);
+		RenderUpgradeScreen();
+		break;
+	case AppState::GameSetup:
+		RenderGameSetupScreen();
 		break;
 	case AppState::Playing:
+		mScreen.Clear();
 		mGame.Render(deltaTime);
 		break;
 	}
 
+	mWindow.draw(mScreen);
 	mWindow.display();
 }
 
-void App::InitUpgradeScreen()
+void App::RenderUpgradeScreen()
 {
 	mGame.Pause();
 
@@ -131,7 +132,7 @@ void App::InitUpgradeScreen()
 	}
 }
 
-void App::InitMainMenuScreen()
+void App::RenderMainMenuScreen()
 {
 	mScreen.Clear();
 
@@ -144,7 +145,7 @@ void App::InitMainMenuScreen()
 
 	startButton.SetOnClickListener([this]()
 		{
-			mGame.Restart(2);
+			mGame.Restart(999);
 			mCurrentState = AppState::Playing;
 		});
 
@@ -164,7 +165,12 @@ void App::InitMainMenuScreen()
 	mScreen.AddView(std::make_shared<Button>(exitButton));
 }
 
-void App::InitVictoryScreen()
+void App::RenderGameSetupScreen()
+{
+
+}
+
+void App::RenderVictoryScreen()
 {
 	mScreen.Clear();
 
@@ -210,7 +216,7 @@ void App::InitVictoryScreen()
 	mScreen.AddView(std::make_shared<Button>(exitButton));
 }
 
-void App::InitDefeatScreen()
+void App::RenderDefeatScreen()
 {
 	mScreen.Clear();
 

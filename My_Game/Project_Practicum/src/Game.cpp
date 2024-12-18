@@ -88,14 +88,14 @@ void Game::Resume()
 	mIsPaused = false;
 }
 
-void Game::Reset(int bossCount = 1)
+void Game::Reset(int bossCount)
 {
 	mScreen.Clear();
 	mScreen.ClearBindings();
 	mEntityManager.Clear();
 	mSystemManager.Clear();
 	mIsPaused = false;
-	mMaxBosses = bossCount;
+	mMaxBosses = bossCount == -1 ? mMaxBosses : bossCount;
 	mDefeatedBosses = 0;
 }
 
@@ -125,7 +125,7 @@ bool Game::IsBossDefeated() const
 
 bool Game::IsPlayerDefeated()
 {
-	return mEntityManager.GetEntitiesWithComponents<GameOverComponent>().size();
+	return mEntityManager.GetEntitiesWithType(Player).empty();
 }
 
 bool Game::HasPlayerLeveledUp()
