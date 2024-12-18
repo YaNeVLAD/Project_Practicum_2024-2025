@@ -142,7 +142,7 @@ void App::RenderMainMenuScreen()
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(View::Alignment::Center, camera, { -160.f, 0.f })
 		.SetFillColor(sf::Color::Green)
-		.SetText("Start Game", mFont)
+		.SetText("Начать игру", mFont)
 		.SetOnClickListener([this]()
 			{
 				state = State::GameSetup;
@@ -153,7 +153,7 @@ void App::RenderMainMenuScreen()
 		.SetSize({ 200.f, 50.f })
 		.SetPosition(View::Alignment::Center, camera, { 160.f, 0.f })
 		.SetFillColor(sf::Color::Red)
-		.SetText("Exit Game", mFont)
+		.SetText("Выйти из игры", mFont)
 		.SetOnClickListener([this]()
 			{
 				window.close();
@@ -204,7 +204,7 @@ void App::RenderGameSetupScreen()
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(View::Alignment::Center, camera, { 0.f, 200.f })
 		.SetFillColor(sf::Color::Green)
-		.SetText("Start", mFont)
+		.SetText("НАЧАТЬ", mFont)
 		.SetOnClickListener([this]()
 			{
 				game.Restart();
@@ -216,7 +216,7 @@ void App::RenderGameSetupScreen()
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(View::Alignment::Center, camera, { 0.f, 260.f })
 		.SetFillColor(sf::Color::Yellow)
-		.SetText("Back", mFont)
+		.SetText("Назад", mFont)
 		.SetOnClickListener([this]()
 			{
 				state = State::MainMenu;
@@ -226,7 +226,7 @@ void App::RenderGameSetupScreen()
 	infiniteModeButton
 		.SetSize({ 300.f, 100.f })
 		.SetFillColor(game.isInfinite ? sf::Color::Green : sf::Color::Red)
-		.SetText("Infinite Mode", mFont)
+		.SetText("Бесконечный режим", mFont)
 		.SetPosition(View::Alignment::Center, camera, { 0.f, 360.f })
 		.SetOnClickListener([this]()
 			{
@@ -276,7 +276,7 @@ void App::RenderVictoryScreen()
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(View::Alignment::Center, camera)
 		.SetFillColor(sf::Color::Green)
-		.SetText("Main Menu", mFont)
+		.SetText("В главное меню", mFont)
 		.SetOnClickListener([this]()
 			{
 				state = State::MainMenu;
@@ -287,7 +287,7 @@ void App::RenderVictoryScreen()
 		.SetSize({ 200.f, 50.f })
 		.SetPosition(View::Alignment::Center, camera, { 0.f, 120.f })
 		.SetFillColor(sf::Color::Red)
-		.SetText("Exit Game", mFont)
+		.SetText("Выйти из игры", mFont)
 		.SetOnClickListener([this]()
 			{
 				window.close();
@@ -306,7 +306,7 @@ void App::RenderDefeatScreen()
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(View::Alignment::Center, camera)
 		.SetFillColor(sf::Color::Green)
-		.SetText("Main Menu", mFont)
+		.SetText("В главное меню", mFont)
 		.SetOnClickListener([this]()
 			{
 				state = State::MainMenu;
@@ -317,7 +317,7 @@ void App::RenderDefeatScreen()
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(View::Alignment::Center, camera, { 0.0f, 60.f })
 		.SetFillColor(sf::Color::Yellow)
-		.SetText("Restart", mFont)
+		.SetText("Заново", mFont)
 		.SetOnClickListener([this]()
 			{
 				game.Restart();
@@ -329,7 +329,7 @@ void App::RenderDefeatScreen()
 		.SetSize({ 200.f, 50.f })
 		.SetPosition(View::Alignment::Center, camera, { 0.f, 120.f })
 		.SetFillColor(sf::Color::Red)
-		.SetText("Exit Game", mFont)
+		.SetText("Выйти из игры", mFont)
 		.SetOnClickListener([this]()
 			{
 				window.close();

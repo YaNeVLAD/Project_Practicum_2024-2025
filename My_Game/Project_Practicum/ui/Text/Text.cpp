@@ -1,11 +1,9 @@
 #include "Text.h"
 
-#include "../../utils/Utils.hpp"
-
 Text& Text::SetText(const std::string& text, const sf::Font& font, unsigned int fontSize, const sf::Color color)
 {
 	mText.setFont(font);
-	mText.setString(StringToWString(text));
+	mText.setString(sf::String().fromUtf8(text.begin(), text.end()));
 	mText.setCharacterSize(fontSize);
 	mText.setFillColor(color);
 	

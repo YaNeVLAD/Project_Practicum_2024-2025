@@ -293,9 +293,6 @@
     <ClInclude Include="ui\Text\Text.h">
       <Filter>Файлы заголовков\ui</Filter>
     </ClInclude>
-    <ClInclude Include="utils\Utils.hpp">
-      <Filter>Файлы заголовков\Utils</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

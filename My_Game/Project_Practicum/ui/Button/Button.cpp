@@ -36,7 +36,7 @@ Button& Button::SetFillColor(const sf::Color color)
 Button& Button::SetText(const std::string& text, const sf::Font& font, unsigned int fontSize, const sf::Color color)
 {
 	mText.setFont(font);
-	mText.setString(text);
+	mText.setString(sf::String().fromUtf8(text.begin(), text.end()));
 	mText.setCharacterSize(fontSize);
 	mText.setFillColor(color);
 
