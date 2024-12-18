@@ -7,7 +7,7 @@
 
 void App::Run()
 {
-	while (mWindow.isOpen())
+	while (window.isOpen())
 	{
 		float deltaTime = mClock.restart().asSeconds();
 		ProcessEvents();
@@ -19,46 +19,46 @@ void App::Run()
 void App::ProcessEvents()
 {
 	sf::Event event;
-	while (mWindow.pollEvent(event))
+	while (window.pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed)
 		{
-			mWindow.close();
+			window.close();
 		}
 
-		if (mCurrentState == AppState::Playing)
+		if (state == State::Playing)
 		{
-			mGame.ProcessEvents(event);
+			game.ProcessEvents(event);
 		}
 		else
 		{
-			mScreen.HandleEvents(mWindow, mCamera, event);
+			screen.HandleEvents(window, camera, event);
 		}
 	}
 }
 
 void App::Update(float deltaTime)
 {
-	if (mCurrentState == AppState::Playing)
+	if (state == State::Playing)
 	{
-		mGame.RunFrame(deltaTime);
+		game.RunFrame(deltaTime);
 
-		if (mGame.IsPlayerDefeated())
+		if (game.IsPlayerDefeated())
 		{
-			mCurrentState = AppState::Defeat;
+			state = State::Defeat;
 			return;
 		}
 
-		if (mGame.HasPlayerLeveledUp())
+		if (game.HasPlayerLeveledUp())
 		{
-			mAvailableWeapons = mGame.GetAvailableWeapons();
-			mCurrentState = AppState::WeaponUpgrade;
+			mAvailableWeapons = game.GetAvailableWeapons();
+			state = State::WeaponUpgrade;
 			return;
 		}
 
-		if (mGame.IsBossDefeated())
+		if (game.IsBossDefeated())
 		{
-			mCurrentState = AppState::Victory;
+			state = State::Victory;
 			return;
 		}
 	}
@@ -66,47 +66,47 @@ void App::Update(float deltaTime)
 
 void App::Render(float deltaTime)
 {
-	mWindow.clear();
-	mScreen.ClearBindings();
+	window.clear();
+	screen.ClearBindings();
 
-	switch (mCurrentState)
+	switch (state)
 	{
-	case AppState::MainMenu:
+	case State::MainMenu:
 		RenderMainMenuScreen();
 		break;
-	case AppState::Victory:
+	case State::Victory:
 		RenderVictoryScreen();
 		break;
-	case AppState::Defeat:
+	case State::Defeat:
 		RenderDefeatScreen();
 		break;
-	case AppState::WeaponUpgrade:
-		mGame.Render(0.0f);
+	case State::WeaponUpgrade:
+		game.Render(0.0f);
 		RenderUpgradeScreen();
 		break;
-	case AppState::GameSetup:
+	case State::GameSetup:
 		RenderGameSetupScreen();
 		break;
-	case AppState::Playing:
-		mScreen.Clear();
-		mGame.Render(deltaTime);
+	case State::Playing:
+		screen.Clear();
+		game.Render(deltaTime);
 		break;
 	}
 
-	mWindow.draw(mScreen);
-	mWindow.display();
+	window.draw(screen);
+	window.display();
 }
 
 void App::RenderUpgradeScreen()
 {
-	mGame.Pause();
+	game.Pause();
 
-	mScreen.Clear();
+	screen.Clear();
 
 	if (mAvailableWeapons.empty())
 	{
-		mGame.Resume();
-		mCurrentState = AppState::Playing;
+		game.Resume();
+		state = State::Playing;
 		return;
 	}
 
@@ -119,53 +119,53 @@ void App::RenderUpgradeScreen()
 		button
 			.SetSize(buttonSize)
 			.SetFillColor(sf::Color::Yellow)
-			.SetPosition(View::Alignment::Center, mCamera, { 0.0f, i * (buttonSize.y + spacing) })
+			.SetPosition(View::Alignment::Center, camera, { 0.0f, i * (buttonSize.y + spacing) })
 			.SetText(mAvailableWeapons[i], mFont, 20, sf::Color::Black)
 			.SetOnClickListener([this, weaponName = mAvailableWeapons[i]]()
 				{
-					mGame.UpgradeWeapon(weaponName);
-					mCurrentState = AppState::Playing;
-					mGame.Resume();
+					game.UpgradeWeapon(weaponName);
+					state = State::Playing;
+					game.Resume();
 				});
 
-		mScreen.AddView(std::make_shared<Button>(button));
+		screen.AddView(std::make_shared<Button>(button));
 	}
 }
 
 void App::RenderMainMenuScreen()
 {
-	mScreen.Clear();
+	screen.Clear();
 
 	Button setupButton;
 	setupButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(View::Alignment::Center, mCamera, { -160.f, 0.f })
+		.SetPosition(View::Alignment::Center, camera, { -160.f, 0.f })
 		.SetFillColor(sf::Color::Green)
 		.SetText("Start Game", mFont)
 		.SetOnClickListener([this]()
 			{
-				mCurrentState = AppState::GameSetup;
+				state = State::GameSetup;
 			});
 
 	Button exitButton;
 	exitButton
 		.SetSize({ 200.f, 50.f })
-		.SetPosition(View::Alignment::Center, mCamera, { 160.f, 0.f })
+		.SetPosition(View::Alignment::Center, camera, { 160.f, 0.f })
 		.SetFillColor(sf::Color::Red)
 		.SetText("Exit Game", mFont)
 		.SetOnClickListener([this]()
 			{
-				mWindow.close();
+				window.close();
 			});
 
-	mScreen.AddView(std::make_shared<Button>(setupButton));
-	mScreen.AddView(std::make_shared<Button>(exitButton));
+	screen.AddView(std::make_shared<Button>(setupButton));
+	screen.AddView(std::make_shared<Button>(exitButton));
 }
 
 using Key = sf::Keyboard::Key;
 void App::RenderGameSetupScreen()
 {
-	mScreen.Clear();
+	screen.Clear();
 
 	sf::Vector2f counterSize(75, 50);
 
@@ -173,151 +173,151 @@ void App::RenderGameSetupScreen()
 	bossCount
 		.SetSize(counterSize)
 		.SetFillColor(sf::Color::Yellow)
-		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 0.f })
-		.SetText(std::to_string(mGame.GetMaxBosses()), mFont, 20, sf::Color::Black);
+		.SetPosition(View::Alignment::Center, camera, { 0.f, 0.f })
+		.SetText(std::to_string(game.GetMaxBosses()), mFont, 20, sf::Color::Black);
 
 	Button decreaseBossesButton;
 	decreaseBossesButton
 		.SetSize({ 50.f, 50.f })
-		.SetPosition(View::Alignment::Center, mCamera, { -counterSize.x + 15, 0.f })
+		.SetPosition(View::Alignment::Center, camera, { -counterSize.x + 15, 0.f })
 		.SetFillColor(sf::Color::White)
 		.SetText("-", mFont, 20, sf::Color::Black)
 		.SetOnClickListener([this]()
 			{
-				mGame.ChangeMaxBosses(-1);
+				game.ChangeMaxBosses(-1);
 			});
 
 	Button increaseBossesButton;
 	increaseBossesButton
 		.SetSize({ 50.f, 50.f })
-		.SetPosition(View::Alignment::Center, mCamera, { counterSize.x - 15, 0.f })
+		.SetPosition(View::Alignment::Center, camera, { counterSize.x - 15, 0.f })
 		.SetFillColor(sf::Color::White)
 		.SetText("+", mFont, 20, sf::Color::Black)
 		.SetOnClickListener([this]()
 			{
-				mGame.ChangeMaxBosses(1);
+				game.ChangeMaxBosses(1);
 			});
 
 	Button startButton;
 	startButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 200.f })
+		.SetPosition(View::Alignment::Center, camera, { 0.f, 200.f })
 		.SetFillColor(sf::Color::Green)
 		.SetText("Start", mFont)
 		.SetOnClickListener([this]()
 			{
-				mGame.Restart();
-				mCurrentState = AppState::Playing;
+				game.Restart();
+				state = State::Playing;
 			});
 
 	Button backButton;
 	backButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 260.f })
+		.SetPosition(View::Alignment::Center, camera, { 0.f, 260.f })
 		.SetFillColor(sf::Color::Yellow)
 		.SetText("Back", mFont)
 		.SetOnClickListener([this]()
 			{
-				mCurrentState = AppState::MainMenu;
+				state = State::MainMenu;
 			});
 
 	KeyBinding increase({ Key::Equal, Key::D, Key::Right, Key::Space }, KeyBinding::OR, [this]()
 		{
-			mGame.ChangeMaxBosses(1);
+			game.ChangeMaxBosses(1);
 		});
 
 	KeyBinding decrease({ Key::Hyphen, Key::A, Key::Left, Key::Tab, Key::Backspace }, KeyBinding::OR, [this]()
 		{
-			mGame.ChangeMaxBosses(-1);
+			game.ChangeMaxBosses(-1);
 		});
 
 	KeyBinding ret(Key::Escape, [this]()
 		{
-			mCurrentState = AppState::MainMenu;
+			state = State::MainMenu;
 		});
 
-	mScreen.AddView(std::make_shared<Button>(bossCount));
-	mScreen.AddView(std::make_shared<Button>(backButton));
-	mScreen.AddView(std::make_shared<Button>(startButton));
-	mScreen.AddView(std::make_shared<Button>(increaseBossesButton));
-	mScreen.AddView(std::make_shared<Button>(decreaseBossesButton));
+	screen.AddView(std::make_shared<Button>(bossCount));
+	screen.AddView(std::make_shared<Button>(backButton));
+	screen.AddView(std::make_shared<Button>(startButton));
+	screen.AddView(std::make_shared<Button>(increaseBossesButton));
+	screen.AddView(std::make_shared<Button>(decreaseBossesButton));
 
-	mScreen.AddKeyBinding(increase);
-	mScreen.AddKeyBinding(decrease);
-	mScreen.AddKeyBinding(ret);
+	screen.AddKeyBinding(increase);
+	screen.AddKeyBinding(decrease);
+	screen.AddKeyBinding(ret);
 }
 
 void App::RenderVictoryScreen()
 {
-	mScreen.Clear();
+	screen.Clear();
 
 	Button mainMenuButton;
 	mainMenuButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(View::Alignment::Center, mCamera)
+		.SetPosition(View::Alignment::Center, camera)
 		.SetFillColor(sf::Color::Green)
 		.SetText("Main Menu", mFont)
 		.SetOnClickListener([this]()
 			{
-				mCurrentState = AppState::MainMenu;
+				state = State::MainMenu;
 			});
 
 	Button exitButton;
 	exitButton
 		.SetSize({ 200.f, 50.f })
-		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 120.f })
+		.SetPosition(View::Alignment::Center, camera, { 0.f, 120.f })
 		.SetFillColor(sf::Color::Red)
 		.SetText("Exit Game", mFont)
 		.SetOnClickListener([this]()
 			{
-				mWindow.close();
+				window.close();
 			});
 
-	mScreen.AddView(std::make_shared<Button>(mainMenuButton));
-	mScreen.AddView(std::make_shared<Button>(exitButton));
+	screen.AddView(std::make_shared<Button>(mainMenuButton));
+	screen.AddView(std::make_shared<Button>(exitButton));
 }
 
 void App::RenderDefeatScreen()
 {
-	mScreen.Clear();
+	screen.Clear();
 
 	Button mainMenuButton;
 	mainMenuButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(View::Alignment::Center, mCamera)
+		.SetPosition(View::Alignment::Center, camera)
 		.SetFillColor(sf::Color::Green)
 		.SetText("Main Menu", mFont)
 		.SetOnClickListener([this]()
 			{
-				mCurrentState = AppState::MainMenu;
+				state = State::MainMenu;
 			});
 
 	Button restartButton;
 	restartButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(View::Alignment::Center, mCamera, { 0.0f, 60.f })
+		.SetPosition(View::Alignment::Center, camera, { 0.0f, 60.f })
 		.SetFillColor(sf::Color::Yellow)
 		.SetText("Restart", mFont)
 		.SetOnClickListener([this]()
 			{
-				mGame.Restart();
-				mCurrentState = AppState::Playing;
+				game.Restart();
+				state = State::Playing;
 			});
 
 	Button exitButton;
 	exitButton
 		.SetSize({ 200.f, 50.f })
-		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 120.f })
+		.SetPosition(View::Alignment::Center, camera, { 0.f, 120.f })
 		.SetFillColor(sf::Color::Red)
 		.SetText("Exit Game", mFont)
 		.SetOnClickListener([this]()
 			{
-				mWindow.close();
+				window.close();
 			});
 
-	mScreen.AddView(std::make_shared<Button>(restartButton));
-	mScreen.AddView(std::make_shared<Button>(mainMenuButton));
-	mScreen.AddView(std::make_shared<Button>(exitButton));
+	screen.AddView(std::make_shared<Button>(restartButton));
+	screen.AddView(std::make_shared<Button>(mainMenuButton));
+	screen.AddView(std::make_shared<Button>(exitButton));
 }
 
 void App::LoadFont()

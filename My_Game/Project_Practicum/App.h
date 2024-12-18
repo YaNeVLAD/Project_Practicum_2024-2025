@@ -8,32 +8,7 @@
 class App
 {
 public:
-	static App& Instance()
-	{
-		static App instance;
-		return instance;
-	}
-
-	void Run();
-
-	sf::RenderWindow& GetWindow() { return mWindow; }
-	Game& GetGame() { return mGame; }
-	Screen& GetScreen() { return mScreen; }
-
-private:
-	App() :
-		mWindow(sf::VideoMode::getDesktopMode(), "Bloody Survivors"),
-		mCamera(mWindow.getView()),
-		mGame(mWindow, mCamera),
-		mCurrentState(AppState::MainMenu)
-	{
-		mWindow.setVerticalSyncEnabled(true);
-		mWindow.setFramerateLimit(120);
-		LoadFont();
-		LoadTextures();
-	}
-
-	enum class AppState
+	enum class State
 	{
 		Defeat,
 		Playing,
@@ -43,22 +18,43 @@ private:
 		WeaponUpgrade,
 	};
 
+	static App& Instance()
+	{
+		static App instance;
+		return instance;
+	}
+
+	void Run();
+
+	sf::RenderWindow window;
+	sf::View camera;
+
+	State state;
+	Game game;
+	Screen screen;
+
+private:
+	App() :
+		window(sf::VideoMode::getDesktopMode(), "Bloody Survivors"),
+		camera(window.getView()),
+		game(window, camera),
+		state(State::MainMenu)
+	{
+		window.setVerticalSyncEnabled(true);
+		window.setFramerateLimit(120);
+		LoadFont();
+		LoadTextures();
+	}
+
 	~App() = default;
 	App(const App&) = delete;
 	App& operator=(const App&) = delete;
 
 	std::vector<std::string> mAvailableWeapons;
 
-	sf::RenderWindow mWindow;
-	sf::View mCamera;
-	AppState mCurrentState;
-	Game mGame;
-
 	sf::Clock mClock;
 
 	sf::Font mFont;
-
-	Screen mScreen;
 
 	void ProcessEvents();
 	void Update(float deltaTime);
