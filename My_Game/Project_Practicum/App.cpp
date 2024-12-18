@@ -114,15 +114,17 @@ void App::RenderUpgradeScreen()
 
 	for (int i = 0; i < mAvailableWeapons.size(); ++i)
 	{
+		auto& weapon = mAvailableWeapons[i];
+
 		Button button;
 		button
 			.SetSize(buttonSize)
 			.SetFillColor(sf::Color::Yellow)
 			.SetPosition(View::Alignment::Center, camera, { 0.0f, i * (buttonSize.y + spacing) })
-			.SetText(mAvailableWeapons[i], mFont, 20, sf::Color::Black)
-			.SetOnClickListener([this, weaponName = mAvailableWeapons[i]]()
+			.SetText(weapon->GetName() + (weapon->GetLevel() == 0 ? "" : " " + std::to_string(weapon->GetLevel())), mFont, 20, sf::Color::Black)
+			.SetOnClickListener([this, weapon]()
 				{
-					game.UpgradeWeapon(weaponName);
+					game.UpgradeWeapon(weapon->GetName());
 					state = State::Playing;
 					game.Resume();
 				});
@@ -223,14 +225,12 @@ void App::RenderGameSetupScreen()
 	Button infiniteModeButton;
 	infiniteModeButton
 		.SetSize({ 300.f, 100.f })
-		.SetFillColor(sf::Color::Red)
+		.SetFillColor(game.isInfinite ? sf::Color::Green : sf::Color::Red)
 		.SetText("Infinite Mode", mFont)
 		.SetPosition(View::Alignment::Center, camera, { 0.f, 360.f })
 		.SetOnClickListener([this]()
 			{
-				game.SetIsInfinite(true);
-				game.Restart();
-				state = State::Playing;
+				game.isInfinite = !game.isInfinite;
 			});
 
 	KeyBinding increase({ Key::Equal, Key::D, Key::Right, Key::Space }, KeyBinding::OR, [this]()
@@ -248,6 +248,12 @@ void App::RenderGameSetupScreen()
 			state = State::MainMenu;
 		});
 
+	KeyBinding start(Key::Enter, [this]()
+		{
+			game.Restart();
+			state = State::Playing;
+		});
+
 	screen.AddView(std::make_shared<Button>(bossCount));
 	screen.AddView(std::make_shared<Button>(backButton));
 	screen.AddView(std::make_shared<Button>(startButton));
@@ -255,9 +261,10 @@ void App::RenderGameSetupScreen()
 	screen.AddView(std::make_shared<Button>(increaseBossesButton));
 	screen.AddView(std::make_shared<Button>(decreaseBossesButton));
 
+	screen.AddKeyBinding(ret);
+	screen.AddKeyBinding(start);
 	screen.AddKeyBinding(increase);
 	screen.AddKeyBinding(decrease);
-	screen.AddKeyBinding(ret);
 }
 
 void App::RenderVictoryScreen()

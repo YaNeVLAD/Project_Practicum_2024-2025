@@ -40,6 +40,14 @@ std::uniform_int_distribution<size_t> nd(0, names.size() -1);
 std::uniform_int_distribution<size_t> td(0, titles.size() -1);
 std::uniform_int_distribution<size_t> od(0, objects.size() -1);
 
+static std::unordered_map<std::string, std::function<std::shared_ptr<Weapon>()>> weaponCreators = {
+		{ "Magic Charge", []() { return std::make_shared<MagicCharge>(); } },
+		{ "Holy Book", []() { return std::make_shared<Book>(); } },
+		{ "Fireball", []() { return std::make_shared<Fireball>(); } },
+		{ "Lightning Strike", []() { return std::make_shared<LightningStrike>(); } },
+		{ "Axe", []() { return std::make_shared<Axe>(); } },
+};
+
 void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera, size_t* defeatedBosses, size_t* maxBosses, bool& isPaused)
 {
 	systemManager.AddSystem<InputSystem>();
@@ -49,7 +57,7 @@ void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window
 	systemManager.AddSystem<LifetimeSystem>(camera, defeatedBosses);
 	systemManager.AddSystem<HomingProjectileSystem>();
 	systemManager.AddSystem<OrbitalProjectileSystem>();
-	systemManager.AddSystem<SpawnSystem>(camera, 0.5f, 1.f, 2.f, maxBosses);
+	systemManager.AddSystem<SpawnSystem>(camera, 0.3f, 1.f, 2.f, maxBosses);
 	systemManager.AddSystem<TrailSystem>();
 	systemManager.AddSystem<DamageSystem>();
 	systemManager.AddSystem<ContainerSystem>();
@@ -60,30 +68,15 @@ void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window
 	systemManager.AddSystem<HUDSystem>(window, camera);
 }
 
-std::unique_ptr<Weapon> Factory::CreateWeapon(const std::string& weaponName)
+std::shared_ptr<Weapon> Factory::CreateWeapon(const std::string& name)
 {
-	if (weaponName == "Holy Book")
+	auto it = weaponCreators.find(name);
+	if (it != weaponCreators.end())
 	{
-		return std::make_unique<Book>();
-	}
-	if (weaponName == "Magic Charge")
-	{
-		return std::make_unique<MagicCharge>();
-	}
-	if (weaponName == "Fireball")
-	{
-		return std::make_unique<Fireball>();
-	}
-	if (weaponName == "Lightning Strike")
-	{
-		return std::make_unique<LightningStrike>();
-	}
-	if (weaponName == "Axe")
-	{
-		return std::make_unique<Axe>();
+		return it->second();
 	}
 
-	throw std::invalid_argument("Unknown weapon type " + weaponName);
+	return nullptr;
 }
 
 void Factory::CreateEnemy(EntityManager& entityManager, sf::Vector2f pos)
@@ -150,7 +143,7 @@ void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 	player.AddComponent<WeaponComponent>();
 
 	auto weapons = player.GetComponent<WeaponComponent>();
-	weapons->AddWeapon(std::make_unique<Axe>());
+	weapons->AddWeapon(std::make_shared<Axe>());
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(40, 40));
 	collisionShape->setOrigin(20, 20);

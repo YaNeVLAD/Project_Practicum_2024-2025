@@ -10,7 +10,7 @@ public:
 	Book()
 	{
 		fireRate = 5.0f;
-		damage = 15;
+		damage = 10;
 		projectileSpeed = 125.0f;
 		LoadTextures();
 	}
@@ -24,7 +24,7 @@ public:
 private:
 	const std::string WEAPON_NAME = "Holy Book";
 	const int MAX_LEVELS = 4;
-	int mLevel = 1;
+	int mLevel = 0;
 
 	float mLifetime = 3.0f;
 

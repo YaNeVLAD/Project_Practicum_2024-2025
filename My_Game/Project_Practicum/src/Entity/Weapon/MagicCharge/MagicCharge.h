@@ -24,7 +24,7 @@ public:
 private:
 	const std::string WEAPON_NAME = "Magic Charge";
 	const int MAX_LEVELS = 3;
-	int mLevel = 1;
+	int mLevel = 0;
 
 	void LoadTextures();
 	std::vector<sf::Texture> mFrames;

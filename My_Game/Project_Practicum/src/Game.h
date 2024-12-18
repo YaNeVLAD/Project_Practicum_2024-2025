@@ -35,18 +35,18 @@ public:
 	bool IsPlayerDefeated();
 	bool HasPlayerLeveledUp();
 
-	std::vector<std::string> GetAvailableWeapons();
+	std::vector<std::shared_ptr<Weapon>> GetAvailableWeapons();
 	void UpgradeWeapon(std::string name);
 
 	void ProcessEvents(const sf::Event& event);
 
 	void ChangeMaxBosses(size_t offset);
 	size_t GetMaxBosses() const { return mMaxBosses; }
-	void SetIsInfinite(bool value) { mIsInfinite = value; }
+	
+	bool isInfinite = false;
 
 private:
 	bool mIsPaused = false;
-	bool mIsInfinite = false;
 
 	size_t mDefeatedBosses = 0;
 	size_t mMaxBosses = 1;

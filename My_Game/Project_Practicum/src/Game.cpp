@@ -96,7 +96,7 @@ void Game::Reset(size_t bossCount)
 	mSystemManager.Clear();
 	mIsPaused = false;
 	mMaxBosses = bossCount == -1 ? mMaxBosses : bossCount;
-	mMaxBosses = mIsInfinite ? UINT64_MAX : mMaxBosses;
+	mMaxBosses = isInfinite ? UINT64_MAX : mMaxBosses;
 	mDefeatedBosses = 0;
 }
 
@@ -121,7 +121,7 @@ void Game::ProcessEvents(const sf::Event& event)
 
 void Game::ChangeMaxBosses(size_t offset)
 {
-	if (mMaxBosses + offset >= 1 && mMaxBosses + offset <= 999) 
+	if (mMaxBosses + offset >= 1 && mMaxBosses + offset <= 999)
 	{
 		mMaxBosses += offset;
 	}
@@ -156,7 +156,7 @@ bool Game::HasPlayerLeveledUp()
 	return false;
 }
 
-std::vector<std::string> Game::GetAvailableWeapons()
+std::vector<std::shared_ptr<Weapon>> Game::GetAvailableWeapons()
 {
 	auto allWeapons = Weapon::GetAllWeapons();
 
@@ -168,37 +168,40 @@ std::vector<std::string> Game::GetAvailableWeapons()
 
 	auto weaponComponent = player.front()->GetComponent<WeaponComponent>();
 
-	std::unordered_map<std::string, bool> playerWeapons;
+	std::unordered_map<std::string, std::shared_ptr<Weapon>> playerWeapons;
 	for (const auto& weapon : weaponComponent->weapons)
 	{
-		playerWeapons[weapon->GetName()] = !weapon->CanUpgrade();
+		playerWeapons[weapon->GetName()] = weapon;
 	}
 
-	allWeapons.erase(
-		std::remove_if(
-			allWeapons.begin(),
-			allWeapons.end(),
-			[&](const std::string& weaponName)
+	std::vector<std::shared_ptr<Weapon>> filteredWeapons;
+	for (const auto& weaponName : allWeapons)
+	{
+		auto it = playerWeapons.find(weaponName);
+		if (it == playerWeapons.end())
+		{
+			auto weapon = Factory::CreateWeapon(weaponName);
+			if (weapon)
 			{
-				auto it = playerWeapons.find(weaponName);
-				if (it != playerWeapons.end())
-				{
-					return playerWeapons[weaponName];
-				}
-				return false;
-			}),
-		allWeapons.end());
+				filteredWeapons.push_back(weapon);
+			}
+		}
+		else if (it->second->CanUpgrade())
+		{
+			filteredWeapons.push_back(it->second);
+		}
+	}
 
 	std::random_device rd;
 	std::mt19937 g(rd());
-	std::shuffle(allWeapons.begin(), allWeapons.end(), g);
+	std::shuffle(filteredWeapons.begin(), filteredWeapons.end(), g);
 
-	if (allWeapons.size() > 3)
+	if (filteredWeapons.size() > 3)
 	{
-		allWeapons.resize(3);
+		filteredWeapons.resize(3);
 	}
 
-	return allWeapons;
+	return filteredWeapons;
 }
 
 void Game::UpgradeWeapon(std::string name)
@@ -222,5 +225,5 @@ void Game::UpgradeWeapon(std::string name)
 	}
 
 	auto newWeapon = Factory::CreateWeapon(name);
-	weaponComponent->AddWeapon(std::move(newWeapon));
+	weaponComponent->AddWeapon(newWeapon);
 }

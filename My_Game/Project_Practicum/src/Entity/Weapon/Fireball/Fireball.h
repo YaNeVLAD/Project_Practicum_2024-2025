@@ -24,7 +24,7 @@ private:
 	const std::string WEAPON_NAME = "Fireball";
 
 	const int MAX_LEVELS = 4;
-	int mLevel = 1;
+	int mLevel = 0;
 
 	int mTrailDamage = 5;
 	sf::Vector2f mScale = { 1,1 };

@@ -50,7 +50,7 @@ private:
 	App(const App&) = delete;
 	App& operator=(const App&) = delete;
 
-	std::vector<std::string> mAvailableWeapons;
+	std::vector<std::shared_ptr<Weapon>> mAvailableWeapons;
 
 	sf::Clock mClock;
 

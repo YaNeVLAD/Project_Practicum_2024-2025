@@ -10,7 +10,7 @@ void Book::Upgrade(int level)
 	if (CanUpgrade())
 	{
 		mLevel++;
-		damage += 5;
+		damage += 2;
 		fireRate -= 1.0f;
 	}
 }
@@ -31,7 +31,7 @@ void Book::Attack(EntityManager& entityManager, TransformComponent* parentTransf
 
 	projectile.AddComponent<DrawableComponent>(mFrames[0], sf::Vector2f(0.375, 0.375));
 
-	projectile.AddComponent<DamageComponent>(damage, 0.3f, Enemy);
+	projectile.AddComponent<DamageComponent>(damage, 0.1f, Enemy);
 }
 
 void Book::LoadTextures()

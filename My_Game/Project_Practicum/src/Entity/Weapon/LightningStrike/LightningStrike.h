@@ -25,10 +25,8 @@ private:
 	const std::string WEAPON_NAME = "Lightning Strike";
 
 	const int MAX_LEVELS = 4;
-	int mLevel = 1;
+	int mLevel = 0;
 
-	int mChainCount = 1;
-	float mChainRadius = 50.0f;
 	float mMaxDistance = 400.0f;
 	
 	sf::Vector2f mCollisionSize = { 32, 32 };

@@ -162,8 +162,8 @@ struct WeaponComponent : public Component
 	/**
 	* @brief Функция добавляет оружие в список оружия сущности
 	*/
-	void AddWeapon(std::unique_ptr<Weapon> weapon);
-	std::vector<std::unique_ptr<Weapon>> weapons;
+	void AddWeapon(std::shared_ptr<Weapon> weapon);
+	std::vector<std::shared_ptr<Weapon>> weapons;
 };
 
 /**

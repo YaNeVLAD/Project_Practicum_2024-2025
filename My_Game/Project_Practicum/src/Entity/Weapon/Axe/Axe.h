@@ -13,7 +13,6 @@ public:
 		cooldown = fireRate;
 		damage = 8;
 		mGravity = projectileSpeed;
-
 		LoadTextures();
 	}
 
@@ -26,7 +25,7 @@ public:
 private:
 	const std::string WEAPON_NAME = "Axe";
 	const int MAX_LEVELS = 4;
-	int mLevel = 1;
+	int mLevel = 0;
 
 	float mGravity = 9.8f;
 	
