@@ -23,9 +23,14 @@ Text& Text::SetPosition(Alignment alignment, const sf::View& camera, const sf::V
 {
 	sf::Vector2f position = offset;
 
-	if (alignment == Alignment::Center || mTextAlignment == TextAlignment::Center)
+	if (alignment == Alignment::CenterX || alignment == Alignment::Center)
 	{
-		position.x += camera.getCenter().x - mText.getLocalBounds().width / 2.0f;
+		position.x += camera.getCenter().x - mText.getGlobalBounds().width / 2.0f;
+	}
+
+	if (alignment == Alignment::CenterY || alignment == Alignment::Center)
+	{
+		position.y += camera.getCenter().y - mText.getGlobalBounds().height / 2.0f;
 	}
 
 	UpdateTextPosition(position);

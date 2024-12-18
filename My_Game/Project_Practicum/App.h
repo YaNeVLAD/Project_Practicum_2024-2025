@@ -8,6 +8,19 @@
 class App
 {
 public:
+	static App& Instance()
+	{
+		static App instance;
+		return instance;
+	}
+
+	void Run();
+
+	sf::RenderWindow& GetWindow() { return mWindow; }
+	Game& GetGame() { return mGame; }
+	Screen& GetScreen() { return mScreen; }
+
+private:
 	App() :
 		mWindow(sf::VideoMode::getDesktopMode(), "Bloody Survivors"),
 		mCamera(mWindow.getView()),
@@ -20,9 +33,6 @@ public:
 		LoadTextures();
 	}
 
-	void Run();
-
-private:
 	enum class AppState
 	{
 		Defeat,
@@ -32,6 +42,10 @@ private:
 		GameSetup,
 		WeaponUpgrade,
 	};
+
+	~App() = default;
+	App(const App&) = delete;
+	App& operator=(const App&) = delete;
 
 	std::vector<std::string> mAvailableWeapons;
 

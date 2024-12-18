@@ -88,7 +88,7 @@ void Game::Resume()
 	mIsPaused = false;
 }
 
-void Game::Reset(int bossCount)
+void Game::Reset(size_t bossCount)
 {
 	mScreen.Clear();
 	mScreen.ClearBindings();
@@ -116,6 +116,14 @@ void Game::Render(float deltaTime)
 void Game::ProcessEvents(const sf::Event& event)
 {
 	mScreen.HandleEvents(mWindow, mCamera, event);
+}
+
+void Game::ChangeMaxBosses(size_t offset)
+{
+	if (mMaxBosses + offset >= 1 && mMaxBosses + offset <= 999) 
+	{
+		mMaxBosses += offset;
+	}
 }
 
 bool Game::IsBossDefeated() const

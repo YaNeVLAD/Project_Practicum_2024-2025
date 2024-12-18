@@ -8,8 +8,9 @@
 class Game
 {
 public:
-	Game(sf::RenderWindow& window, sf::View& camera) 
-		: mWindow(window), mCamera(camera) {}
+	Game(sf::RenderWindow& window, sf::View& camera)
+		: mWindow(window), mCamera(camera) {
+	}
 
 	void Init()
 	{
@@ -19,7 +20,7 @@ public:
 		InitMap();
 	}
 
-	void Restart(int bossCount = -1)
+	void Restart(size_t bossCount = -1)
 	{
 		Reset(bossCount);
 		Init();
@@ -30,7 +31,7 @@ public:
 
 	void Pause();
 	void Resume();
-	
+
 	bool IsBossDefeated() const;
 	bool IsPlayerDefeated();
 	bool HasPlayerLeveledUp();
@@ -40,9 +41,13 @@ public:
 
 	void ProcessEvents(const sf::Event& event);
 
+	size_t GetMaxBosses() const { return mMaxBosses; }
+	void SetMaxBosses(size_t count) { mMaxBosses = count; }
+	void ChangeMaxBosses(size_t offset);
+
 private:
 	bool mIsPaused = false;
-	
+
 	size_t mDefeatedBosses = 0;
 	size_t mMaxBosses = 1;
 
@@ -57,7 +62,7 @@ private:
 
 	bool CanPause();
 
-	void Reset(int bossCount);
+	void Reset(size_t bossCount);
 
 	void InitKeyBindings();
 	void InitSystems();

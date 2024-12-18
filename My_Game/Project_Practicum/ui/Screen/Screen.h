@@ -8,24 +8,55 @@
 
 struct KeyBinding
 {
-	KeyBinding(sf::Keyboard::Key key, const std::function<void()>& onKeyPressed)
-		: mKey(key), mOnKeyPressed(onKeyPressed) {}
+	enum PressMode
+	{
+		AND,
+		OR
+	};
 
-	sf::Keyboard::Key GetKey() const { return mKey; }
+	KeyBinding(sf::Keyboard::Key key, const std::function<void()>& onKeyPressed)
+		: mKeys({ key }), mOnKeyPressed(onKeyPressed), mPressMode(PressMode::OR) {}
+
+	KeyBinding(const std::vector<sf::Keyboard::Key>& keys, PressMode pressMode, const std::function<void()>& onKeyPressed)
+		: mKeys(keys), mPressMode(pressMode), mOnKeyPressed(onKeyPressed) {}
+
+	sf::Keyboard::Key GetKey() const { return mKeys.front(); }
 
 	void Press() { if (mOnKeyPressed) mOnKeyPressed(); }
 
+	bool CheckPressed() const
+	{
+		bool allPressed = true;
+		bool anyPressed = false;
+
+		for (auto key : mKeys)
+		{
+			bool isPressed = sf::Keyboard::isKeyPressed(key);
+			if (mPressMode == PressMode::AND)
+			{
+				allPressed &= isPressed;
+			}
+			else if (mPressMode == PressMode::OR)
+			{
+				anyPressed |= isPressed;
+			}
+		}
+
+		return (mPressMode == PressMode::AND) ? allPressed : anyPressed;
+	}
+
 private:
-	sf::Keyboard::Key mKey;
+	PressMode mPressMode;
+	std::vector<sf::Keyboard::Key> mKeys;
 	std::function<void()> mOnKeyPressed = nullptr;
 };
 
 class Screen : public sf::Drawable
 {
 public:
-	void AddView(const std::shared_ptr<View>& view) { mViews.push_back(view); }
+	void AddView(const std::shared_ptr<View>& view);
 
-	void AddKeyBinding(const KeyBinding& binding) {mKeyBindings.push_back(binding); }
+	void AddKeyBinding(const KeyBinding& binding);
 
 	void Clear() { mViews.clear(); }
 	void ClearBindings() { mKeyBindings.clear(); }

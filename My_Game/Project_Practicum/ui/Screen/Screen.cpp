@@ -1,5 +1,15 @@
 #include "Screen.h"
 
+void Screen::AddView(const std::shared_ptr<View>& view)
+{
+	mViews.push_back(view);
+}
+
+void Screen::AddKeyBinding(const KeyBinding& binding)
+{
+	mKeyBindings.push_back(binding);
+}
+
 void Screen::HandleEvents(const sf::RenderWindow& window, const sf::View& camera, const sf::Event& event)
 {
 	sf::Vector2f worldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window), camera);
@@ -20,11 +30,10 @@ void Screen::HandleEvents(const sf::RenderWindow& window, const sf::View& camera
 	case sf::Event::KeyPressed:
 		for (auto& binding : mKeyBindings)
 		{
-			if (event.key.code != binding.GetKey())
+			if (binding.CheckPressed())
 			{
-				continue;
+				binding.Press();
 			}
-			binding.Press();
 		}
 		break;
 
