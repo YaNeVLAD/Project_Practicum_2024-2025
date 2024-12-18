@@ -23,6 +23,12 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 
 	std::vector<Entity::IdType> entitiesToDelete;
 
+	sf::Vector2f cameraCenter = mCamera.getCenter();
+	sf::Vector2f cameraSize = mCamera.getSize();
+
+	float maxDistanceX = 1.5f * (cameraSize.x / 2.f);
+	float maxDistanceY = 1.5f * (cameraSize.y / 2.f);
+
 	for (auto& entity : entityManager.GetEntities())
 	{
 		auto health = entity.GetComponent<HealthComponent>();
@@ -45,6 +51,22 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 			lifetime->time -= deltaTime;
 
 			if (lifetime->time <= 0.0f)
+			{
+				entitiesToDelete.push_back(entity.GetId());
+			}
+		}
+
+		if (transform != nullptr)
+		{
+			float dx = std::abs(transform->x - cameraCenter.x);
+			float dy = std::abs(transform->y - cameraCenter.y);
+
+			if (dx < maxDistanceX && dy < maxDistanceY)
+			{
+				continue;
+			}
+
+			if (!entity.HasComponent<PlayerHealthComponent>() && !entity.HasComponent<BossHealthComponent>() && entity.GetType() != EntityType::Particle)
 			{
 				entitiesToDelete.push_back(entity.GetId());
 			}

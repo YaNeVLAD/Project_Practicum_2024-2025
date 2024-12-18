@@ -10,7 +10,7 @@ class LightningStrike : public Weapon
 public:
 	LightningStrike()
 	{
-		fireRate = 3.0f;
+		fireRate = 1.0f;
 		damage = 15;
 		LoadTextures();
 	}

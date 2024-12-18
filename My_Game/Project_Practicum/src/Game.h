@@ -9,8 +9,7 @@ class Game
 {
 public:
 	Game(sf::RenderWindow& window, sf::View& camera)
-		: mWindow(window), mCamera(camera) {
-	}
+		: mWindow(window), mCamera(camera) {}
 
 	void Init()
 	{
@@ -41,12 +40,13 @@ public:
 
 	void ProcessEvents(const sf::Event& event);
 
-	size_t GetMaxBosses() const { return mMaxBosses; }
-	void SetMaxBosses(size_t count) { mMaxBosses = count; }
 	void ChangeMaxBosses(size_t offset);
+	size_t GetMaxBosses() const { return mMaxBosses; }
+	void SetIsInfinite(bool value) { mIsInfinite = value; }
 
 private:
 	bool mIsPaused = false;
+	bool mIsInfinite = false;
 
 	size_t mDefeatedBosses = 0;
 	size_t mMaxBosses = 1;

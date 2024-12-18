@@ -3,7 +3,6 @@
 #include "ui/Button/Button.h"
 #include "src/Manager/Texture/TextureManager.h"
 #include "src/Factory/Factory.h"
-#include "ui/Text/Text.h"
 
 void App::Run()
 {
@@ -221,6 +220,19 @@ void App::RenderGameSetupScreen()
 				state = State::MainMenu;
 			});
 
+	Button infiniteModeButton;
+	infiniteModeButton
+		.SetSize({ 300.f, 100.f })
+		.SetFillColor(sf::Color::Red)
+		.SetText("Infinite Mode", mFont)
+		.SetPosition(View::Alignment::Center, camera, { 0.f, 360.f })
+		.SetOnClickListener([this]()
+			{
+				game.SetIsInfinite(true);
+				game.Restart();
+				state = State::Playing;
+			});
+
 	KeyBinding increase({ Key::Equal, Key::D, Key::Right, Key::Space }, KeyBinding::OR, [this]()
 		{
 			game.ChangeMaxBosses(1);
@@ -239,6 +251,7 @@ void App::RenderGameSetupScreen()
 	screen.AddView(std::make_shared<Button>(bossCount));
 	screen.AddView(std::make_shared<Button>(backButton));
 	screen.AddView(std::make_shared<Button>(startButton));
+	screen.AddView(std::make_shared<Button>(infiniteModeButton));
 	screen.AddView(std::make_shared<Button>(increaseBossesButton));
 	screen.AddView(std::make_shared<Button>(decreaseBossesButton));
 

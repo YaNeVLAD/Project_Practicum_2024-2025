@@ -96,6 +96,7 @@ void Game::Reset(size_t bossCount)
 	mSystemManager.Clear();
 	mIsPaused = false;
 	mMaxBosses = bossCount == -1 ? mMaxBosses : bossCount;
+	mMaxBosses = mIsInfinite ? UINT64_MAX : mMaxBosses;
 	mDefeatedBosses = 0;
 }
 
