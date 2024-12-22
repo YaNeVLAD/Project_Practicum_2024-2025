@@ -103,8 +103,9 @@ void Game::Reset(size_t bossCount)
 	mSystemManager.Clear();
 	mIsPaused = false;
 	mConfig->maxBosses = bossCount == -1 ? mConfig->maxBosses : bossCount;
-	mConfig->maxBosses = isInfinite ? UINT64_MAX : mConfig->maxBosses;
+	mConfig->maxBosses = isInfinite ? SIZE_MAX : mConfig->maxBosses;
 	mConfig->killedBosses = 0;
+	mConfig->killedEnemies = 0;
 }
 
 void Game::Render(float deltaTime)

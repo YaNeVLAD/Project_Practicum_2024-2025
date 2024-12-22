@@ -3,7 +3,6 @@
 #include "../../../Manager/Texture/TextureManager.h"
 #include "../../../Manager/Entity/EntityManager.h"
 #include "../../../component/Components.h"
-#include <iostream>
 
 void Fireball::Upgrade(int level)
 {
@@ -22,8 +21,7 @@ void Fireball::Attack(EntityManager& entityManager, TransformComponent* parentTr
     auto& fireball = entityManager.CreateEntity(Projectile);
 
     sf::Vector2f direction = playerTransform->lastDirection;
-    std::cout << direction.x << " " << direction.y << std::endl;
-
+    
     if (direction.x != 0 && direction.y != 0)
     {
         direction = direction / std::sqrt(2.0f);

@@ -28,6 +28,7 @@ private:
 
 	void RenderHealth(Entity* entity);
 
+	void RenderStatistics();
 	void RenderXPBar(Entity* player);
 	void RenderAbility(Entity* player);
 	void RenderPlayerHealth(Entity* player);

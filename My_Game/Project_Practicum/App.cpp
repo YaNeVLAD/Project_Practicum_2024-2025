@@ -284,6 +284,11 @@ void App::RenderVictoryScreen()
 		.SetPosition(View::Alignment::Center, camera, { 0.f, -200.f })
 		.SetTextAlignment(Text::TextAlignment::Center);
 
+	Text killedEnemies;
+	killedEnemies
+		.SetText("Убитых врагов: " + std::to_string(GameConfig::GetInstance()->killedEnemies + GameConfig::GetInstance()->killedBosses), mFont, 24)
+		.SetPosition(View::Alignment::Center, camera, {0.f, -100.f});
+
 	Button mainMenuButton;
 	mainMenuButton
 		.SetSize({ 200.0f, 50.0f })
@@ -311,6 +316,7 @@ void App::RenderVictoryScreen()
 			state = State::MainMenu;
 		});
 
+	screen.AddView(std::make_shared<Text>(killedEnemies));
 	screen.AddView(std::make_shared<Text>(victoryText));
 	screen.AddView(std::make_shared<Button>(mainMenuButton));
 	screen.AddView(std::make_shared<Button>(exitButton));
@@ -327,6 +333,11 @@ void App::RenderDefeatScreen()
 		.SetText("Вы проиграли!", mFont, 60, sf::Color::Red)
 		.SetPosition(View::Alignment::Center, camera, { 0.f, -200.f })
 		.SetTextAlignment(Text::TextAlignment::Center);
+
+	Text killedEnemies;
+	killedEnemies
+		.SetText("Убитых врагов: " + std::to_string(GameConfig::GetInstance()->killedEnemies + GameConfig::GetInstance()->killedBosses), mFont, 24)
+		.SetPosition(View::Alignment::Center, camera, { 0.f, -100.f });
 
 	Button mainMenuButton;
 	mainMenuButton
@@ -374,6 +385,7 @@ void App::RenderDefeatScreen()
 			state = State::MainMenu;
 		});
 
+	screen.AddView(std::make_shared<Text>(killedEnemies));
 	screen.AddView(std::make_shared<Text>(defeatText));
 	screen.AddView(std::make_shared<Button>(restartButton));
 	screen.AddView(std::make_shared<Button>(mainMenuButton));

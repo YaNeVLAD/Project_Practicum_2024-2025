@@ -42,6 +42,7 @@ void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
 			if (transform != nullptr)
 			{
 				Factory::CreateExperience(entityManager, sf::Vector2f(transform->x, transform->y));
+				GameConfig::GetInstance()->killedEnemies++;
 			}
 
 			entitiesToDelete.push_back(entity.GetId());

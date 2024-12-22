@@ -5,6 +5,7 @@
 #include "../../Manager/Entity/EntityManager.h"
 #include "../../Manager/Texture/TextureManager.h"
 #include "../../../ui/Text/Text.h"
+#include "../../Config/GameConfig.h"
 
 void HUDSystem::Render(EntityManager& entityManager, float deltaTime)
 {
@@ -22,6 +23,7 @@ void HUDSystem::Render(EntityManager& entityManager, float deltaTime)
 		RenderHealth(entity);
 	}
 
+	RenderStatistics();
 	RenderXPBar(player.front());
 	RenderPlayerHealth(player.front());
 	RenderAbility(player.front());
@@ -98,6 +100,16 @@ void HUDSystem::RenderBossesHealth(const std::vector<Entity*>& bosses)
 		mScreen.AddView(std::make_shared<ProgressBar>(bossHeathBar));
 		mScreen.AddView(std::make_shared<Text>(bossName));
 	}
+}
+
+void HUDSystem::RenderStatistics()
+{
+	Text killedEnemies;
+	killedEnemies
+		.SetText("Врагов убито: " + std::to_string(GameConfig::GetInstance()->killedEnemies + GameConfig::GetInstance()->killedBosses), mFont, 20)
+		.SetPosition(View::Alignment::Default, mCamera, { mXpBar.GetPosition().x + 300, mXpBar.GetPosition().y + 50 });
+
+	mScreen.AddView(std::make_shared<Text>(killedEnemies));
 }
 
 void HUDSystem::RenderXPBar(Entity* player)
