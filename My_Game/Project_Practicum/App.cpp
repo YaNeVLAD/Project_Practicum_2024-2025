@@ -1,9 +1,11 @@
 #include "App.h"
 
 #include "ui/Button/Button.h"
-#include "src/Manager/Texture/TextureManager.h"
 #include "src/Factory/Factory.h"
+#include "ui/Text/Text.h"
+#include "src/Manager/Texture/TextureManager.h"
 
+using Key = sf::Keyboard::Key;
 void App::Run()
 {
 	while (window.isOpen())
@@ -163,7 +165,6 @@ void App::RenderMainMenuScreen()
 	screen.AddView(std::make_shared<Button>(exitButton));
 }
 
-using Key = sf::Keyboard::Key;
 void App::RenderGameSetupScreen()
 {
 	screen.Clear();
@@ -175,7 +176,7 @@ void App::RenderGameSetupScreen()
 		.SetSize(counterSize)
 		.SetFillColor(sf::Color::Yellow)
 		.SetPosition(View::Alignment::Center, camera, { 0.f, 0.f })
-		.SetText(std::to_string(game.GetMaxBosses()), mFont, 20, sf::Color::Black);
+		.SetText(std::to_string(GameConfig::GetInstance()->maxBosses), mFont, 20, sf::Color::Black);
 
 	Button decreaseBossesButton;
 	decreaseBossesButton
@@ -185,7 +186,7 @@ void App::RenderGameSetupScreen()
 		.SetText("-", mFont, 20, sf::Color::Black)
 		.SetOnClickListener([this]()
 			{
-				game.ChangeMaxBosses(-1);
+				mConfig->maxBosses--;
 			});
 
 	Button increaseBossesButton;
@@ -196,7 +197,7 @@ void App::RenderGameSetupScreen()
 		.SetText("+", mFont, 20, sf::Color::Black)
 		.SetOnClickListener([this]()
 			{
-				game.ChangeMaxBosses(1);
+				mConfig->maxBosses++;
 			});
 
 	Button startButton;
@@ -204,7 +205,7 @@ void App::RenderGameSetupScreen()
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(View::Alignment::Center, camera, { 0.f, 200.f })
 		.SetFillColor(sf::Color::Green)
-		.SetText("НАЧАТЬ", mFont)
+		.SetText("НАЧАТЬ (Enter)", mFont)
 		.SetOnClickListener([this]()
 			{
 				game.Restart();
@@ -216,7 +217,7 @@ void App::RenderGameSetupScreen()
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(View::Alignment::Center, camera, { 0.f, 260.f })
 		.SetFillColor(sf::Color::Yellow)
-		.SetText("Назад", mFont)
+		.SetText("Назад (Esc)", mFont)
 		.SetOnClickListener([this]()
 			{
 				state = State::MainMenu;
@@ -226,21 +227,26 @@ void App::RenderGameSetupScreen()
 	infiniteModeButton
 		.SetSize({ 300.f, 100.f })
 		.SetFillColor(game.isInfinite ? sf::Color::Green : sf::Color::Red)
-		.SetText("Бесконечный режим", mFont)
+		.SetText("Бесконечный режим (Пробел)", mFont)
 		.SetPosition(View::Alignment::Center, camera, { 0.f, 360.f })
 		.SetOnClickListener([this]()
 			{
 				game.isInfinite = !game.isInfinite;
 			});
 
-	KeyBinding increase({ Key::Equal, Key::D, Key::Right, Key::Space }, KeyBinding::OR, [this]()
+	KeyBinding increase({ Key::Equal, Key::D, Key::Right }, KeyBinding::OR, [this]()
 		{
-			game.ChangeMaxBosses(1);
+			mConfig->maxBosses++;
 		});
 
-	KeyBinding decrease({ Key::Hyphen, Key::A, Key::Left, Key::Tab, Key::Backspace }, KeyBinding::OR, [this]()
+	KeyBinding decrease({ Key::Hyphen, Key::A, Key::Left }, KeyBinding::OR, [this]()
 		{
-			game.ChangeMaxBosses(-1);
+			mConfig->maxBosses--;
+		});
+
+	KeyBinding infiniteMode(Key::Space, [this]()
+		{
+			game.isInfinite = !game.isInfinite;
 		});
 
 	KeyBinding ret(Key::Escape, [this]()
@@ -265,18 +271,25 @@ void App::RenderGameSetupScreen()
 	screen.AddKeyBinding(start);
 	screen.AddKeyBinding(increase);
 	screen.AddKeyBinding(decrease);
+	screen.AddKeyBinding(infiniteMode);
 }
 
 void App::RenderVictoryScreen()
 {
 	screen.Clear();
 
+	Text victoryText;
+	victoryText
+		.SetText("Вы победили!", mFont, 60, sf::Color::Green)
+		.SetPosition(View::Alignment::Center, camera, { 0.f, -200.f })
+		.SetTextAlignment(Text::TextAlignment::Center);
+
 	Button mainMenuButton;
 	mainMenuButton
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(View::Alignment::Center, camera)
 		.SetFillColor(sf::Color::Green)
-		.SetText("В главное меню", mFont)
+		.SetText("В главное меню (Esc)", mFont)
 		.SetOnClickListener([this]()
 			{
 				state = State::MainMenu;
@@ -293,20 +306,34 @@ void App::RenderVictoryScreen()
 				window.close();
 			});
 
+	KeyBinding exit(sf::Keyboard::Escape, [this]()
+		{
+			state = State::MainMenu;
+		});
+
+	screen.AddView(std::make_shared<Text>(victoryText));
 	screen.AddView(std::make_shared<Button>(mainMenuButton));
 	screen.AddView(std::make_shared<Button>(exitButton));
+
+	screen.AddKeyBinding(exit);
 }
 
 void App::RenderDefeatScreen()
 {
 	screen.Clear();
 
+	Text defeatText;
+	defeatText
+		.SetText("Вы проиграли!", mFont, 60, sf::Color::Red)
+		.SetPosition(View::Alignment::Center, camera, { 0.f, -200.f })
+		.SetTextAlignment(Text::TextAlignment::Center);
+
 	Button mainMenuButton;
 	mainMenuButton
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(View::Alignment::Center, camera)
 		.SetFillColor(sf::Color::Green)
-		.SetText("В главное меню", mFont)
+		.SetText("В главное меню (Esc)", mFont)
 		.SetOnClickListener([this]()
 			{
 				state = State::MainMenu;
@@ -317,7 +344,7 @@ void App::RenderDefeatScreen()
 		.SetSize({ 200.0f, 50.0f })
 		.SetPosition(View::Alignment::Center, camera, { 0.0f, 60.f })
 		.SetFillColor(sf::Color::Yellow)
-		.SetText("Заново", mFont)
+		.SetText("Заново (R)", mFont)
 		.SetOnClickListener([this]()
 			{
 				game.Restart();
@@ -335,9 +362,25 @@ void App::RenderDefeatScreen()
 				window.close();
 			});
 
+
+	KeyBinding restart(sf::Keyboard::R, [this]()
+		{
+			game.Restart();
+			state = State::Playing;
+		});
+
+	KeyBinding exit(sf::Keyboard::Escape, [this]()
+		{
+			state = State::MainMenu;
+		});
+
+	screen.AddView(std::make_shared<Text>(defeatText));
 	screen.AddView(std::make_shared<Button>(restartButton));
 	screen.AddView(std::make_shared<Button>(mainMenuButton));
 	screen.AddView(std::make_shared<Button>(exitButton));
+
+	screen.AddKeyBinding(restart);
+	screen.AddKeyBinding(exit);
 }
 
 void App::LoadFont()

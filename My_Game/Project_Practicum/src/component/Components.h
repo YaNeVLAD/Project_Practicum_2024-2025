@@ -56,7 +56,7 @@ struct TransformComponent : public Component
 
 	float x, y;
 	float vx, vy;
-	sf::Vector2f lastDirection = { 0.f, 0.f };
+	sf::Vector2f lastDirection = { 1.f, 0.f };
 	sf::Vector2f multiplier = { 1, 1 };
 };
 
@@ -159,6 +159,10 @@ struct DrawableComponent : public Component
 */
 struct WeaponComponent : public Component
 {
+	WeaponComponent(std::shared_ptr<Weapon> weapon = nullptr)
+	{
+		AddWeapon(weapon);
+	}
 	/**
 	* @brief Функция добавляет оружие в список оружия сущности
 	*/

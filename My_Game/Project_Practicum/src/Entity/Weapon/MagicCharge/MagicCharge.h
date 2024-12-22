@@ -9,9 +9,10 @@ class MagicCharge : public Weapon
 public:
 	MagicCharge() 
 	{
-		fireRate = 1.f;
+		fireRate = 1.5f;
+		cooldown = fireRate;
 		projectileSpeed = 250.f; 
-		damage = 5;
+		damage = 1;
 		LoadTextures(); 
 	}
 

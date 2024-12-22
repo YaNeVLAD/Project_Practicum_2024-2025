@@ -139,6 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="src\Config\GameConfig.cpp" />
     <ClCompile Include="src\Entity\Weapon\Axe\Axe.cpp" />
     <ClCompile Include="src\System\DeathAnimation\DeathAnimationSystem.cpp" />
     <ClCompile Include="ui\Text\Text.cpp" />
@@ -175,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="src\Config\GameConfig.h" />
     <ClInclude Include="src\Entity\Weapon\Axe\Axe.h" />
     <ClInclude Include="src\System\DeathAnimation\DeathAnimationSystem.h" />
     <ClInclude Include="ui\Text\Text.h" />

@@ -4,6 +4,7 @@
 
 #include "src/Game.h"
 #include "ui/Screen/Screen.h"
+#include "src/Config/GameConfig.h"
 
 class App
 {
@@ -38,7 +39,8 @@ private:
 		window(sf::VideoMode::getDesktopMode(), "Bloody Survivors"),
 		camera(window.getView()),
 		game(window, camera),
-		state(State::MainMenu)
+		state(State::MainMenu),
+		mConfig(GameConfig::GetInstance())
 	{
 		window.setVerticalSyncEnabled(true);
 		window.setFramerateLimit(120);
@@ -49,6 +51,8 @@ private:
 	~App() = default;
 	App(const App&) = delete;
 	App& operator=(const App&) = delete;
+
+	GameConfig* mConfig;
 
 	std::vector<std::shared_ptr<Weapon>> mAvailableWeapons;
 

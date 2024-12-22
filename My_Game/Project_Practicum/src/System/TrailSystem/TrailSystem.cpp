@@ -37,12 +37,17 @@ void TrailSystem::CreateTrailProjectile(EntityManager& em, Entity* entity)
 
 	auto& trailEffect = em.CreateEntity(EntityType::Projectile);
 	trailEffect.AddComponent<TransformComponent>(transform->GetPosition());
+	trailEffect.AddComponent<AnimationComponent>(0.2f, true);
+	auto animation = trailEffect.GetComponent<AnimationComponent>();
+	animation->AddAnimation(AnimationComponent::ATTACK, mFrames);
+	animation->SetState(AnimationComponent::ATTACK);
+
 	trailEffect.AddComponent<DrawableComponent>(mFrames[0]);
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(20, 20));
 	collisionShape->setOrigin(10, 10);
 	trailEffect.AddComponent<CollisionComponent>(std::move(collisionShape));
 
-	trailEffect.AddComponent<LifetimeComponent>(0.5f);
-	trailEffect.AddComponent<DamageComponent>(trail->damage, 0.5f, Enemy);
+	trailEffect.AddComponent<LifetimeComponent>(2.f);
+	trailEffect.AddComponent<DamageComponent>(trail->damage, 0.1f, Enemy);
 }

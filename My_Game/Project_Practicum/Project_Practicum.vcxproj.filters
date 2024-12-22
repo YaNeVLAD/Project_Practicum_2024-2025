@@ -177,6 +177,9 @@
     <ClCompile Include="ui\Text\Text.cpp">
       <Filter>Исходные файлы\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Config\GameConfig.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -292,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="ui\Text\Text.h">
       <Filter>Файлы заголовков\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Config\GameConfig.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

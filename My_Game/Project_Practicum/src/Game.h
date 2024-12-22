@@ -4,12 +4,13 @@
 #include "SFML/Graphics.hpp"
 #include "Manager/System/SystemManager.h"
 #include "Manager/Entity/EntityManager.h"
+#include "Config/GameConfig.h"
 
 class Game
 {
 public:
 	Game(sf::RenderWindow& window, sf::View& camera)
-		: mWindow(window), mCamera(camera) {}
+		: mWindow(window), mCamera(camera), mConfig(GameConfig::GetInstance()) {}
 
 	void Init()
 	{
@@ -17,6 +18,7 @@ public:
 		InitSystems();
 		InitPlayer();
 		InitMap();
+		LoadFont();
 	}
 
 	void Restart(size_t bossCount = -1)
@@ -40,18 +42,16 @@ public:
 
 	void ProcessEvents(const sf::Event& event);
 
-	void ChangeMaxBosses(size_t offset);
-	size_t GetMaxBosses() const { return mMaxBosses; }
-	
 	bool isInfinite = false;
 
 private:
+	GameConfig* mConfig;
+
 	bool mIsPaused = false;
 
-	size_t mDefeatedBosses = 0;
-	size_t mMaxBosses = 1;
-
 	Map mMap;
+
+	sf::Font mFont;
 
 	Screen mScreen;
 
@@ -68,6 +68,8 @@ private:
 	void InitSystems();
 	void InitPlayer();
 	void InitMap();
+
+	void LoadFont();
 
 	void RenderPauseScreen();
 };

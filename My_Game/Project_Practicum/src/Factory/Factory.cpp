@@ -12,12 +12,13 @@
 #include "../Entity/Weapon/BossWeapon/BossWeapon.h"
 #include "../Entity/Weapon/MagicCharge/MagicCharge.h"
 #include "../Entity/Weapon/LightningStrike/LightningStrike.h"
+#include "../Config/GameConfig.h"
 
-std::vector<std::string> names = { 
-	"Влад", "Кирилл", "Максим", "Дима", "Илья", "Елисей", 
-	"Степан", "Мирослав", "Данил", "Константин", "Михаил", 
-	"Богдан", "Андрей", "Денис", "Антон", "Александр", "Тимофей", 
-	"Григорий", "Арсений", "Владимир", "Иван"
+std::vector<std::string> names = {
+	"Влад", "Кирилл", "Максим", "Дима", "Илья", "Елисей",
+	"Степан", "Мирослав", "Данил", "Константин", "Михаил",
+	"Богдан", "Андрей", "Денис", "Антон", "Александр", "Тимофей",
+	"Григорий", "Арсений", "Владимир", "Иван", "Глеб"
 };
 
 std::vector<std::string> titles = {
@@ -32,14 +33,14 @@ std::vector<std::string> objects = {
 	"С++", "Жизни", "Смерти", "Молнии", "Теней", "Света", "Льда", "Железа",
 	"Лавы", "Водопадов", "Старого мира", "Леса", "Песков", "Скалы", "Древности",
 	"Чудес", "Травы", "Судьбы", "Души", "Пламени", "Звезд", "Коллизий", "Мобилок",
-	"Бэкенда", "Фронтенда", "УПО"
+	"Бекенда", "Фронтенда", "УПО"
 };
 
 std::random_device rd;
 std::mt19937 rg(rd());
-std::uniform_int_distribution<size_t> nd(0, names.size() -1);
-std::uniform_int_distribution<size_t> td(0, titles.size() -1);
-std::uniform_int_distribution<size_t> od(0, objects.size() -1);
+std::uniform_int_distribution<size_t> nd(0, names.size() - 1);
+std::uniform_int_distribution<size_t> td(0, titles.size() - 1);
+std::uniform_int_distribution<size_t> od(0, objects.size() - 1);
 
 static std::unordered_map<std::string, std::function<std::shared_ptr<Weapon>()>> weaponCreators = {
 		{ "Magic Charge", []() { return std::make_shared<MagicCharge>(); } },
@@ -49,20 +50,20 @@ static std::unordered_map<std::string, std::function<std::shared_ptr<Weapon>()>>
 		{ "Axe", []() { return std::make_shared<Axe>(); } },
 };
 
-void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera, size_t* defeatedBosses, size_t* maxBosses, bool& isPaused)
+void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window, sf::View& camera, bool& isPaused)
 {
 	systemManager.AddSystem<InputSystem>();
 	systemManager.AddSystem<WeaponSystem>();
 	systemManager.AddSystem<MovementSystem>();
 	systemManager.AddSystem<CollisionSystem>();
-	systemManager.AddSystem<LifetimeSystem>(camera, defeatedBosses);
+	systemManager.AddSystem<LifetimeSystem>(camera);
 	systemManager.AddSystem<HomingProjectileSystem>();
 	systemManager.AddSystem<OrbitalProjectileSystem>();
-	systemManager.AddSystem<SpawnSystem>(camera, 0.3f, 1.f, 2.f, maxBosses);
+	systemManager.AddSystem<SpawnSystem>(camera, 0.2f, 15.f, 60.f);
 	systemManager.AddSystem<TrailSystem>();
 	systemManager.AddSystem<DamageSystem>();
 	systemManager.AddSystem<ContainerSystem>();
-	systemManager.AddSystem<DeathAnimationSystem>(camera, isPaused, *maxBosses == 1);
+	systemManager.AddSystem<DeathAnimationSystem>(camera, isPaused, GameConfig::GetInstance()->maxBosses == 1);
 
 	systemManager.AddSystem<RenderSystem>(window);
 	systemManager.AddSystem<CameraSystem>(camera);
@@ -82,18 +83,20 @@ std::shared_ptr<Weapon> Factory::CreateWeapon(const std::string& name)
 
 void Factory::CreateEnemy(EntityManager& entityManager, sf::Vector2f pos)
 {
+	size_t multiplier = static_cast<size_t>(1) << GameConfig::GetInstance()->killedBosses;
+
 	auto& enemy = entityManager.CreateEntity(EntityType::Enemy);
 	enemy.AddComponent<TransformComponent>(pos);
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(50, 50));
 	collisionShape->setOrigin(25, 25);
 	enemy.AddComponent<CollisionComponent>(std::move(collisionShape), sf::Vector2f(0, 15));
-	enemy.AddComponent<HealthComponent>(50);
+	enemy.AddComponent<HealthComponent>(50 * multiplier);
 
 	enemy.AddComponent<AnimationComponent>(0.2f, true);
 
 	std::vector<sf::Texture> walkFrames = TextureManager::GetTextures("assets/melee_enemy/Walk.png", 128, 128);
-	
+
 	auto animation = enemy.GetComponent<AnimationComponent>();
 	animation->AddAnimation(AnimationComponent::WALK, walkFrames);
 
@@ -104,19 +107,19 @@ void Factory::CreateEnemy(EntityManager& entityManager, sf::Vector2f pos)
 
 void Factory::CreateBoss(EntityManager& entityManager, sf::Vector2f pos)
 {
+	size_t multiplier = static_cast<size_t>(1) << GameConfig::GetInstance()->killedBosses;
+
 	auto& boss = entityManager.CreateEntity(EntityType::Enemy);
 
 	boss.AddComponent<TransformComponent>(pos);
-	boss.AddComponent<BossHealthComponent>(300);
+	boss.AddComponent<BossHealthComponent>(300 * multiplier);
 	boss.AddComponent<DamageComponent>(2, 0.1f, Player);
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(40, 80));
 	collisionShape->setOrigin(20, 40);
 	boss.AddComponent<CollisionComponent>(std::move(collisionShape), sf::Vector2f(0, 15));
 
-	boss.AddComponent<WeaponComponent>();
-	auto weapons = boss.GetComponent<WeaponComponent>();
-	weapons->AddWeapon(std::make_unique<BossWeapon>());
+	boss.AddComponent<WeaponComponent>(std::make_shared<BossWeapon>());
 
 	boss.AddComponent<AnimationComponent>(0.2f, true);
 
@@ -141,10 +144,7 @@ void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 	player.AddComponent<TransformComponent>(pos);
 	player.AddComponent<InputComponent>();
 	player.AddComponent<CameraComponent>();
-	player.AddComponent<WeaponComponent>();
-
-	auto weapons = player.GetComponent<WeaponComponent>();
-	weapons->AddWeapon(std::make_shared<Axe>());
+	player.AddComponent<WeaponComponent>(std::make_shared<MagicCharge>());
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(40, 40));
 	collisionShape->setOrigin(20, 20);

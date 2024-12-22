@@ -11,6 +11,7 @@ public:
 	{
 		fireRate = 5.0f;
 		damage = 10;
+		cooldown = fireRate;
 		projectileSpeed = 125.0f;
 		LoadTextures();
 	}

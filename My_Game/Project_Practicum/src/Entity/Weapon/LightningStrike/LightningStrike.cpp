@@ -10,7 +10,7 @@ void LightningStrike::Upgrade(int level)
 	if (CanUpgrade())
 	{
 		mLevel++;
-		fireRate -= 0.25f;
+		fireRate -= 0.1f;
 		damage += 15;
 		mScale += {0.25f, 0.25f};
 		mMaxDistance += 50.f;
@@ -37,7 +37,7 @@ void LightningStrike::Attack(EntityManager& entityManager, TransformComponent* p
 
 	Entity& lightning = entityManager.CreateEntity(EntityType::Projectile);
 
-	lightning.AddComponent<LifetimeComponent>(0.3f);
+	lightning.AddComponent<LifetimeComponent>(1.f);
 	lightning.AddComponent<TransformComponent>(transform->GetPosition());
 
 	lightning.AddComponent<DrawableComponent>(mFrames[2], mScale);

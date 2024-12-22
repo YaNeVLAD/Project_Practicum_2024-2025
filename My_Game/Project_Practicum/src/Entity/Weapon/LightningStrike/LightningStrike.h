@@ -11,6 +11,7 @@ public:
 	LightningStrike()
 	{
 		fireRate = 1.0f;
+		cooldown = fireRate;
 		damage = 15;
 		LoadTextures();
 	}

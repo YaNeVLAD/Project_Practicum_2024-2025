@@ -71,21 +71,22 @@ void MovementSystem::MoveTowardsTarget(TransformComponent& transform, const sf::
 
 void MovementSystem::UpdateDirectionAndRotation(TransformComponent* transform, RotationComponent* rotation, CollisionComponent* collision)
 {
-	sf::Vector2f newDirection = sf::Vector2f(
-		std::copysign(1.0f, transform->vx),
-		std::copysign(1.0f, transform->vy)
-	);
+	sf::Vector2f newDirection;
 
-	if (transform->lastDirection.x == newDirection.x)
+	newDirection.x = (transform->vx != 0) ? std::copysign(1.0f, transform->vx) : 0;
+
+	newDirection.y = (transform->vy != 0) ? std::copysign(1.0f, transform->vy) : 0;
+
+	if (transform->lastDirection != newDirection)
 	{
-		return;
+		transform->lastDirection = newDirection;
 	}
-	transform->lastDirection = newDirection;
 
 	if (rotation == nullptr)
 	{
 		return;
 	}
+
 	float angle = std::atan2(transform->lastDirection.y, transform->lastDirection.x) * (180.0f / 3.14159f);
 	rotation->angle = angle;
 
@@ -93,5 +94,6 @@ void MovementSystem::UpdateDirectionAndRotation(TransformComponent* transform, R
 	{
 		return;
 	}
+
 	collision->shape->setRotation(angle);
 }

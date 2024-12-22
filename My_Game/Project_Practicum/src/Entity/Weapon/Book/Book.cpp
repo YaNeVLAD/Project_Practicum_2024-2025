@@ -10,7 +10,7 @@ void Book::Upgrade(int level)
 	if (CanUpgrade())
 	{
 		mLevel++;
-		damage += 2;
+		damage += 5;
 		fireRate -= 1.0f;
 	}
 }

@@ -34,6 +34,8 @@ void Axe::Attack(EntityManager& entityManager, TransformComponent* parentTransfo
     auto animation = projectile.GetComponent<AnimationComponent>();
     animation->AddAnimation(AnimationComponent::ATTACK, mFrames);
     animation->SetState(AnimationComponent::ATTACK);
+
+    projectile.AddComponent<LifetimeComponent>(2.5f);
 }
 
 void Axe::Upgrade(int level)
@@ -41,7 +43,7 @@ void Axe::Upgrade(int level)
     if (CanUpgrade())
     {
         mLevel++;
-        damage += 2;
+        damage += 5;
         fireRate -= 0.1f;
     }
 }

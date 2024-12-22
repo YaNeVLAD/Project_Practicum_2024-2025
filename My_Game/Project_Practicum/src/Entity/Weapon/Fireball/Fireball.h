@@ -26,7 +26,7 @@ private:
 	const int MAX_LEVELS = 4;
 	int mLevel = 0;
 
-	int mTrailDamage = 5;
+	int mTrailDamage = 2;
 	sf::Vector2f mScale = { 1,1 };
 
 	std::vector<sf::Texture> mFrames;

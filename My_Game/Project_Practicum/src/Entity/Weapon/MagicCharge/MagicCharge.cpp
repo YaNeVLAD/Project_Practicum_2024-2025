@@ -10,7 +10,7 @@ void MagicCharge::Upgrade(int level)
 	if (CanUpgrade())
 	{
 		mLevel++;
-		damage += 2;
+		damage += 5;
 	}
 }
 
@@ -36,7 +36,7 @@ void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* paren
 
 	projectile.AddComponent<HomingProjectileComponent>(projectileSpeed, EntityType::Enemy);
 
-	projectile.AddComponent<DamageComponent>(damage, 0.25f, Enemy);
+	projectile.AddComponent<DamageComponent>(damage, 0.1f, Enemy);
 }
 
 void MagicCharge::LoadTextures()

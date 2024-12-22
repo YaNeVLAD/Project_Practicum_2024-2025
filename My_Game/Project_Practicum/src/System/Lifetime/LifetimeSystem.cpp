@@ -1,6 +1,7 @@
 #include "LifetimeSystem.h"
 
 #include "../../Factory/Factory.h"
+#include "../../Config/GameConfig.h"
 #include <iostream>
 
 void LifetimeSystem::Update(EntityManager& entityManager, float deltaTime)
@@ -93,7 +94,7 @@ void LifetimeSystem::TryApplyDeathAnimation(EntityManager& em, Entity* entity, a
 
 	if (bossDeath != nullptr)
 	{
-		(*mDefeatedBosses)++;
+		GameConfig::GetInstance()->killedBosses++;
 	}
 	if (health != nullptr && !health->IsAlive() && deathAnimation == nullptr)
 	{

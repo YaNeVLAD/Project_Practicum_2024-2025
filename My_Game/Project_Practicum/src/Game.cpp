@@ -4,6 +4,7 @@
 #include "../ui/Button/Button.h"
 #include "Entity/Weapon/Weapon.h"
 #include <iostream>
+#include "Manager/Texture/TextureManager.h"
 
 bool Game::CanPause()
 {
@@ -26,7 +27,7 @@ void Game::InitKeyBindings()
 
 void Game::InitSystems()
 {
-	Factory::InitSystems(mSystemManager, mWindow, mCamera, &mDefeatedBosses, &mMaxBosses, mIsPaused);
+	Factory::InitSystems(mSystemManager, mWindow, mCamera, mIsPaused);
 }
 
 void Game::InitPlayer()
@@ -37,6 +38,11 @@ void Game::InitPlayer()
 void Game::InitMap()
 {
 	mMap.Init("assets/map/Grass.png");
+}
+
+void Game::LoadFont()
+{
+	mFont = TextureManager::GetFont("assets/font/Roboto-Bold.ttf");
 }
 
 void Game::RenderPauseScreen()
@@ -51,6 +57,7 @@ void Game::RenderPauseScreen()
 	continueButton
 		.SetSize({ 200.f, 50.f })
 		.SetFillColor(sf::Color::Yellow)
+		.SetText("Продолжить", mFont, 18)
 		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 300.f })
 		.SetOnClickListener([this]()
 			{
@@ -95,9 +102,9 @@ void Game::Reset(size_t bossCount)
 	mEntityManager.Clear();
 	mSystemManager.Clear();
 	mIsPaused = false;
-	mMaxBosses = bossCount == -1 ? mMaxBosses : bossCount;
-	mMaxBosses = isInfinite ? UINT64_MAX : mMaxBosses;
-	mDefeatedBosses = 0;
+	mConfig->maxBosses = bossCount == -1 ? mConfig->maxBosses : bossCount;
+	mConfig->maxBosses = isInfinite ? UINT64_MAX : mConfig->maxBosses;
+	mConfig->killedBosses = 0;
 }
 
 void Game::Render(float deltaTime)
@@ -119,17 +126,9 @@ void Game::ProcessEvents(const sf::Event& event)
 	mScreen.HandleEvents(mWindow, mCamera, event);
 }
 
-void Game::ChangeMaxBosses(size_t offset)
-{
-	if (mMaxBosses + offset >= 1 && mMaxBosses + offset <= 999)
-	{
-		mMaxBosses += offset;
-	}
-}
-
 bool Game::IsBossDefeated() const
 {
-	return mDefeatedBosses >= mMaxBosses;
+	return mConfig->killedBosses >= mConfig->maxBosses;
 }
 
 bool Game::IsPlayerDefeated()

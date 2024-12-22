@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "../../Factory/Factory.h"
+#include "../../Config/GameConfig.h"
 
 void SpawnSystem::Update(EntityManager& entityManager, float deltaTime)
 {
@@ -10,7 +11,7 @@ void SpawnSystem::Update(EntityManager& entityManager, float deltaTime)
 	mTimeSinceLastBonusSpawn += deltaTime;
 	mTimeSinceLastBossSpawn += deltaTime;
 
-	if (mTimeSinceLastBossSpawn >= mBossSpawnInterval && mSpawnedBosses < mMaxBosses)
+	if (mTimeSinceLastBossSpawn >= mBossSpawnInterval && mSpawnedBosses < GameConfig::GetInstance()->maxBosses)
 	{
 		SpawnBoss(entityManager);
 		mTimeSinceLastBossSpawn = 0.f;
