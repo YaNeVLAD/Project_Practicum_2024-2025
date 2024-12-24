@@ -18,6 +18,7 @@ public:
 	void Attack(EntityManager& entityManager, TransformComponent* parentTransform, TransformComponent* playerTransform) override;
 	bool CanUpgrade() override { return false; }
 	int GetLevel() override { return mLevel; }
+	std::vector<sf::Texture> GetAnimation() override { return mFrames; }
 
 private:
 	const std::string WEAPON_NAME = "Boss Weapon";

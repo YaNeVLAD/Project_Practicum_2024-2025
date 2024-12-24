@@ -175,6 +175,7 @@
     <ClCompile Include="src\System\Weapon\WeaponSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ui\AnimatedSprite.hpp" />
     <ClInclude Include="App.h" />
     <ClInclude Include="src\Config\GameConfig.h" />
     <ClInclude Include="src\Entity\Weapon\Axe\Axe.h" />

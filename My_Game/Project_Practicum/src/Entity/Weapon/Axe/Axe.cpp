@@ -63,6 +63,11 @@ bool Axe::CanUpgrade()
     return mLevel < MAX_LEVELS;
 }
 
+std::vector<sf::Texture> Axe::GetAnimation()
+{
+    return mFrames;
+}
+
 void Axe::LoadTextures()
 {
     mFrames = TextureManager::GetTextures("assets/weapon/Axe.png", 64, 64);

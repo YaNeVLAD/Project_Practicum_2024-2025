@@ -5,6 +5,7 @@
 #include "ui/Text/Text.h"
 #include "src/Manager/Texture/TextureManager.h"
 
+
 using Key = sf::Keyboard::Key;
 void App::Run()
 {
@@ -63,6 +64,13 @@ void App::Update(float deltaTime)
 			return;
 		}
 	}
+	if (state == State::WeaponUpgrade)
+	{
+		for (const auto& sprite : mWeaponSprites)
+		{
+			sprite.second->Update(deltaTime);
+		}
+	}
 }
 
 void App::Render(float deltaTime)
@@ -113,16 +121,33 @@ void App::RenderUpgradeScreen()
 
 	sf::Vector2f buttonSize(200.0f, 50.0f);
 	float spacing = 10.0f;
+	float buttonWidth = buttonSize.x + spacing;
 
+	float screenCenterX = window.getSize().x / static_cast<float>(16);
+	float startPosX = screenCenterX - ((mAvailableWeapons.size() * buttonWidth) / 2);
 	for (int i = 0; i < mAvailableWeapons.size(); ++i)
 	{
 		auto& weapon = mAvailableWeapons[i];
+
+		if (mWeaponSprites.find(weapon->GetName()) == mWeaponSprites.end())
+		{
+			auto sprite = std::make_shared<AnimatedSprite>();
+			sprite->SetScale({ 1.f, 1.f })
+				.SetPosition(View::Alignment::Center, camera, { 100.f, 100.f })
+				.SetTextures(weapon->GetAnimation());
+
+			mWeaponSprites[weapon->GetName()] = sprite;
+		}
+
+		auto& sprite = *mWeaponSprites[weapon->GetName()];
+		sprite.SetPosition(View::Alignment::Center, camera, { startPosX + i * buttonWidth, 100.f });
+		sprite.Update(0.1f);
 
 		Button button;
 		button
 			.SetSize(buttonSize)
 			.SetFillColor(sf::Color::Yellow)
-			.SetPosition(View::Alignment::Center, camera, { 0.0f, i * (buttonSize.y + spacing) })
+			.SetPosition(View::Alignment::Center, camera, { startPosX + i * buttonWidth, 160.f })
 			.SetText(weapon->GetName() + (weapon->GetLevel() == 0 ? "" : " " + std::to_string(weapon->GetLevel())), mFont, 20, sf::Color::Black)
 			.SetOnClickListener([this, weapon]()
 				{
@@ -131,6 +156,7 @@ void App::RenderUpgradeScreen()
 					game.Resume();
 				});
 
+		screen.AddView(std::make_shared<AnimatedSprite>(sprite));
 		screen.AddView(std::make_shared<Button>(button));
 	}
 }
@@ -260,7 +286,7 @@ void App::RenderGameSetupScreen()
 			state = State::Playing;
 		});
 
-	screen.AddView(std::make_shared<Button>(bossCount));
+	;	screen.AddView(std::make_shared<Button>(bossCount));
 	screen.AddView(std::make_shared<Button>(backButton));
 	screen.AddView(std::make_shared<Button>(startButton));
 	screen.AddView(std::make_shared<Button>(infiniteModeButton));
@@ -287,7 +313,7 @@ void App::RenderVictoryScreen()
 	Text killedEnemies;
 	killedEnemies
 		.SetText("Убитых врагов: " + std::to_string(GameConfig::GetInstance()->killedEnemies + GameConfig::GetInstance()->killedBosses), mFont, 24)
-		.SetPosition(View::Alignment::Center, camera, {0.f, -100.f});
+		.SetPosition(View::Alignment::Center, camera, { 0.f, -100.f });
 
 	Button mainMenuButton;
 	mainMenuButton

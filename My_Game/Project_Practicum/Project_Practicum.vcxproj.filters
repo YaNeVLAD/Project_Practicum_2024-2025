@@ -299,6 +299,9 @@
     <ClInclude Include="src\Config\GameConfig.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="ui\AnimatedSprite.hpp">
+      <Filter>Файлы заголовков\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

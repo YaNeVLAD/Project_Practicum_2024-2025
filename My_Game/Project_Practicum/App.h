@@ -4,6 +4,7 @@
 
 #include "src/Game.h"
 #include "ui/Screen/Screen.h"
+#include "ui/AnimatedSprite.hpp"
 #include "src/Config/GameConfig.h"
 
 class App
@@ -55,6 +56,7 @@ private:
 	GameConfig* mConfig;
 
 	std::vector<std::shared_ptr<Weapon>> mAvailableWeapons;
+	std::unordered_map<std::string, std::shared_ptr<AnimatedSprite>> mWeaponSprites;
 
 	sf::Clock mClock;
 

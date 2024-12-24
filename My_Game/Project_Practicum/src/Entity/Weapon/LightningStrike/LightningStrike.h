@@ -21,6 +21,7 @@ public:
 	void Attack(EntityManager& entityManager, TransformComponent* parentTransform, TransformComponent* playerTransform) override;
 	bool CanUpgrade() override { return mLevel < MAX_LEVELS; }
 	int GetLevel() override { return mLevel; }
+	std::vector<sf::Texture> GetAnimation() override { return mFrames; }
 
 private:
 	const std::string WEAPON_NAME = "Lightning Strike";

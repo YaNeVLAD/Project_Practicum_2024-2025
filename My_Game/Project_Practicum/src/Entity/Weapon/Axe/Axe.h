@@ -21,6 +21,7 @@ public:
 	std::string GetName() override;
 	int GetLevel() override;
 	bool CanUpgrade() override;
+	std::vector<sf::Texture> GetAnimation() override;
 
 private:
 	const std::string WEAPON_NAME = "Axe";
