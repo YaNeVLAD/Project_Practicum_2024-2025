@@ -32,7 +32,7 @@ void Fireball::Attack(EntityManager& entityManager, TransformComponent* parentTr
         projectileSpeed * direction
     );
 
-    fireball.AddComponent<DrawableComponent>(mFrames[0], mScale);
+    fireball.AddComponent<DrawableComponent>(mFrames->at(0), mScale);
     fireball.AddComponent<AnimationComponent>(0.3f, true);
     auto animation = fireball.GetComponent<AnimationComponent>();
     animation->AddAnimation(AnimationComponent::ATTACK, mFrames);

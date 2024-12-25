@@ -30,7 +30,7 @@ void TrailSystem::LoadTextures()
 	mFrames = TextureManager::GetTextures("assets/weapon/Fireball.png", 64, 64);
 }
 
-void TrailSystem::CreateTrailProjectile(EntityManager& em, Entity* entity)
+void TrailSystem::CreateTrailProjectile(EntityManager& em, Entity* entity) const
 {
 	auto trail = entity->GetComponent<TrailComponent>();
 	auto transform = entity->GetComponent<TransformComponent>();
@@ -42,7 +42,7 @@ void TrailSystem::CreateTrailProjectile(EntityManager& em, Entity* entity)
 	animation->AddAnimation(AnimationComponent::ATTACK, mFrames);
 	animation->SetState(AnimationComponent::ATTACK);
 
-	trailEffect.AddComponent<DrawableComponent>(mFrames[0]);
+	trailEffect.AddComponent<DrawableComponent>(mFrames->at(0));
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(20, 20));
 	collisionShape->setOrigin(10, 10);

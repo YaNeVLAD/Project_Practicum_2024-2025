@@ -13,8 +13,8 @@ public:
 	void Update(EntityManager& entityManager, float deltaTime) override;
 
 private:
-	std::vector<sf::Texture> mFrames;
+	std::shared_ptr<std::vector<sf::Texture>> mFrames;
 
 	void LoadTextures();
-	void CreateTrailProjectile(EntityManager& em, Entity* entity);
+	void CreateTrailProjectile(EntityManager& em, Entity* entity) const;
 };

@@ -28,7 +28,7 @@ void Axe::Attack(EntityManager& entityManager, TransformComponent* parentTransfo
     collisionShape->setOrigin(32, 32);
     projectile.AddComponent<CollisionComponent>(std::move(collisionShape));
 
-    projectile.AddComponent<DrawableComponent>(mFrames[0]);
+    projectile.AddComponent<DrawableComponent>(mFrames->at(0));
     projectile.AddComponent<AnimationComponent>(0.1f);
 
     auto animation = projectile.GetComponent<AnimationComponent>();
@@ -63,7 +63,7 @@ bool Axe::CanUpgrade()
     return mLevel < MAX_LEVELS;
 }
 
-std::vector<sf::Texture> Axe::GetAnimation()
+std::shared_ptr<std::vector<sf::Texture>> Axe::GetAnimation()
 {
     return mFrames;
 }

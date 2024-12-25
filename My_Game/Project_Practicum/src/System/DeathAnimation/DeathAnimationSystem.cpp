@@ -107,7 +107,7 @@ void DeathAnimationSystem::ZoomOut(Entity* entity)
 	auto animation = entity->GetComponent<AnimationComponent>();
 	auto deathAnimation = entity->GetComponent<DeathAnimationComponent>();
 
-	if (animation->currentFrameIndex == animation->animations[AnimationComponent::DEAD].size() - 1)
+	if (animation->currentFrameIndex == animation->animations[AnimationComponent::DEAD]->size() - 1)
 	{
 		RestoreInitialZoom();
 		animation->frameTime = 0.0f;
@@ -119,7 +119,7 @@ void DeathAnimationSystem::EndAnimation(Entity* entity)
 	auto animation = entity->GetComponent<AnimationComponent>();
 	auto deathAnimation = entity->GetComponent<DeathAnimationComponent>();
 
-	if (animation->currentFrameIndex == animation->animations[AnimationComponent::DEAD].size())
+	if (animation->currentFrameIndex == animation->animations[AnimationComponent::DEAD]->size())
 	{
 		auto playerHealth = entity->GetComponent<PlayerHealthComponent>();
 		auto bossHealth = entity->GetComponent<BossHealthComponent>();

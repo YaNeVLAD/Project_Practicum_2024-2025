@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../ui/Map/Map.h"
 #include "SFML/Graphics.hpp"
+#include "../ui/Map/Map.h"
+#include "Factory/Factory.h"
 #include "Manager/System/SystemManager.h"
 #include "Manager/Entity/EntityManager.h"
 #include "Config/GameConfig.h"
@@ -9,6 +10,8 @@
 class Game
 {
 public:
+	using PlayerType = GameConfig::PlayerType;
+
 	Game(sf::RenderWindow& window, sf::View& camera)
 		: mWindow(window), mCamera(camera), mConfig(GameConfig::GetInstance()) {}
 
@@ -44,6 +47,7 @@ public:
 
 	bool isInfinite = false;
 
+	PlayerType playerType = PlayerType::First;
 private:
 	GameConfig* mConfig;
 

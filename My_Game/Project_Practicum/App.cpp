@@ -134,7 +134,7 @@ void App::RenderUpgradeScreen()
 			auto sprite = std::make_shared<AnimatedSprite>();
 			sprite->SetScale({ 1.f, 1.f })
 				.SetPosition(View::Alignment::Center, camera, { 100.f, 100.f })
-				.SetTextures(weapon->GetAnimation());
+				.SetTextures(*weapon->GetAnimation());
 
 			mWeaponSprites[weapon->GetName()] = sprite;
 		}
@@ -212,7 +212,8 @@ void App::RenderGameSetupScreen()
 		.SetText("-", mFont, 20, sf::Color::Black)
 		.SetOnClickListener([this]()
 			{
-				mConfig->maxBosses--;
+				if (mConfig->maxBosses > 1)
+					mConfig->maxBosses--;
 			});
 
 	Button increaseBossesButton;
@@ -223,7 +224,8 @@ void App::RenderGameSetupScreen()
 		.SetText("+", mFont, 20, sf::Color::Black)
 		.SetOnClickListener([this]()
 			{
-				mConfig->maxBosses++;
+				if (mConfig->maxBosses < 999)
+					mConfig->maxBosses++;
 			});
 
 	Button startButton;
@@ -262,12 +264,14 @@ void App::RenderGameSetupScreen()
 
 	KeyBinding increase({ Key::Equal, Key::D, Key::Right }, KeyBinding::OR, [this]()
 		{
-			mConfig->maxBosses++;
+			if (mConfig->maxBosses < 999)
+				mConfig->maxBosses++;
 		});
 
 	KeyBinding decrease({ Key::Hyphen, Key::A, Key::Left }, KeyBinding::OR, [this]()
 		{
-			mConfig->maxBosses--;
+			if (mConfig->maxBosses > 1)
+				mConfig->maxBosses--;
 		});
 
 	KeyBinding infiniteMode(Key::Space, [this]()
@@ -286,7 +290,7 @@ void App::RenderGameSetupScreen()
 			state = State::Playing;
 		});
 
-	;	screen.AddView(std::make_shared<Button>(bossCount));
+	screen.AddView(std::make_shared<Button>(bossCount));
 	screen.AddView(std::make_shared<Button>(backButton));
 	screen.AddView(std::make_shared<Button>(startButton));
 	screen.AddView(std::make_shared<Button>(infiniteModeButton));

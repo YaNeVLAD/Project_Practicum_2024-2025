@@ -21,7 +21,7 @@ void BossWeapon::Attack(EntityManager& entityManager, TransformComponent* parent
 	);
 	projectile.AddComponent<LifetimeComponent>(1.5f);
 
-	projectile.AddComponent<DrawableComponent>(mFrames[0]);
+	projectile.AddComponent<DrawableComponent>(mFrames->at(0));
 	projectile.AddComponent<AnimationComponent>(0.3f, true);
 	auto animation = projectile.GetComponent<AnimationComponent>();
 	animation->AddAnimation(AnimationComponent::ATTACK, mFrames);

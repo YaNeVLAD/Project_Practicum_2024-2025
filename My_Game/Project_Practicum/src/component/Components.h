@@ -257,33 +257,31 @@ struct AnimationComponent : public Component
 	bool loop = true;
 
 	AnimationState currentState;
-	std::vector<sf::Texture>* frames = nullptr;
-	std::map<AnimationState, std::vector<sf::Texture>> animations;
+	std::shared_ptr<std::vector<sf::Texture>> frames = nullptr;
+	std::map<AnimationState, std::shared_ptr<std::vector<sf::Texture>>> animations;
 
 	void SetState(AnimationState state)
 	{
-		if (currentState != state && animations.find(state) != animations.end())
-		{
+		auto it = animations.find(state);
+		if (currentState != state && it != animations.end()) {
 			currentState = state;
-			frames = &animations[state];
+			frames = it->second;
 			currentFrameIndex = 0;
 			elapsedTime = 0.f;
 		}
 	}
 
-	void AddAnimation(AnimationState state, const std::vector<sf::Texture>& stateFrames)
+	void AddAnimation(AnimationState state, const std::shared_ptr<std::vector<sf::Texture>>& stateFrames)
 	{
 		animations[state] = stateFrames;
-		if (currentState == state)
-		{
-			frames = &animations[state];
+		if (currentState == state) {
+			frames = stateFrames;
 		}
 	}
 
 	const sf::Texture* GetCurrentFrame() const
 	{
-		if (frames != nullptr && !frames->empty() && currentFrameIndex < frames->size())
-		{
+		if (frames && !frames->empty() && currentFrameIndex < frames->size()) {
 			return &(*frames)[currentFrameIndex];
 		}
 		return nullptr;

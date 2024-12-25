@@ -21,7 +21,7 @@ public:
 	std::string GetName() override;
 	int GetLevel() override;
 	bool CanUpgrade() override;
-	std::vector<sf::Texture> GetAnimation() override;
+	std::shared_ptr<std::vector<sf::Texture>> GetAnimation() override;
 
 private:
 	const std::string WEAPON_NAME = "Axe";
@@ -30,7 +30,7 @@ private:
 
 	float mGravity = 9.8f;
 	
-	std::vector<sf::Texture> mFrames;
+	std::shared_ptr<std::vector<sf::Texture>> mFrames;
 
 	void LoadTextures();
 };

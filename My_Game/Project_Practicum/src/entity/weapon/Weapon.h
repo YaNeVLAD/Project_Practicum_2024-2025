@@ -21,7 +21,7 @@ public:
 	virtual std::string GetName() = 0;
 	virtual int GetLevel() = 0;
 	virtual bool CanUpgrade() = 0;
-	virtual std::vector<sf::Texture> GetAnimation() = 0;
+	virtual std::shared_ptr<std::vector<sf::Texture>> GetAnimation() = 0;
 
 	static std::vector<std::string> GetAllWeapons()
 	{

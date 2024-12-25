@@ -19,7 +19,7 @@ public:
 	void Attack(EntityManager& entityManager, TransformComponent* parentTransform, TransformComponent* playerTransform) override;
 	bool CanUpgrade() override { return mLevel < MAX_LEVELS; }
 	int GetLevel() override { return mLevel; }
-	std::vector<sf::Texture> GetAnimation() override { return mFrames; }
+	std::shared_ptr<std::vector<sf::Texture>> GetAnimation() override { return mFrames; }
 
 private:
 	const std::string WEAPON_NAME = "Fireball";
@@ -30,7 +30,7 @@ private:
 	int mTrailDamage = 2;
 	sf::Vector2f mScale = { 1,1 };
 
-	std::vector<sf::Texture> mFrames;
+	std::shared_ptr<std::vector<sf::Texture>> mFrames;
 
 	void LoadTextures();
 };

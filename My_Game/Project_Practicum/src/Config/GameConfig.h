@@ -5,6 +5,12 @@
 class GameConfig
 {
 public:
+	enum class PlayerType
+	{
+		First,
+		Second,
+	};
+
 	static GameConfig* GetInstance()
 	{
 		if (mInstance == nullptr)
@@ -17,6 +23,7 @@ public:
 	size_t killedEnemies = 0;
 	size_t killedBosses = 0;
 	size_t maxBosses = 1;
+	PlayerType playerType = PlayerType::First;
 
 private:
 	static GameConfig* mInstance;

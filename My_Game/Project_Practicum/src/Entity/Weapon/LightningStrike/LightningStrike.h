@@ -21,7 +21,7 @@ public:
 	void Attack(EntityManager& entityManager, TransformComponent* parentTransform, TransformComponent* playerTransform) override;
 	bool CanUpgrade() override { return mLevel < MAX_LEVELS; }
 	int GetLevel() override { return mLevel; }
-	std::vector<sf::Texture> GetAnimation() override { return mFrames; }
+	std::shared_ptr<std::vector<sf::Texture>> GetAnimation() override { return mFrames; }
 
 private:
 	const std::string WEAPON_NAME = "Lightning Strike";
@@ -34,7 +34,7 @@ private:
 	sf::Vector2f mCollisionSize = { 32, 32 };
 	sf::Vector2f mScale = { 1.25f, 1.25f };
 
-	std::vector<sf::Texture> mFrames;
+	std::shared_ptr<std::vector<sf::Texture>> mFrames;
 
 	Entity* FindFarthestEnemy(std::vector<Entity*>&, TransformComponent* transform) const;
 

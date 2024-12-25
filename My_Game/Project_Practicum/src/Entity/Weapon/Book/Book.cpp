@@ -29,7 +29,7 @@ void Book::Attack(EntityManager& entityManager, TransformComponent* parentTransf
 	collisionShape->setOrigin(17.8125, 24);
 	projectile.AddComponent<CollisionComponent>(std::move(collisionShape));
 
-	projectile.AddComponent<DrawableComponent>(mFrames[0], sf::Vector2f(0.375, 0.375));
+	projectile.AddComponent<DrawableComponent>(mFrames->at(0), sf::Vector2f(0.375, 0.375));
 
 	projectile.AddComponent<DamageComponent>(damage, 0.1f, Enemy);
 }

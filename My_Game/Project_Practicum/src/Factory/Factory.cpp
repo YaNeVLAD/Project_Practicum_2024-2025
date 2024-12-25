@@ -13,6 +13,7 @@
 #include "../Entity/Weapon/MagicCharge/MagicCharge.h"
 #include "../Entity/Weapon/LightningStrike/LightningStrike.h"
 #include "../Config/GameConfig.h"
+#include "../Game.h"
 
 std::vector<std::string> names = {
 	"Влад", "Кирилл", "Максим", "Дима", "Илья", "Елисей",
@@ -95,12 +96,12 @@ void Factory::CreateEnemy(EntityManager& entityManager, sf::Vector2f pos)
 
 	enemy.AddComponent<AnimationComponent>(0.2f, true);
 
-	std::vector<sf::Texture> walkFrames = TextureManager::GetTextures("assets/melee_enemy/Walk.png", 128, 128);
+	auto walkFrames = TextureManager::GetTextures("assets/melee_enemy/Walk.png", 128, 128);
 
 	auto animation = enemy.GetComponent<AnimationComponent>();
 	animation->AddAnimation(AnimationComponent::WALK, walkFrames);
 
-	enemy.AddComponent<DrawableComponent>(walkFrames[0], sf::Vector2f(0.6f, 0.6f));
+	enemy.AddComponent<DrawableComponent>(walkFrames->at(0), sf::Vector2f(0.6f, 0.6f));
 
 	enemy.AddComponent<DamageComponent>(1, 0.1f, Player);
 }
@@ -123,9 +124,9 @@ void Factory::CreateBoss(EntityManager& entityManager, sf::Vector2f pos)
 
 	boss.AddComponent<AnimationComponent>(0.2f, true);
 
-	std::vector<sf::Texture> walkFrames = TextureManager::GetTextures("assets/boss/Walk.png", 128, 128);
-	std::vector<sf::Texture> hurtFrames = TextureManager::GetTextures("assets/boss/Hurt.png", 128, 128);
-	std::vector<sf::Texture> deadFrames = TextureManager::GetTextures("assets/boss/Dead.png", 128, 128);
+	auto walkFrames = TextureManager::GetTextures("assets/boss/Walk.png", 128, 128);
+	auto hurtFrames = TextureManager::GetTextures("assets/boss/Hurt.png", 128, 128);
+	auto deadFrames = TextureManager::GetTextures("assets/boss/Dead.png", 128, 128);
 
 	auto animation = boss.GetComponent<AnimationComponent>();
 	animation->AddAnimation(AnimationComponent::WALK, walkFrames);
@@ -133,18 +134,21 @@ void Factory::CreateBoss(EntityManager& entityManager, sf::Vector2f pos)
 	animation->AddAnimation(AnimationComponent::DEAD, deadFrames);
 	animation->AddAnimation(AnimationComponent::IDLE, deadFrames);
 
-	boss.AddComponent<DrawableComponent>(walkFrames[0], sf::Vector2f(1, 1));
+	boss.AddComponent<DrawableComponent>(walkFrames->at(0), sf::Vector2f(1, 1));
 
 	boss.AddComponent<NameComponent>(CreateRandomName());
 }
 
+using PlayerType = GameConfig::PlayerType;
 void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 {
+	auto type = GameConfig::GetInstance()->playerType;
 	auto& player = entityManager.CreateEntity(EntityType::Player);
 	player.AddComponent<TransformComponent>(pos);
 	player.AddComponent<InputComponent>();
 	player.AddComponent<CameraComponent>();
-	player.AddComponent<WeaponComponent>(std::make_shared<MagicCharge>());
+
+	player.AddComponent<WeaponComponent>(CreateWeapon(type == PlayerType::First ? "Magic Charge" : "Axe"));
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(40, 40));
 	collisionShape->setOrigin(20, 20);
@@ -152,10 +156,10 @@ void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 
 	player.AddComponent<AnimationComponent>(0.2f, true);
 
-	std::vector<sf::Texture> walkFrames = TextureManager::GetTextures("assets/character/Walk.png", 128, 128);
-	std::vector<sf::Texture> idleFrames = TextureManager::GetTextures("assets/character/Idle.png", 128, 128);
-	std::vector<sf::Texture> hurtFrames = TextureManager::GetTextures("assets/character/Hurt.png", 128, 128);
-	std::vector<sf::Texture> deadFrames = TextureManager::GetTextures("assets/character/Dead.png", 128, 128);
+	auto walkFrames = TextureManager::GetTextures("assets/character/Walk.png", 128, 128);
+	auto idleFrames = TextureManager::GetTextures("assets/character/Idle.png", 128, 128);
+	auto hurtFrames = TextureManager::GetTextures("assets/character/Hurt.png", 128, 128);
+	auto deadFrames = TextureManager::GetTextures("assets/character/Dead.png", 128, 128);
 
 	auto animation = player.GetComponent<AnimationComponent>();
 	animation->AddAnimation(AnimationComponent::IDLE, idleFrames);
@@ -163,7 +167,7 @@ void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 	animation->AddAnimation(AnimationComponent::HURT, hurtFrames);
 	animation->AddAnimation(AnimationComponent::DEAD, deadFrames);
 
-	player.AddComponent<DrawableComponent>(idleFrames[0], sf::Vector2f(1.f, 1.f));
+	player.AddComponent<DrawableComponent>(idleFrames->at(0), sf::Vector2f(1.f, 1.f));
 
 	player.AddComponent<PlayerHealthComponent>(100);
 
@@ -228,8 +232,8 @@ void Factory::CreateContainer(EntityManager& entityManager, sf::Vector2f pos)
 
 	container.AddComponent<TransformComponent>(pos);
 
-	auto& frames = TextureManager::GetTextures("assets/map/Barrel.png", 128, 128);
-	container.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(0.75, 0.75));
+	auto frames = TextureManager::GetTextures("assets/map/Barrel.png", 128, 128);
+	container.AddComponent<DrawableComponent>(frames->at(0), sf::Vector2f(0.75, 0.75));
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
 	collisionShape->setOrigin(16, 16);
@@ -244,8 +248,8 @@ void Factory::CreateExperience(EntityManager& entityManager, sf::Vector2f pos)
 
 	experience.AddComponent<TransformComponent>(pos);
 
-	auto& frames = TextureManager::GetTextures("assets/gif/xp/Experience.png", 64, 64);
-	experience.AddComponent<DrawableComponent>(frames[0], sf::Vector2f(0.4f, 0.4f));
+	auto frames = TextureManager::GetTextures("assets/gif/xp/Experience.png", 64, 64);
+	experience.AddComponent<DrawableComponent>(frames->at(0), sf::Vector2f(0.4f, 0.4f));
 
 	experience.AddComponent<AnimationComponent>(0.1f, true);
 	auto animation = experience.GetComponent<AnimationComponent>();

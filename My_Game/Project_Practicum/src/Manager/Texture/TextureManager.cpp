@@ -2,8 +2,8 @@
 #include "TextureManager.h"
 #include "../../../utils/SpriteSheet.hpp"
 
-std::unordered_map<std::string, std::vector<sf::Texture>> TextureManager::mTextureCache;
-std::unordered_map<std::string, sf::Font> TextureManager::mFonts;
+TextureManager::TextureMap TextureManager::mTextureCache;
+TextureManager::FontMap TextureManager::mFonts;
 
 sf::Font& TextureManager::GetFont(const std::string& fontPath)
 {
@@ -23,15 +23,16 @@ sf::Font& TextureManager::GetFont(const std::string& fontPath)
     return mFonts[fontPath];
 }
 
-std::vector<sf::Texture>& TextureManager::GetTextures(const std::string& filePath, int frameWidth, int frameHeight)
+std::shared_ptr<std::vector<sf::Texture>> TextureManager::GetTextures(const std::string& filePath, int frameWidth, int frameHeight)
 {
-    if (mTextureCache.find(filePath) != mTextureCache.end())
+    auto it = mTextureCache.find(filePath);
+    if (it != mTextureCache.end())
     {
-        return mTextureCache[filePath];
+        return it->second;
     }
 
-    std::vector<sf::Texture> frames = SpriteSheet::LoadTextures(filePath, frameWidth, frameHeight);
+    auto frames = std::make_shared<std::vector<sf::Texture>>(SpriteSheet::LoadTextures(filePath, frameWidth, frameHeight));
     mTextureCache[filePath] = frames;
 
-    return mTextureCache[filePath];
+    return frames;
 }

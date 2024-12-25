@@ -40,7 +40,7 @@ void LightningStrike::Attack(EntityManager& entityManager, TransformComponent* p
 	lightning.AddComponent<LifetimeComponent>(1.f);
 	lightning.AddComponent<TransformComponent>(transform->GetPosition());
 
-	lightning.AddComponent<DrawableComponent>(mFrames[2], mScale);
+	lightning.AddComponent<DrawableComponent>(mFrames->at(2), mScale);
 	lightning.AddComponent<AnimationComponent>(0.3f, true);
 	auto animation = lightning.GetComponent<AnimationComponent>();
 	animation->AddAnimation(AnimationComponent::ATTACK, mFrames);

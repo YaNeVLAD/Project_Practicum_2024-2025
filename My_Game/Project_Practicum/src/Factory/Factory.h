@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
+#include "../Game.h"
 #include "../Entity/Weapon/Weapon.h"
 
 class EntityManager;

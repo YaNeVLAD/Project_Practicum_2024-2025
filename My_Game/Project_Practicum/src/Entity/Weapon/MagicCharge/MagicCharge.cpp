@@ -22,7 +22,7 @@ void MagicCharge::Attack(EntityManager& entityManager, TransformComponent* paren
 	);
 	projectile.AddComponent<LifetimeComponent>(1.25f);
 
-	projectile.AddComponent<DrawableComponent>(mFrames[0], sf::Vector2f(1.5, 1.5));
+	projectile.AddComponent<DrawableComponent>(mFrames->at(0), sf::Vector2f(1.5, 1.5));
 	projectile.AddComponent<AnimationComponent>(0.3f, true);
 	auto animation = projectile.GetComponent<AnimationComponent>();
 	animation->AddAnimation(AnimationComponent::ATTACK, mFrames);

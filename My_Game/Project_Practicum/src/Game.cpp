@@ -1,6 +1,5 @@
 #include "Game.h"
 
-#include "Factory/Factory.h"
 #include "../ui/Button/Button.h"
 #include "Entity/Weapon/Weapon.h"
 #include <iostream>
