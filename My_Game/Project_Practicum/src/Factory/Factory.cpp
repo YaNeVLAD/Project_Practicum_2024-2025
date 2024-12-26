@@ -64,7 +64,7 @@ void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window
 	systemManager.AddSystem<TrailSystem>();
 	systemManager.AddSystem<DamageSystem>();
 	systemManager.AddSystem<ContainerSystem>();
-	systemManager.AddSystem<DeathAnimationSystem>(camera, isPaused, GameConfig::GetInstance()->maxBosses == 1);
+	systemManager.AddSystem<DeathAnimationSystem>(camera, isPaused, GameConfig::GetInstance()->maxBosses == 1 && !GameConfig::GetInstance()->isInfinite);
 
 	systemManager.AddSystem<RenderSystem>(window);
 	systemManager.AddSystem<CameraSystem>(camera);
@@ -81,7 +81,7 @@ std::shared_ptr<Weapon> Factory::CreateWeapon(const std::string& name)
 		auto damageBuff = config->weaponStats.find(name);
 		if (damageBuff != config->weaponStats.end())
 		{
-			weapon->damage += damageBuff->second;
+			weapon->damage += damageBuff->second + config->playerDamageBuff;
 		}
 		return weapon;
 	}

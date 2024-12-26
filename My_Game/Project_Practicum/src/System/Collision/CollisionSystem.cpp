@@ -127,8 +127,6 @@ void CollisionSystem::ApplyBonus(Entity* player, Entity* bonus)
 
 void CollisionSystem::DealDamage(Entity* target, DamageComponent* damage)
 {
-	Game::GetInstance()->screen.Clear();
-
 	if (damage == nullptr || target == nullptr)
 	{
 		return;
@@ -146,13 +144,6 @@ void CollisionSystem::DealDamage(Entity* target, DamageComponent* damage)
 	auto container = target->GetComponent<ContainerComponent>();
 
 	auto animation = target->GetComponent<AnimationComponent>();
-
-	auto transform = target->GetComponent<TransformComponent>();
-
-	if (transform == nullptr)
-	{
-		return;
-	}
 
 	if (animation != nullptr)
 	{
@@ -175,13 +166,6 @@ void CollisionSystem::DealDamage(Entity* target, DamageComponent* damage)
 	{
 		damage->DealDamage(bossHealth);
 	}
-
-	Text damageText;
-	damageText
-		.SetText(std::to_string(damage->amount), Game::GetInstance()->font, 16)
-		.SetPosition(View::Alignment::Default, App::Instance().camera, transform->GetPosition());
-
-	Game::GetInstance()->screen.AddView(std::make_unique<Text>(damageText));
 }
 
 void CollisionSystem::HandleCollision(Entity* first, Entity* second)

@@ -129,7 +129,7 @@ void Game::ProcessEvents(const sf::Event& event)
 
 bool Game::IsBossDefeated() const
 {
-	return mConfig->killedBosses >= mConfig->maxBosses;
+	return mConfig->killedBosses >= mConfig->maxBosses && !mConfig->isInfinite;
 }
 
 bool Game::IsPlayerDefeated()
