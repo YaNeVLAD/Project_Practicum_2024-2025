@@ -14,11 +14,11 @@ public:
 		Second,
 	};
 
-	const char* AxeDamage = "AxeDamage";
-	const char* ChargeDamage = "MagicChargeDamage";
-	const char* LightningDamage = "LightningStrikeDamage";
-	const char* FireballDamage = "FireballDamage";
-	const char* BookDamage = "BookDamage";
+	const char* AxeDamage = "Axe";
+	const char* ChargeDamage = "Magic Charge";
+	const char* LightningDamage = "Lightning Strike";
+	const char* FireballDamage = "Fireball";
+	const char* BookDamage = "Book";
 
 	static GameConfig* GetInstance()
 	{

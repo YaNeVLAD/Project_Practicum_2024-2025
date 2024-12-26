@@ -73,12 +73,18 @@ void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window
 
 std::shared_ptr<Weapon> Factory::CreateWeapon(const std::string& name)
 {
+	auto config = GameConfig::GetInstance();
 	auto it = weaponCreators.find(name);
 	if (it != weaponCreators.end())
 	{
-		return it->second();
+		auto weapon = it->second();
+		auto damageBuff = config->weaponStats.find(name);
+		if (damageBuff != config->weaponStats.end())
+		{
+			weapon->damage += damageBuff->second;
+		}
+		return weapon;
 	}
-
 	return nullptr;
 }
 
@@ -160,13 +166,17 @@ static std::string GetAnimationPath(GameConfig::PlayerType type, AnimationCompon
 
 void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 {
-	auto type = GameConfig::GetInstance()->playerType;
+	auto config = GameConfig::GetInstance();
+	auto type = config->playerType;
 	auto& player = entityManager.CreateEntity(EntityType::Player);
 	player.AddComponent<TransformComponent>(pos);
 	player.AddComponent<InputComponent>();
 	player.AddComponent<CameraComponent>();
 
-	player.AddComponent<WeaponComponent>(CreateWeapon(type == GameConfig::PlayerType::First ? "Magic Charge" : "Fireball"));
+	auto weaponName = type == GameConfig::PlayerType::First ? "Magic Charge" : "Fireball";
+	auto weapon = CreateWeapon(weaponName);
+	weapon->damage += config->playerDamageBuff;
+	player.AddComponent<WeaponComponent>(weapon);
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(40, 40));
 	collisionShape->setOrigin(20, 20);
@@ -187,12 +197,15 @@ void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 
 	player.AddComponent<DrawableComponent>(idleFrames->at(0), sf::Vector2f(1.f, 1.f));
 
-	player.AddComponent<PlayerHealthComponent>(100);
+	player.AddComponent<PlayerHealthComponent>(100 + config->playerHealthBuff);
 
 	player.AddComponent<LevelComponent>(100);
 
 	player.AddComponent<AbilityComponent>(
-		type == GameConfig::PlayerType::First ? AbilityComponent::Haste : AbilityComponent::Heal, 3.f, 1.f, sf::Keyboard::Key::E
+		type == GameConfig::PlayerType::First ? AbilityComponent::Haste : AbilityComponent::Heal,
+		type == GameConfig::PlayerType::First ? 3.f : 15.f,
+		type == GameConfig::PlayerType::First ? 1.f : 0.f,
+		sf::Keyboard::Key::E
 	);
 }
 

@@ -16,7 +16,7 @@ public:
 	void Render(EntityManager& entityManager, float deltaTime) override;
 
 private:
-	Screen mScreen;
+	Screen screen;
 
 	ProgressBar mXpBar;
 	ProgressBar mCooldown;

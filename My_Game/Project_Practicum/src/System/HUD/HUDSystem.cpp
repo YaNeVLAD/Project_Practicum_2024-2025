@@ -9,7 +9,7 @@
 
 void HUDSystem::Render(EntityManager& entityManager, float deltaTime)
 {
-	mScreen.Clear();
+	screen.Clear();
 
 	auto player = entityManager.GetEntitiesWithComponents<PlayerHealthComponent, TransformComponent>();
 
@@ -29,7 +29,7 @@ void HUDSystem::Render(EntityManager& entityManager, float deltaTime)
 	RenderAbility(player.front());
 	RenderBossesHealth(entityManager.GetEntitiesWithComponents<BossHealthComponent>());
 
-	mWindow.draw(mScreen);
+	mWindow.draw(screen);
 }
 
 void HUDSystem::RenderHealth(Entity* entity)
@@ -54,7 +54,7 @@ void HUDSystem::RenderHealth(Entity* entity)
 		.SetProgressLineColor(sf::Color::Green)
 		.SetPosition(View::Alignment::Default, mCamera, position);
 
-	mScreen.AddView(std::make_shared<ProgressBar>(healthBar));
+	screen.AddView(std::make_shared<ProgressBar>(healthBar));
 }
 
 void HUDSystem::RenderPlayerHealth(Entity* player)
@@ -72,7 +72,13 @@ void HUDSystem::RenderPlayerHealth(Entity* player)
 		.SetProgressLineColor(sf::Color::Green)
 		.SetPosition(View::Alignment::Default, mCamera, position);
 
-	mScreen.AddView(std::make_shared<ProgressBar>(mPlayerHealth));
+	Text maxHp;
+	maxHp
+		.SetPosition(View::Alignment::Default, mCamera, position)
+		.SetText(std::to_string(health->currentHealth) + "/" + std::to_string(health->maxHealth), mFont, 12);
+
+	screen.AddView(std::make_shared<ProgressBar>(mPlayerHealth));
+	screen.AddView(std::make_shared<Text>(maxHp));
 }
 
 void HUDSystem::RenderBossesHealth(const std::vector<Entity*>& bosses)
@@ -97,8 +103,8 @@ void HUDSystem::RenderBossesHealth(const std::vector<Entity*>& bosses)
 			.SetTextAlignment(Text::TextAlignment::Right)
 			.SetPosition(View::Alignment::Default, mCamera, { bossHeathBar.GetPosition().x - 10.f, bossHeathBar.GetPosition().y });
 
-		mScreen.AddView(std::make_shared<ProgressBar>(bossHeathBar));
-		mScreen.AddView(std::make_shared<Text>(bossName));
+		screen.AddView(std::make_shared<ProgressBar>(bossHeathBar));
+		screen.AddView(std::make_shared<Text>(bossName));
 	}
 }
 
@@ -109,7 +115,7 @@ void HUDSystem::RenderStatistics()
 		.SetText("Врагов убито: " + std::to_string(GameConfig::GetInstance()->killedEnemies + GameConfig::GetInstance()->killedBosses), mFont, 20)
 		.SetPosition(View::Alignment::Default, mCamera, { mXpBar.GetPosition().x + 300, mXpBar.GetPosition().y + 50 });
 
-	mScreen.AddView(std::make_shared<Text>(killedEnemies));
+	screen.AddView(std::make_shared<Text>(killedEnemies));
 }
 
 void HUDSystem::RenderXPBar(Entity* player)
@@ -131,7 +137,7 @@ void HUDSystem::RenderXPBar(Entity* player)
 	levelText.setPosition(mXpBar.GetPosition().x - 100.f, mXpBar.GetPosition().y);
 	levelText.setFillColor(sf::Color::White);
 
-	mScreen.AddView(std::make_shared<ProgressBar>(mXpBar));
+	screen.AddView(std::make_shared<ProgressBar>(mXpBar));
 	mWindow.draw(levelText);
 }
 
@@ -152,7 +158,7 @@ void HUDSystem::RenderAbility(Entity* player)
 	mCooldown
 		.SetProgressLineColor(ability->IsActive() ? sf::Color::Green : sf::Color::Yellow);
 
-	mScreen.AddView(std::make_shared<ProgressBar>(mCooldown));
+	screen.AddView(std::make_shared<ProgressBar>(mCooldown));
 }
 
 void HUDSystem::LoadFont()

@@ -5,6 +5,8 @@
 #include <iostream>
 #include "Manager/Texture/TextureManager.h"
 
+Game* Game::mInstance = nullptr;
+
 bool Game::CanPause()
 {
 	return mEntityManager.GetEntitiesWithComponents<DeathAnimationComponent>().empty();
@@ -12,7 +14,7 @@ bool Game::CanPause()
 
 void Game::InitKeyBindings()
 {
-	mScreen.AddKeyBinding(KeyBinding(sf::Keyboard::Escape, [this]()
+	screen.AddKeyBinding(KeyBinding(sf::Keyboard::Escape, [this]()
 		{
 			if (!CanPause())
 			{
@@ -41,12 +43,12 @@ void Game::InitMap()
 
 void Game::LoadFont()
 {
-	mFont = TextureManager::GetFont("assets/font/Roboto-Bold.ttf");
+	font = TextureManager::GetFont("assets/font/Roboto-Bold.ttf");
 }
 
 void Game::RenderPauseScreen()
 {
-	mScreen.Clear();
+	screen.Clear();
 	if (!mIsPaused)
 	{
 		return;
@@ -56,15 +58,15 @@ void Game::RenderPauseScreen()
 	continueButton
 		.SetSize({ 200.f, 50.f })
 		.SetFillColor(sf::Color::Yellow)
-		.SetText("Продолжить", mFont, 18)
+		.SetText("Продолжить", font, 18)
 		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 300.f })
 		.SetOnClickListener([this]()
 			{
 				Resume();
-				mScreen.Clear();
+				screen.Clear();
 			});
 
-	mScreen.AddView(std::make_shared<Button>(continueButton));
+	screen.AddView(std::make_shared<Button>(continueButton));
 }
 
 void Game::RunFrame(float deltaTime)
@@ -96,8 +98,8 @@ void Game::Resume()
 
 void Game::Reset(size_t bossCount)
 {
-	mScreen.Clear();
-	mScreen.ClearBindings();
+	screen.Clear();
+	screen.ClearBindings();
 	mEntityManager.Clear();
 	mSystemManager.Clear();
 	mIsPaused = false;
@@ -117,12 +119,12 @@ void Game::Render(float deltaTime)
 		system->Render(mEntityManager, deltaTime);
 	}
 
-	mWindow.draw(mScreen);
+	mWindow.draw(screen);
 }
 
 void Game::ProcessEvents(const sf::Event& event)
 {
-	mScreen.HandleEvents(mWindow, mCamera, event);
+	screen.HandleEvents(mWindow, mCamera, event);
 }
 
 bool Game::IsBossDefeated() const

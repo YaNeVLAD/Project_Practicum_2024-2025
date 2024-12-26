@@ -10,68 +10,79 @@
 class Game
 {
 public:
-	using PlayerType = GameConfig::PlayerType;
+    using PlayerType = GameConfig::PlayerType;
 
-	Game(sf::RenderWindow& window, sf::View& camera)
-		: mWindow(window), mCamera(camera), mConfig(GameConfig::GetInstance()) {}
+    static Game* GetInstance(sf::RenderWindow* window = nullptr, sf::View* camera = nullptr)
+    {
+        if (!mInstance && window && camera)
+        {
+            mInstance = new Game(*window, *camera);
+        }
+        return mInstance;
+    }
 
-	void Init()
-	{
-		InitKeyBindings();
-		InitSystems();
-		InitPlayer();
-		InitMap();
-		LoadFont();
-	}
+    void Init()
+    {
+        InitKeyBindings();
+        InitSystems();
+        InitPlayer();
+        InitMap();
+        LoadFont();
+    }
 
-	void Restart(size_t bossCount = -1)
-	{
-		Reset(bossCount);
-		Init();
-	}
+    void Restart(size_t bossCount = -1)
+    {
+        Reset(bossCount);
+        Init();
+    }
 
-	void Render(float deltaTime);
-	void RunFrame(float deltaTime);
+    void Render(float deltaTime);
+    void RunFrame(float deltaTime);
 
-	void Pause();
-	void Resume();
-		
-	bool IsBossDefeated() const;
-	bool IsPlayerDefeated();
-	bool HasPlayerLeveledUp();
+    void Pause();
+    void Resume();
 
-	std::vector<std::shared_ptr<Weapon>> GetAvailableWeapons();
-	void UpgradeWeapon(std::string name);
+    bool IsBossDefeated() const;
+    bool IsPlayerDefeated();
+    bool HasPlayerLeveledUp();
 
-	void ProcessEvents(const sf::Event& event);
+    std::vector<std::shared_ptr<Weapon>> GetAvailableWeapons();
+    void UpgradeWeapon(std::string name);
 
-	PlayerType playerType = PlayerType::First;
+    void ProcessEvents(const sf::Event& event);
+
+    PlayerType playerType = PlayerType::First;
+
+    Screen screen;
+    sf::Font font;
+
 private:
-	GameConfig* mConfig;
+    Game(sf::RenderWindow& window, sf::View& camera)
+        : mWindow(window), mCamera(camera), mConfig(GameConfig::GetInstance()) {
+    }
 
-	bool mIsPaused = false;
+    Game(const Game&) = delete;
+    Game& operator=(const Game&) = delete;
 
-	Map mMap;
+    static Game* mInstance;
 
-	sf::Font mFont;
+    GameConfig* mConfig;
 
-	Screen mScreen;
+    bool mIsPaused = false;
 
-	sf::View& mCamera;
-	sf::RenderWindow& mWindow;
-	SystemManager mSystemManager;
-	EntityManager mEntityManager;
+    Map mMap;
 
-	bool CanPause();
+    sf::View& mCamera;
+    sf::RenderWindow& mWindow;
+    SystemManager mSystemManager;
+    EntityManager mEntityManager;
 
-	void Reset(size_t bossCount);
-
-	void InitKeyBindings();
-	void InitSystems();
-	void InitPlayer();
-	void InitMap();
-
-	void LoadFont();
-
-	void RenderPauseScreen();
+    bool CanPause();
+    void Reset(size_t bossCount);
+    void InitKeyBindings();
+    void InitSystems();
+    void InitPlayer();
+    void InitMap();
+    void LoadFont();
+    void RenderPauseScreen();
 };

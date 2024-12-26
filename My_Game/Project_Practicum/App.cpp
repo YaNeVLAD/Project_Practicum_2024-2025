@@ -30,7 +30,7 @@ void App::ProcessEvents()
 
 		if (state == State::Playing)
 		{
-			game.ProcessEvents(event);
+			game->ProcessEvents(event);
 		}
 		else
 		{
@@ -43,23 +43,26 @@ void App::Update(float deltaTime)
 {
 	if (state == State::Playing)
 	{
-		game.RunFrame(deltaTime);
+		game->RunFrame(deltaTime);
 
-		if (game.IsPlayerDefeated())
+		if (game->IsPlayerDefeated())
 		{
+			mConfig->SaveConfig();
 			state = State::Defeat;
 			return;
 		}
 
-		if (game.HasPlayerLeveledUp())
+		if (game->HasPlayerLeveledUp())
 		{
-			mAvailableWeapons = game.GetAvailableWeapons();
+			mConfig->SaveConfig();
+			mAvailableWeapons = game->GetAvailableWeapons();
 			state = State::WeaponUpgrade;
 			return;
 		}
 
-		if (game.IsBossDefeated())
+		if (game->IsBossDefeated())
 		{
+			mConfig->SaveConfig();
 			state = State::Victory;
 			return;
 		}
@@ -89,7 +92,7 @@ void App::Render(float deltaTime)
 		RenderDefeatScreen();
 		break;
 	case State::WeaponUpgrade:
-		game.Render(0.0f);
+		game->Render(0.0f);
 		RenderUpgradeScreen();
 		break;
 	case State::GameSetup:
@@ -97,7 +100,10 @@ void App::Render(float deltaTime)
 		break;
 	case State::Playing:
 		screen.Clear();
-		game.Render(deltaTime);
+		game->Render(deltaTime);
+		break;
+	case State::UpgradeShop:
+		RenderUpgradeShopScreen();
 		break;
 	}
 
@@ -107,13 +113,13 @@ void App::Render(float deltaTime)
 
 void App::RenderUpgradeScreen()
 {
-	game.Pause();
+	game->Pause();
 
 	screen.Clear();
 
 	if (mAvailableWeapons.empty())
 	{
-		game.Resume();
+		game->Resume();
 		state = State::Playing;
 		return;
 	}
@@ -131,16 +137,15 @@ void App::RenderUpgradeScreen()
 		if (mWeaponSprites.find(weapon->GetName()) == mWeaponSprites.end())
 		{
 			auto sprite = std::make_shared<AnimatedSprite>();
-			sprite->SetSize({ 64.f, 64.f })
-				.SetPosition(View::Alignment::Center, camera, { 100.f, 100.f })
+			sprite->SetSize({ 200.f, 200.f })
+				.SetBackgroundColor(sf::Color::White)
 				.SetTextures(*weapon->GetAnimation());
 
 			mWeaponSprites[weapon->GetName()] = sprite;
 		}
 
 		auto& sprite = *mWeaponSprites[weapon->GetName()];
-		sprite.SetPosition(View::Alignment::Center, camera, { startPosX + i * buttonWidth, 100.f });
-		sprite.Update(0.1f);
+		sprite.SetPosition(View::Alignment::Center, camera, { startPosX + i * buttonWidth, 35.f });
 
 		Button button;
 		button
@@ -150,9 +155,9 @@ void App::RenderUpgradeScreen()
 			.SetText(weapon->GetName() + (weapon->GetLevel() == 0 ? "" : " " + std::to_string(weapon->GetLevel())), mFont, 20, sf::Color::Black)
 			.SetOnClickListener([this, weapon]()
 				{
-					game.UpgradeWeapon(weapon->GetName());
+					game->UpgradeWeapon(weapon->GetName());
 					state = State::Playing;
-					game.Resume();
+					game->Resume();
 				});
 
 		screen.AddView(std::make_shared<AnimatedSprite>(sprite));
@@ -175,6 +180,17 @@ void App::RenderMainMenuScreen()
 				state = State::GameSetup;
 			});
 
+	Button upgradeButton;
+	upgradeButton
+		.SetSize({ 200.0f, 50.0f })
+		.SetPosition(View::Alignment::Center, camera, { 0.f, 60.f })
+		.SetFillColor(sf::Color::Yellow)
+		.SetText(std::to_string(mConfig->upgradePoints), mFont)
+		.SetOnClickListener([this]()
+			{
+				state = State::UpgradeShop;
+			});
+
 	Button exitButton;
 	exitButton
 		.SetSize({ 200.f, 50.f })
@@ -187,6 +203,7 @@ void App::RenderMainMenuScreen()
 			});
 
 	screen.AddView(std::make_shared<Button>(setupButton));
+	screen.AddView(std::make_shared<Button>(upgradeButton));
 	screen.AddView(std::make_shared<Button>(exitButton));
 }
 
@@ -295,7 +312,7 @@ void App::RenderGameSetupScreen()
 		.SetText("НАЧАТЬ (Enter)", mFont)
 		.SetOnClickListener([this]()
 			{
-				game.Restart(mConfig->maxBosses);
+				game->Restart(mConfig->maxBosses);
 				state = State::Playing;
 			});
 
@@ -332,7 +349,7 @@ void App::RenderGameSetupScreen()
 
 	KeyBinding start(Key::Enter, [this]()
 		{
-			game.Restart();
+			game->Restart();
 			state = State::Playing;
 		});
 
@@ -340,6 +357,96 @@ void App::RenderGameSetupScreen()
 	screen.AddKeyBinding(start);
 	screen.AddKeyBinding(increase);
 	screen.AddKeyBinding(decrease);
+}
+
+void App::RenderUpgradeShopScreen()
+{
+	screen.Clear();
+
+	auto config = GameConfig::GetInstance();
+	sf::Vector2f buttonSize(200.0f, 50.0f);
+	float spacing = 20.0f;
+
+	float screenWidth = window.getSize().x / static_cast<float>(16);
+	float rowCenterX = screenWidth / 2;
+
+	Button healthBuffButton;
+	healthBuffButton
+		.SetSize(buttonSize)
+		.SetPosition(View::Alignment::Center, camera, { rowCenterX - buttonSize.x - spacing / 2, 100.0f })
+		.SetFillColor(sf::Color::Green)
+		.SetText("Increase Health", mFont, 20, sf::Color::White)
+		.SetOnClickListener([config]() {
+		if (config->upgradePoints > 0) {
+			config->playerHealthBuff++;
+			config->upgradePoints--;
+		}
+			});
+
+	Button damageBuffButton;
+	damageBuffButton
+		.SetSize(buttonSize)
+		.SetPosition(View::Alignment::Center, camera, { rowCenterX + spacing / 2, 100.0f })
+		.SetFillColor(sf::Color::Red)
+		.SetText("Increase Damage", mFont, 20, sf::Color::White)
+		.SetOnClickListener([config]() {
+		if (config->upgradePoints > 0) {
+			config->playerDamageBuff++;
+			config->upgradePoints--;
+		}
+			});
+
+	screen.AddView(std::make_shared<Button>(healthBuffButton));
+	screen.AddView(std::make_shared<Button>(damageBuffButton));
+
+	float secondRowY = 200.0f;
+	float startPosX = rowCenterX - 2 * (buttonSize.x + spacing) / 2;
+	std::vector<std::string> weaponKeys = {
+		config->AxeDamage,
+		config->ChargeDamage,
+		config->LightningDamage,
+		config->FireballDamage,
+		config->BookDamage
+	};
+
+	for (size_t i = 0; i < weaponKeys.size(); ++i) {
+		std::string weaponName = weaponKeys[i];
+		Button weaponButton;
+		weaponButton
+			.SetSize(buttonSize)
+			.SetPosition(View::Alignment::Center, camera, { startPosX + i * (buttonSize.x + spacing), secondRowY })
+			.SetFillColor(sf::Color::Yellow)
+			.SetText(weaponName, mFont, 20, sf::Color::Black)
+			.SetOnClickListener([config, weaponName]() {
+			if (config->upgradePoints > 0) {
+				config->weaponStats[weaponName]++;
+				config->upgradePoints--;
+			}
+				});
+
+		screen.AddView(std::make_shared<Button>(weaponButton));
+	}
+
+	Button mainMenuButton;
+	mainMenuButton
+		.SetSize({ 200.f, 50.f })
+		.SetPosition(View::Alignment::Center, camera, { 0.f, -300.f })
+		.SetFillColor(sf::Color::Green)
+		.SetText("В главное меню", mFont)
+		.SetOnClickListener([this]() {
+		mConfig->SaveConfig();
+		state = State::MainMenu;
+			});
+
+	Button upgradeButton;
+	upgradeButton
+		.SetSize({ 200.0f, 50.0f })
+		.SetPosition(View::Alignment::Center, camera, { 0.f, -360.f })
+		.SetFillColor(sf::Color::Yellow)
+		.SetText(std::to_string(mConfig->upgradePoints), mFont);
+
+	screen.AddView(std::make_shared<Button>(mainMenuButton));
+	screen.AddView(std::make_shared<Button>(upgradeButton));
 }
 
 void App::RenderVictoryScreen()
@@ -426,7 +533,7 @@ void App::RenderDefeatScreen()
 		.SetText("Заново (R)", mFont)
 		.SetOnClickListener([this]()
 			{
-				game.Restart();
+				game->Restart();
 				state = State::Playing;
 			});
 
@@ -444,7 +551,7 @@ void App::RenderDefeatScreen()
 
 	KeyBinding restart(sf::Keyboard::R, [this]()
 		{
-			game.Restart();
+			game->Restart();
 			state = State::Playing;
 		});
 

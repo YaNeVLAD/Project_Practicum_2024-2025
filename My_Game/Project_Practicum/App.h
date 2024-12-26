@@ -17,6 +17,7 @@ public:
 		Victory,
 		MainMenu,
 		GameSetup,
+		UpgradeShop,
 		WeaponUpgrade,
 	};
 
@@ -32,14 +33,14 @@ public:
 	sf::View camera;
 
 	State state;
-	Game game;
+	Game* game;
 	Screen screen;
 
 private:
 	App() :
 		window(sf::VideoMode::getDesktopMode(), "Bloody Survivors"),
 		camera(window.getView()),
-		game(window, camera),
+		game(Game::GetInstance(&window, &camera)),
 		state(State::MainMenu),
 		mConfig(GameConfig::GetInstance())
 	{
@@ -74,6 +75,7 @@ private:
 	void RenderUpgradeScreen();
 	void RenderMainMenuScreen();
 	void RenderGameSetupScreen();
+	void RenderUpgradeShopScreen();
 
 	void LoadFont();
 	void LoadTextures();

@@ -5,6 +5,10 @@
 
 void WeaponComponent::AddWeapon(std::shared_ptr<Weapon> weapon)
 {
+	if (!weapon)
+	{
+		return;
+	}
 	weapon->Upgrade(1);
 	weapons.push_back(std::move(weapon));
 }
