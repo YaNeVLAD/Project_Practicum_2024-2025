@@ -11,9 +11,12 @@ public:
 	ProgressBar& SetProgress(float progress);
 	ProgressBar& SetBackgroundColor(sf::Color color);
 	ProgressBar& SetProgressLineColor(sf::Color color);
-	ProgressBar& SetPosition(Alignment alignment, const sf::View& camera, const sf::Vector2f offset = {0.0f, 0.0f});
-
-	const sf::Vector2f& GetPosition();
+	ProgressBar& SetPosition(Alignment alignment, const sf::View& camera, const sf::Vector2f& offset = {0.0f, 0.0f}) override;
+	ProgressBar& SetPosition(Alignment alignment, const View* parent, const sf::Vector2f& offset) override;
+	
+	sf::Vector2f GetCenter() const override;
+	sf::Vector2f GetPosition() const;
+	sf::Vector2f GetSize() const override;
 
 protected:
 	bool Contains(const sf::Vector2f& point) const override;
@@ -25,4 +28,7 @@ private:
 
 	sf::RectangleShape mBackground;
 	sf::RectangleShape mProgressLine;
+
+	// Унаследовано через View
+	
 };

@@ -12,6 +12,31 @@ void ProgressBar::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(mProgressLine, states);
 }
 
+ProgressBar& ProgressBar::SetPosition(Alignment alignment, const View* parent, const sf::Vector2f& offset)
+{
+	sf::Vector2f position = offset;
+
+	if (alignment == Alignment::CenterX || alignment == Alignment::Center)
+	{
+		position.x += parent->GetCenter().x - mBackground.getSize().x / 2.0f;
+	}
+
+	if (alignment == Alignment::CenterY || alignment == Alignment::Center)
+	{
+		position.y += parent->GetCenter().y - mBackground.getSize().y / 2.0f;
+	}
+
+	mBackground.setPosition(position);
+	mProgressLine.setPosition(position);
+
+	return *this;
+}
+
+sf::Vector2f ProgressBar::GetCenter() const
+{
+	return mBackground.getPosition() + mBackground.getSize() / 2.f;
+}
+
 ProgressBar& ProgressBar::SetSize(sf::Vector2f size)
 {
 	mBackground.setSize(size);
@@ -39,7 +64,7 @@ ProgressBar& ProgressBar::SetProgressLineColor(sf::Color color)
 	return *this;
 }
 
-ProgressBar& ProgressBar::SetPosition(Alignment alignment, const sf::View& camera, const sf::Vector2f offset)
+ProgressBar& ProgressBar::SetPosition(Alignment alignment, const sf::View& camera, const sf::Vector2f& offset)
 {
 	sf::Vector2f position = offset;
 
@@ -59,7 +84,12 @@ ProgressBar& ProgressBar::SetPosition(Alignment alignment, const sf::View& camer
 	return *this;
 }
 
-const sf::Vector2f& ProgressBar::GetPosition()
+sf::Vector2f ProgressBar::GetSize() const
+{
+	return mBackground.getSize();
+}
+
+sf::Vector2f ProgressBar::GetPosition() const
 {
 	return mBackground.getPosition();
 }

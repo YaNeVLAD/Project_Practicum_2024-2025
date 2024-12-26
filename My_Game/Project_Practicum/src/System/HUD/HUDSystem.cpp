@@ -78,7 +78,7 @@ void HUDSystem::RenderPlayerHealth(Entity* player)
 void HUDSystem::RenderBossesHealth(const std::vector<Entity*>& bosses)
 {
 	float heathBarOffset = 30.f;
-	for (size_t i = 0; i < bosses.size() && i < 10; ++i)
+	for (size_t i = 0; i < bosses.size() && i < 25; ++i)
 	{
 		auto bossHealth = bosses[i]->GetComponent<BossHealthComponent>();
 		auto name = bosses[i]->GetComponent<NameComponent>();

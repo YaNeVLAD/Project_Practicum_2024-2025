@@ -47,6 +47,7 @@ private:
 		window.setFramerateLimit(120);
 		LoadFont();
 		LoadTextures();
+		mConfig->LoadConfig();
 	}
 
 	~App() = default;
@@ -56,6 +57,8 @@ private:
 	GameConfig* mConfig;
 
 	std::vector<std::shared_ptr<Weapon>> mAvailableWeapons;
+	std::unordered_map<GameConfig::PlayerType, std::shared_ptr<AnimatedSprite>> mPlayers;
+	std::unordered_map<std::string, std::shared_ptr<AnimatedSprite>> mPlayerWeapons;
 	std::unordered_map<std::string, std::shared_ptr<AnimatedSprite>> mWeaponSprites;
 
 	sf::Clock mClock;

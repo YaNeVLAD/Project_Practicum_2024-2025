@@ -96,6 +96,7 @@ void LifetimeSystem::TryApplyDeathAnimation(EntityManager& em, Entity* entity, a
 	if (bossDeath != nullptr)
 	{
 		GameConfig::GetInstance()->killedBosses++;
+		GameConfig::GetInstance()->upgradePoints++;
 	}
 	if (health != nullptr && !health->IsAlive() && deathAnimation == nullptr)
 	{

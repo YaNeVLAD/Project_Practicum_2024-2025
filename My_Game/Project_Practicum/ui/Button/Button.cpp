@@ -6,7 +6,7 @@ Button& Button::SetSize(const sf::Vector2f size)
 	return *this;
 }
 
-Button& Button::SetPosition(Alignment alignment, const sf::View& camera, const sf::Vector2f offset)
+Button& Button::SetPosition(Alignment alignment, const sf::View& camera, const sf::Vector2f& offset)
 {
 	sf::Vector2f position = offset;
 
@@ -21,7 +21,6 @@ Button& Button::SetPosition(Alignment alignment, const sf::View& camera, const s
 	}
 
 	mShape.setPosition(position);
-
 	UpdateTextPosition();
 
 	return *this;
@@ -43,6 +42,11 @@ Button& Button::SetText(const std::string& text, const sf::Font& font, unsigned 
 	UpdateTextPosition();
 
 	return *this;
+}
+
+sf::Vector2f Button::GetSize() const
+{
+	return mShape.getSize();
 }
 
 bool Button::Contains(const sf::Vector2f& point) const
@@ -74,4 +78,29 @@ void Button::UpdateTextPosition()
 		buttonPos.x + (buttonSize.x - textBounds.width) / 2.0f - textBounds.left,
 		buttonPos.y + (buttonSize.y - textBounds.height) / 2.0f - textBounds.top
 	);
+}
+
+Button& Button::SetPosition(Alignment alignment, const View* parent, const sf::Vector2f& offset)
+{
+	sf::Vector2f position = offset;
+
+	if (alignment == Alignment::CenterX || alignment == Alignment::Center)
+	{
+		position.x += parent->GetCenter().x - mShape.getSize().x / 2.0f;
+	}
+
+	if (alignment == Alignment::CenterY || alignment == Alignment::Center)
+	{
+		position.y += parent->GetCenter().y - mShape.getSize().y / 2.0f;
+	}
+
+	mShape.setPosition(position);
+	UpdateTextPosition();
+
+	return *this;
+}
+
+sf::Vector2f Button::GetCenter() const
+{
+	return mShape.getPosition() + mShape.getSize() / 2.f;
 }

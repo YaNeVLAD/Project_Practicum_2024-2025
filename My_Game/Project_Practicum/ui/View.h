@@ -20,6 +20,12 @@ public:
 
 	void Click() const { if (mOnClick) mOnClick(); }
 
+	virtual View& SetPosition(Alignment alignment, const sf::View& camera, const sf::Vector2f& offset = { 0,0 }) = 0;
+	virtual View& SetPosition(Alignment alignment, const View* parent, const sf::Vector2f& offset = { 0,0 }) = 0;
+
+	virtual sf::Vector2f GetSize() const = 0;
+	virtual sf::Vector2f GetCenter() const = 0;
+
 	void SetOnClickListener(const std::function<void()>& callback) { mOnClick = callback; }
 
 protected:

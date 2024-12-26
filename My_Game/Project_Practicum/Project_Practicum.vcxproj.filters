@@ -302,6 +302,9 @@
     <ClInclude Include="ui\AnimatedSprite.hpp">
       <Filter>Файлы заголовков\ui</Filter>
     </ClInclude>
+    <ClInclude Include="ui\Layout.hpp">
+      <Filter>Файлы заголовков\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

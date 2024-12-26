@@ -11,7 +11,7 @@ void SpawnSystem::Update(EntityManager& entityManager, float deltaTime)
 	mTimeSinceLastBonusSpawn += deltaTime;
 	mTimeSinceLastBossSpawn += deltaTime;
 
-	if (mTimeSinceLastBossSpawn >= mBossSpawnInterval && mSpawnedBosses < GameConfig::GetInstance()->maxBosses)
+	if (mTimeSinceLastBossSpawn >= mBossSpawnInterval && (GameConfig::GetInstance()->isInfinite || mSpawnedBosses < GameConfig::GetInstance()->maxBosses))
 	{
 		SpawnBoss(entityManager);
 		mTimeSinceLastBossSpawn = 0.f;

@@ -25,6 +25,11 @@ void Map::Init(const std::string& textureFile)
 	}
 }
 
+sf::Vector2f Map::GetSize() const
+{
+	return sf::Vector2f(0,0);
+}
+
 bool Map::Contains(const sf::Vector2f& point) const
 {
 	return false;
@@ -39,6 +44,16 @@ void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const
 			target.draw(mBackgrounds[i][j]);
 		}
 	}
+}
+
+Map& Map::SetPosition(Alignment alignment, const View* parent, const sf::Vector2f& offset)
+{
+	return *this;
+}
+
+sf::Vector2f Map::GetCenter() const
+{
+	return { 0,0 };
 }
 
 void Map::UpdatePosition(const sf::View& camera)
@@ -64,4 +79,9 @@ void Map::UpdatePosition(const sf::View& camera)
 			mBackgrounds[i][j].setPosition(xPos, yPos);
 		}
 	}
+}
+
+Map& Map::SetPosition(Alignment alignment, const sf::View& camera, const sf::Vector2f& offset)
+{
+	return *this;
 }

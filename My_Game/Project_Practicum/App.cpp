@@ -65,12 +65,11 @@ void App::Update(float deltaTime)
 		}
 	}
 	if (state == State::WeaponUpgrade)
-	{
 		for (const auto& sprite : mWeaponSprites)
-		{
-			sprite.second->Update(deltaTime);
-		}
-	}
+			sprite.second->Update(deltaTime * 5);
+	if (state == State::GameSetup)
+		for (const auto& player : mPlayers)
+			player.second->Update(deltaTime * 5);
 }
 
 void App::Render(float deltaTime)
@@ -132,7 +131,7 @@ void App::RenderUpgradeScreen()
 		if (mWeaponSprites.find(weapon->GetName()) == mWeaponSprites.end())
 		{
 			auto sprite = std::make_shared<AnimatedSprite>();
-			sprite->SetScale({ 1.f, 1.f })
+			sprite->SetSize({ 64.f, 64.f })
 				.SetPosition(View::Alignment::Center, camera, { 100.f, 100.f })
 				.SetTextures(*weapon->GetAnimation());
 
@@ -197,17 +196,61 @@ void App::RenderGameSetupScreen()
 
 	sf::Vector2f counterSize(75, 50);
 
+	auto firstPlayerTextures = TextureManager::GetTextures("assets/character/1/Idle.png", 128, 128);
+	auto secondPlayerTextures = TextureManager::GetTextures("assets/character/2/Idle.png", 128, 128);
+
+	auto firstPlayerWeapon = TextureManager::GetTextures("assets/weapon/Charge.png", 64, 64);
+	auto secondPlayerWeapon = TextureManager::GetTextures("assets/weapon/Fireball.png", 64, 64);
+
+	std::vector<GameConfig::PlayerType> playerTypes = { GameConfig::PlayerType::First, GameConfig::PlayerType::Second };
+
+	float buttonWidth = 200.f;
+	float buttonHeight = 50.f;
+	float spacing = 20.f;
+
+	for (int i = 0; i < playerTypes.size(); ++i)
+	{
+		const auto& playerType = playerTypes[i];
+
+		if (mPlayers.find(playerType) == mPlayers.end())
+		{
+			auto sprite = std::make_shared<AnimatedSprite>();
+			sprite->SetSize({ 128.f, 128.f });
+			sprite->SetTextures(playerType == GameConfig::PlayerType::First ? *firstPlayerTextures : *secondPlayerTextures);
+			mPlayers[playerType] = sprite;
+		}
+
+		auto& sprite = mPlayers[playerType];
+
+		float offsetX = (i == 0) ? -120.f : 120.f;
+		sprite->SetPosition(View::Alignment::Center, camera, { offsetX, 0 });
+
+		Button selectButton;
+		selectButton
+			.SetSize({ buttonWidth, buttonHeight })
+			.SetFillColor(playerType == mConfig->playerType ? sf::Color::Green : sf::Color::Red)
+			.SetPosition(View::Alignment::Center, camera, { offsetX, 220.f - 100.f })
+			.SetText("Select", mFont, 20, playerType == mConfig->playerType ? sf::Color::White : sf::Color::Black)
+			.SetOnClickListener([this, playerType]()
+				{
+					mConfig->playerType = playerType;
+				});
+
+		screen.AddView(sprite);
+		screen.AddView(std::make_shared<Button>(selectButton));
+	}
+
 	Button bossCount;
 	bossCount
 		.SetSize(counterSize)
 		.SetFillColor(sf::Color::Yellow)
-		.SetPosition(View::Alignment::Center, camera, { 0.f, 0.f })
+		.SetPosition(View::Alignment::Center, camera, { 0.f, 300.f - 100.f })
 		.SetText(std::to_string(GameConfig::GetInstance()->maxBosses), mFont, 20, sf::Color::Black);
 
 	Button decreaseBossesButton;
 	decreaseBossesButton
 		.SetSize({ 50.f, 50.f })
-		.SetPosition(View::Alignment::Center, camera, { -counterSize.x + 15, 0.f })
+		.SetPosition(View::Alignment::Center, camera, { -counterSize.x + 15, 300.f - 100.f })
 		.SetFillColor(sf::Color::White)
 		.SetText("-", mFont, 20, sf::Color::Black)
 		.SetOnClickListener([this]()
@@ -219,7 +262,7 @@ void App::RenderGameSetupScreen()
 	Button increaseBossesButton;
 	increaseBossesButton
 		.SetSize({ 50.f, 50.f })
-		.SetPosition(View::Alignment::Center, camera, { counterSize.x - 15, 0.f })
+		.SetPosition(View::Alignment::Center, camera, { counterSize.x - 15, 300.f - 100.f })
 		.SetFillColor(sf::Color::White)
 		.SetText("+", mFont, 20, sf::Color::Black)
 		.SetOnClickListener([this]()
@@ -228,22 +271,38 @@ void App::RenderGameSetupScreen()
 					mConfig->maxBosses++;
 			});
 
+	Button infiniteModeButton;
+	infiniteModeButton
+		.SetSize({ 200.f, 50.f })
+		.SetPosition(View::Alignment::Center, camera, { 0.f, 380.f - 100.f })
+		.SetFillColor(mConfig->isInfinite ? sf::Color::Blue : sf::Color::White)
+		.SetText("Бесконечный режим", mFont, 20, sf::Color::Black)
+		.SetOnClickListener([this]()
+			{
+				mConfig->isInfinite = !mConfig->isInfinite;
+			});
+
+	screen.AddView(std::make_shared<Button>(bossCount));
+	screen.AddView(std::make_shared<Button>(decreaseBossesButton));
+	screen.AddView(std::make_shared<Button>(increaseBossesButton));
+	screen.AddView(std::make_shared<Button>(infiniteModeButton));
+
 	Button startButton;
 	startButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(View::Alignment::Center, camera, { 0.f, 200.f })
+		.SetPosition(View::Alignment::Center, camera, { 0.f, 440.f - 100.f })
 		.SetFillColor(sf::Color::Green)
 		.SetText("НАЧАТЬ (Enter)", mFont)
 		.SetOnClickListener([this]()
 			{
-				game.Restart();
+				game.Restart(mConfig->maxBosses);
 				state = State::Playing;
 			});
 
 	Button backButton;
 	backButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(View::Alignment::Center, camera, { 0.f, 260.f })
+		.SetPosition(View::Alignment::Center, camera, { 0.f, 500.f - 100.f })
 		.SetFillColor(sf::Color::Yellow)
 		.SetText("Назад (Esc)", mFont)
 		.SetOnClickListener([this]()
@@ -251,16 +310,8 @@ void App::RenderGameSetupScreen()
 				state = State::MainMenu;
 			});
 
-	Button infiniteModeButton;
-	infiniteModeButton
-		.SetSize({ 300.f, 100.f })
-		.SetFillColor(game.isInfinite ? sf::Color::Green : sf::Color::Red)
-		.SetText("Бесконечный режим (Пробел)", mFont)
-		.SetPosition(View::Alignment::Center, camera, { 0.f, 360.f })
-		.SetOnClickListener([this]()
-			{
-				game.isInfinite = !game.isInfinite;
-			});
+	screen.AddView(std::make_shared<Button>(startButton));
+	screen.AddView(std::make_shared<Button>(backButton));
 
 	KeyBinding increase({ Key::Equal, Key::D, Key::Right }, KeyBinding::OR, [this]()
 		{
@@ -274,11 +325,6 @@ void App::RenderGameSetupScreen()
 				mConfig->maxBosses--;
 		});
 
-	KeyBinding infiniteMode(Key::Space, [this]()
-		{
-			game.isInfinite = !game.isInfinite;
-		});
-
 	KeyBinding ret(Key::Escape, [this]()
 		{
 			state = State::MainMenu;
@@ -290,18 +336,10 @@ void App::RenderGameSetupScreen()
 			state = State::Playing;
 		});
 
-	screen.AddView(std::make_shared<Button>(bossCount));
-	screen.AddView(std::make_shared<Button>(backButton));
-	screen.AddView(std::make_shared<Button>(startButton));
-	screen.AddView(std::make_shared<Button>(infiniteModeButton));
-	screen.AddView(std::make_shared<Button>(increaseBossesButton));
-	screen.AddView(std::make_shared<Button>(decreaseBossesButton));
-
 	screen.AddKeyBinding(ret);
 	screen.AddKeyBinding(start);
 	screen.AddKeyBinding(increase);
 	screen.AddKeyBinding(decrease);
-	screen.AddKeyBinding(infiniteMode);
 }
 
 void App::RenderVictoryScreen()

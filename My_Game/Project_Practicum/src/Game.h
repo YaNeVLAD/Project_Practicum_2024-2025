@@ -35,7 +35,7 @@ public:
 
 	void Pause();
 	void Resume();
-
+		
 	bool IsBossDefeated() const;
 	bool IsPlayerDefeated();
 	bool HasPlayerLeveledUp();
@@ -44,8 +44,6 @@ public:
 	void UpgradeWeapon(std::string name);
 
 	void ProcessEvents(const sf::Event& event);
-
-	bool isInfinite = false;
 
 	PlayerType playerType = PlayerType::First;
 private:

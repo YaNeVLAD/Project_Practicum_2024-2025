@@ -6,7 +6,7 @@ Text& Text::SetText(const std::string& text, const sf::Font& font, unsigned int 
 	mText.setString(sf::String().fromUtf8(text.begin(), text.end()));
 	mText.setCharacterSize(fontSize);
 	mText.setFillColor(color);
-	
+
 	return *this;
 }
 
@@ -36,6 +36,11 @@ Text& Text::SetPosition(Alignment alignment, const sf::View& camera, const sf::V
 	return *this;
 }
 
+sf::Vector2f Text::GetSize() const
+{
+	return { 0,0 };
+}
+
 bool Text::Contains(const sf::Vector2f& point) const
 {
 	return false;
@@ -61,4 +66,28 @@ void Text::UpdateTextPosition(const sf::Vector2f position)
 	}
 
 	mText.setPosition(position.x - offsetX, position.y);
+}
+
+Text& Text::SetPosition(Alignment alignment, const View* parent, const sf::Vector2f& offset)
+{
+	sf::Vector2f position = offset;
+
+	if (alignment == Alignment::CenterX || alignment == Alignment::Center)
+	{
+		position.x += parent->GetCenter().x - mText.getGlobalBounds().width / 2.0f;
+	}
+
+	if (alignment == Alignment::CenterY || alignment == Alignment::Center)
+	{
+		position.y += parent->GetCenter().y - mText.getGlobalBounds().height / 2.0f;
+	}
+
+	UpdateTextPosition(position);
+
+	return *this;
+}
+
+sf::Vector2f Text::GetCenter() const
+{
+	return { 0,0 };
 }

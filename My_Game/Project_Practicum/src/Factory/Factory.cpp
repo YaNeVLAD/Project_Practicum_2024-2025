@@ -12,21 +12,21 @@
 #include "../Entity/Weapon/BossWeapon/BossWeapon.h"
 #include "../Entity/Weapon/MagicCharge/MagicCharge.h"
 #include "../Entity/Weapon/LightningStrike/LightningStrike.h"
-#include "../Config/GameConfig.h"
 #include "../Game.h"
 
 std::vector<std::string> names = {
 	"Влад", "Кирилл", "Максим", "Дима", "Илья", "Елисей",
 	"Степан", "Мирослав", "Данил", "Константин", "Михаил",
 	"Богдан", "Андрей", "Денис", "Антон", "Александр", "Тимофей",
-	"Григорий", "Арсений", "Владимир", "Иван", "Глеб"
+	"Григорий", "Арсений", "Владимир", "Иван", "Глеб", "Коля"
 };
 
 std::vector<std::string> titles = {
 	"Повелитель", "Хранитель", "Защитник", "Мастер", "Поборник", "Убийца",
 	"Созидатель", "Ценитель", "Гений", "Король", "Воин", "Покоритель", "Титан",
 	"Звезда", "Пророк", "Исцелитель", "Легенда", "Странник", "Владыка",
-	"Мудрец", "Строитель", "Чародей", "Охотник", "Скиталец", "Чемпион", "Лидер"
+	"Мудрец", "Строитель", "Чародей", "Охотник", "Скиталец", "Чемпион", "Лидер",
+	"Программист", "Инженер", "Архитектор", "Ведущий инженер"
 };
 
 std::vector<std::string> objects = {
@@ -34,7 +34,7 @@ std::vector<std::string> objects = {
 	"С++", "Жизни", "Смерти", "Молнии", "Теней", "Света", "Льда", "Железа",
 	"Лавы", "Водопадов", "Старого мира", "Леса", "Песков", "Скалы", "Древности",
 	"Чудес", "Травы", "Судьбы", "Души", "Пламени", "Звезд", "Коллизий", "Мобилок",
-	"Бекенда", "Фронтенда", "УПО"
+	"Бекенда", "Фронтенда", "УПО", "Гаража", "Кальяна", "Шаурмы"
 };
 
 std::random_device rd;
@@ -60,7 +60,7 @@ void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window
 	systemManager.AddSystem<LifetimeSystem>(camera);
 	systemManager.AddSystem<HomingProjectileSystem>();
 	systemManager.AddSystem<OrbitalProjectileSystem>();
-	systemManager.AddSystem<SpawnSystem>(camera, 0.2f, 15.f, 60.f);
+	systemManager.AddSystem<SpawnSystem>(camera, 0.2f, 15.f, 0.f);
 	systemManager.AddSystem<TrailSystem>();
 	systemManager.AddSystem<DamageSystem>();
 	systemManager.AddSystem<ContainerSystem>();
@@ -84,7 +84,7 @@ std::shared_ptr<Weapon> Factory::CreateWeapon(const std::string& name)
 
 void Factory::CreateEnemy(EntityManager& entityManager, sf::Vector2f pos)
 {
-	size_t multiplier = static_cast<size_t>(1ull) << GameConfig::GetInstance()->killedBosses;
+	size_t multiplier = std::pow(1.5f, GameConfig::GetInstance()->killedBosses);
 
 	auto& enemy = entityManager.CreateEntity(EntityType::Enemy);
 	enemy.AddComponent<TransformComponent>(pos);
@@ -108,7 +108,7 @@ void Factory::CreateEnemy(EntityManager& entityManager, sf::Vector2f pos)
 
 void Factory::CreateBoss(EntityManager& entityManager, sf::Vector2f pos)
 {
-	size_t multiplier = static_cast<size_t>(1ull) << GameConfig::GetInstance()->killedBosses;
+	size_t multiplier = std::pow(1.5f, GameConfig::GetInstance()->killedBosses);
 
 	auto& boss = entityManager.CreateEntity(EntityType::Enemy);
 
@@ -139,7 +139,25 @@ void Factory::CreateBoss(EntityManager& entityManager, sf::Vector2f pos)
 	boss.AddComponent<NameComponent>(CreateRandomName());
 }
 
-using PlayerType = GameConfig::PlayerType;
+static std::string GetAnimationPath(GameConfig::PlayerType type, AnimationComponent::AnimationState state)
+{
+	std::string basePath = "assets/character/";
+	std::string playerFolder = (type == GameConfig::PlayerType::First) ? "1/" : "2/";
+	std::string animationFile;
+
+	switch (state)
+	{
+	case AnimationComponent::IDLE:   animationFile = "Idle.png"; break;
+	case AnimationComponent::WALK:   animationFile = "Walk.png"; break;
+	case AnimationComponent::HURT:   animationFile = "Hurt.png"; break;
+	case AnimationComponent::DEAD:   animationFile = "Dead.png"; break;
+	case AnimationComponent::ATTACK: animationFile = "Attack.png"; break;
+	default:                         animationFile = "Idle.png"; break;
+	}
+
+	return basePath + playerFolder + animationFile;
+}
+
 void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 {
 	auto type = GameConfig::GetInstance()->playerType;
@@ -148,7 +166,7 @@ void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 	player.AddComponent<InputComponent>();
 	player.AddComponent<CameraComponent>();
 
-	player.AddComponent<WeaponComponent>(CreateWeapon(type == PlayerType::First ? "Magic Charge" : "Axe"));
+	player.AddComponent<WeaponComponent>(CreateWeapon(type == GameConfig::PlayerType::First ? "Magic Charge" : "Fireball"));
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(40, 40));
 	collisionShape->setOrigin(20, 20);
@@ -156,10 +174,10 @@ void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 
 	player.AddComponent<AnimationComponent>(0.2f, true);
 
-	auto walkFrames = TextureManager::GetTextures("assets/character/Walk.png", 128, 128);
-	auto idleFrames = TextureManager::GetTextures("assets/character/Idle.png", 128, 128);
-	auto hurtFrames = TextureManager::GetTextures("assets/character/Hurt.png", 128, 128);
-	auto deadFrames = TextureManager::GetTextures("assets/character/Dead.png", 128, 128);
+	auto walkFrames = TextureManager::GetTextures(GetAnimationPath(type, AnimationComponent::WALK), 128, 128);
+	auto idleFrames = TextureManager::GetTextures(GetAnimationPath(type, AnimationComponent::IDLE), 128, 128);
+	auto hurtFrames = TextureManager::GetTextures(GetAnimationPath(type, AnimationComponent::HURT), 128, 128);
+	auto deadFrames = TextureManager::GetTextures(GetAnimationPath(type, AnimationComponent::DEAD), 128, 128);
 
 	auto animation = player.GetComponent<AnimationComponent>();
 	animation->AddAnimation(AnimationComponent::IDLE, idleFrames);
@@ -173,7 +191,9 @@ void Factory::CreatePlayer(EntityManager& entityManager, sf::Vector2f pos)
 
 	player.AddComponent<LevelComponent>(100);
 
-	player.AddComponent<AbilityComponent>(AbilityComponent::Haste, 3.f, 1.f, sf::Keyboard::Key::E);
+	player.AddComponent<AbilityComponent>(
+		type == GameConfig::PlayerType::First ? AbilityComponent::Haste : AbilityComponent::Heal, 3.f, 1.f, sf::Keyboard::Key::E
+	);
 }
 
 void Factory::CreateHealthBonus(EntityManager& entityManager, sf::Vector2f pos)
@@ -242,14 +262,16 @@ void Factory::CreateContainer(EntityManager& entityManager, sf::Vector2f pos)
 
 void Factory::CreateExperience(EntityManager& entityManager, sf::Vector2f pos)
 {
+	size_t multiplier = std::pow(1.25f, GameConfig::GetInstance()->killedBosses);
+
 	auto& experience = entityManager.CreateEntity(EntityType::Particle);
 
-	experience.AddComponent<ExperienceComponent>(50);
+	experience.AddComponent<ExperienceComponent>(50 * multiplier);
 
 	experience.AddComponent<TransformComponent>(pos);
 
 	auto frames = TextureManager::GetTextures("assets/gif/xp/Experience.png", 64, 64);
-	experience.AddComponent<DrawableComponent>(frames->at(0), sf::Vector2f(0.4f, 0.4f));
+	experience.AddComponent<DrawableComponent>(frames->at(0), sf::Vector2f(0.25f, 0.25f));
 
 	experience.AddComponent<AnimationComponent>(0.1f, true);
 	auto animation = experience.GetComponent<AnimationComponent>();
@@ -295,10 +317,10 @@ void Factory::LoadTextures()
 	TextureManager::GetTextures("assets/boss/Hurt.png", 128, 128);
 	TextureManager::GetTextures("assets/boss/Dead.png", 128, 128);
 
-	TextureManager::GetTextures("assets/character/Walk.png", 128, 128);
-	TextureManager::GetTextures("assets/character/Dead.png", 128, 128);
-	TextureManager::GetTextures("assets/character/Idle.png", 128, 128);
-	TextureManager::GetTextures("assets/character/Hurt.png", 128, 128);
+	TextureManager::GetTextures("assets/character/1/Walk.png", 128, 128);
+	TextureManager::GetTextures("assets/character/1/Dead.png", 128, 128);
+	TextureManager::GetTextures("assets/character/1/Idle.png", 128, 128);
+	TextureManager::GetTextures("assets/character/1/Hurt.png", 128, 128);
 
 	TextureManager::GetTextures("assets/map/Barrel.png", 128, 128);
 

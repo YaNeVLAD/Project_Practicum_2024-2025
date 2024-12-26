@@ -11,6 +11,12 @@ public:
 
 	void UpdatePosition(const sf::View& camera);
 
+	Map& SetPosition(Alignment alignment, const sf::View& camera, const sf::Vector2f& offset) override;
+	Map& SetPosition(Alignment alignment, const View* parent, const sf::Vector2f& offset) override;
+	
+	sf::Vector2f GetCenter() const override;
+	sf::Vector2f GetSize() const override;
+
 	bool Contains(const sf::Vector2f& point) const override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:

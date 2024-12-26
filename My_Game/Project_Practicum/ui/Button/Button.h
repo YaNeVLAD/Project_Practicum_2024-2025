@@ -9,8 +9,12 @@ public:
 
 	Button& SetSize(const sf::Vector2f size);
 	Button& SetFillColor(const sf::Color color);
-	Button& SetPosition(Alignment alignment, const sf::View& camera, const sf::Vector2f offset = { 0.0f, 0.0f });
+	Button& SetPosition(Alignment alignment, const sf::View& camera, const sf::Vector2f& offset = { 0.0f, 0.0f }) override;
+	Button& SetPosition(Alignment alignment, const View* parent, const sf::Vector2f& offset) override;
 	Button& SetText(const std::string& text, const sf::Font& font, unsigned int fontSize = 20, const sf::Color color = sf::Color::White);
+	
+	sf::Vector2f GetSize() const override;
+	sf::Vector2f GetCenter() const override;
 
 protected:
 	bool Contains(const sf::Vector2f& point) const override;
