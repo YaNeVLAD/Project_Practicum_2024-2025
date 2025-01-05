@@ -87,6 +87,21 @@ public:
 		}
 	}
 
+	void ResetPoints()
+	{
+		int weaponUpgrades = 0;
+		for (auto& [weapon, upgrades] : weaponStats)
+		{
+			weaponUpgrades += upgrades;
+			upgrades = 0;
+		}
+
+		upgradePoints = upgradePoints + playerDamageBuff + playerHealthBuff + weaponUpgrades;
+
+		playerDamageBuff = 0;
+		playerHealthBuff = 0;
+	}
+
 private:
 	static GameConfig* mInstance;
 

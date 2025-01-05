@@ -455,6 +455,19 @@ void App::RenderShopScreen()
 
 	screen.AddView(std::make_shared<Button>(mainMenuButton));
 	screen.AddView(std::make_shared<Button>(upgradeButton));
+
+	Button resetPointsButton;
+	resetPointsButton
+		.SetSize({ 200.f, 50.f })
+		.SetPosition(View::Alignment::Center, camera)
+		.SetFillColor(sf::Color::Cyan)
+		.SetText("Reset Points", mFont)
+		.SetOnClickListener([config]()
+			{
+				config->ResetPoints();
+			});
+
+	screen.AddView(std::make_shared<Button>(resetPointsButton));
 }
 
 void App::RenderVictoryScreen()
