@@ -363,7 +363,7 @@ void App::RenderShopScreen()
 {
 	screen.Clear();
 
-	auto config = GameConfig::GetInstance();
+	mConfig->SaveConfig();
 	sf::Vector2f buttonSize(200.0f, 50.0f);
 	float spacing = 20.0f;
 
@@ -375,13 +375,13 @@ void App::RenderShopScreen()
 		.SetSize(buttonSize)
 		.SetPosition(View::Alignment::Center, camera, { rowCenterX - buttonSize.x - spacing / 2, 100.0f })
 		.SetFillColor(sf::Color::Green)
-		.SetText("Increase Health " + std::to_string(config->playerHealthBuff), mFont, 20, sf::Color::White)
-		.SetOnClickListener([config]()
+		.SetText("Increase Health " + std::to_string(mConfig->playerHealthBuff), mFont, 20, sf::Color::White)
+		.SetOnClickListener([this]()
 			{
-				if (config->upgradePoints > 0)
+				if (mConfig->upgradePoints > 0)
 				{
-					config->playerHealthBuff++;
-					config->upgradePoints--;
+					mConfig->playerHealthBuff++;
+					mConfig->upgradePoints--;
 				}
 			});
 
@@ -390,13 +390,13 @@ void App::RenderShopScreen()
 		.SetSize(buttonSize)
 		.SetPosition(View::Alignment::Center, camera, { rowCenterX + spacing / 2, 100.0f })
 		.SetFillColor(sf::Color::Red)
-		.SetText("Increase Damage " + std::to_string(config->playerDamageBuff), mFont, 20, sf::Color::White)
-		.SetOnClickListener([config]()
+		.SetText("Increase Damage " + std::to_string(mConfig->playerDamageBuff), mFont, 20, sf::Color::White)
+		.SetOnClickListener([this]()
 			{
-				if (config->upgradePoints > 0)
+				if (mConfig->upgradePoints > 0)
 				{
-					config->playerDamageBuff++;
-					config->upgradePoints--;
+					mConfig->playerDamageBuff++;
+					mConfig->upgradePoints--;
 				}
 			});
 
@@ -406,11 +406,11 @@ void App::RenderShopScreen()
 	float secondRowY = 200.0f;
 	float startPosX = rowCenterX - 2 * (buttonSize.x + spacing) / 2;
 	std::vector<std::string> weaponKeys = {
-		config->Axe,
-		config->MagicCharge,
-		config->Lightning,
-		config->Fireball,
-		config->Book
+		mConfig->Axe,
+		mConfig->MagicCharge,
+		mConfig->Lightning,
+		mConfig->Fireball,
+		mConfig->Book
 	};
 
 	for (size_t i = 0; i < weaponKeys.size(); ++i)
@@ -421,13 +421,13 @@ void App::RenderShopScreen()
 			.SetSize(buttonSize)
 			.SetPosition(View::Alignment::Center, camera, { startPosX + i * (buttonSize.x + spacing), secondRowY })
 			.SetFillColor(sf::Color::Yellow)
-			.SetText(weaponName + " " + std::to_string(config->weaponStats[weaponName]), mFont, 20, sf::Color::Black)
-			.SetOnClickListener([config, weaponName]()
+			.SetText(weaponName + " " + std::to_string(mConfig->weaponStats[weaponName]), mFont, 20, sf::Color::Black)
+			.SetOnClickListener([this, weaponName]()
 				{
-					if (config->upgradePoints > 0)
+					if (mConfig->upgradePoints > 0)
 					{
-						config->weaponStats[weaponName]++;
-						config->upgradePoints--;
+						mConfig->weaponStats[weaponName]++;
+						mConfig->upgradePoints--;
 					}
 				});
 
@@ -442,19 +442,17 @@ void App::RenderShopScreen()
 		.SetText("В главное меню", mFont)
 		.SetOnClickListener([this]()
 			{
-				mConfig->SaveConfig();
 				state = State::MainMenu;
 			});
 
-	Button upgradeButton;
-	upgradeButton
-		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(View::Alignment::Center, camera, { 0.f, -360.f })
-		.SetFillColor(sf::Color::Yellow)
-		.SetText(std::to_string(mConfig->upgradePoints), mFont);
+	Text upgradePoints;
+	upgradePoints
+		.SetTextAlignment(Text::TextAlignment::Center)
+		.SetText(std::to_string(mConfig->upgradePoints), mFont, 40)
+		.SetPosition(View::Alignment::Center, camera, { 0.f, -400.f });
 
 	screen.AddView(std::make_shared<Button>(mainMenuButton));
-	screen.AddView(std::make_shared<Button>(upgradeButton));
+	screen.AddView(std::make_shared<Text>(upgradePoints));
 
 	Button resetPointsButton;
 	resetPointsButton
@@ -462,9 +460,9 @@ void App::RenderShopScreen()
 		.SetPosition(View::Alignment::Center, camera)
 		.SetFillColor(sf::Color::Cyan)
 		.SetText("Reset Points", mFont)
-		.SetOnClickListener([config]()
+		.SetOnClickListener([this]()
 			{
-				config->ResetPoints();
+				mConfig->ResetPoints();
 			});
 
 	screen.AddView(std::make_shared<Button>(resetPointsButton));
@@ -507,7 +505,7 @@ void App::RenderVictoryScreen()
 				window.close();
 			});
 
-	KeyBinding exit(sf::Keyboard::Escape, [this]()
+	KeyBinding exit(Key::Escape, [this]()
 		{
 			state = State::MainMenu;
 		});
@@ -570,13 +568,13 @@ void App::RenderDefeatScreen()
 			});
 
 
-	KeyBinding restart(sf::Keyboard::R, [this]()
+	KeyBinding restart(Key::R, [this]()
 		{
 			game->Restart();
 			state = State::Playing;
 		});
 
-	KeyBinding exit(sf::Keyboard::Escape, [this]()
+	KeyBinding exit(Key::Escape, [this]()
 		{
 			state = State::MainMenu;
 		});
