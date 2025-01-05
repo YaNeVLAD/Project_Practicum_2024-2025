@@ -14,11 +14,11 @@ public:
 		Second,
 	};
 
-	const char* AxeDamage = "Axe";
-	const char* ChargeDamage = "Magic Charge";
-	const char* LightningDamage = "Lightning Strike";
-	const char* FireballDamage = "Fireball";
-	const char* BookDamage = "Book";
+	const char* Axe = "Axe";
+	const char* MagicCharge = "Magic Charge";
+	const char* Lightning = "Lightning Strike";
+	const char* Fireball = "Fireball";
+	const char* Book = "Book";
 
 	static GameConfig* GetInstance()
 	{
@@ -38,7 +38,7 @@ public:
 	PlayerType playerType = PlayerType::First;
 	bool isInfinite = false;
 	std::unordered_map<std::string, int> weaponStats =
-	{ {AxeDamage, 0}, {ChargeDamage, 0}, {LightningDamage, 0}, {FireballDamage, 0}, {BookDamage, 0} };
+	{ {Axe, 0}, {MagicCharge, 0}, {Lightning, 0}, {Fireball, 0}, {Book, 0} };
 
 	void SaveConfig(const std::string& filePath = "common/stats.conf")
 	{

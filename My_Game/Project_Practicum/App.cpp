@@ -103,7 +103,7 @@ void App::Render(float deltaTime)
 		game->Render(deltaTime);
 		break;
 	case State::UpgradeShop:
-		RenderUpgradeShopScreen();
+		RenderShopScreen();
 		break;
 	}
 
@@ -359,7 +359,7 @@ void App::RenderGameSetupScreen()
 	screen.AddKeyBinding(decrease);
 }
 
-void App::RenderUpgradeShopScreen()
+void App::RenderShopScreen()
 {
 	screen.Clear();
 
@@ -375,12 +375,14 @@ void App::RenderUpgradeShopScreen()
 		.SetSize(buttonSize)
 		.SetPosition(View::Alignment::Center, camera, { rowCenterX - buttonSize.x - spacing / 2, 100.0f })
 		.SetFillColor(sf::Color::Green)
-		.SetText("Increase Health", mFont, 20, sf::Color::White)
-		.SetOnClickListener([config]() {
-		if (config->upgradePoints > 0) {
-			config->playerHealthBuff++;
-			config->upgradePoints--;
-		}
+		.SetText("Increase Health " + std::to_string(config->playerHealthBuff), mFont, 20, sf::Color::White)
+		.SetOnClickListener([config]()
+			{
+				if (config->upgradePoints > 0)
+				{
+					config->playerHealthBuff++;
+					config->upgradePoints--;
+				}
 			});
 
 	Button damageBuffButton;
@@ -388,12 +390,14 @@ void App::RenderUpgradeShopScreen()
 		.SetSize(buttonSize)
 		.SetPosition(View::Alignment::Center, camera, { rowCenterX + spacing / 2, 100.0f })
 		.SetFillColor(sf::Color::Red)
-		.SetText("Increase Damage", mFont, 20, sf::Color::White)
-		.SetOnClickListener([config]() {
-		if (config->upgradePoints > 0) {
-			config->playerDamageBuff++;
-			config->upgradePoints--;
-		}
+		.SetText("Increase Damage " + std::to_string(config->playerDamageBuff), mFont, 20, sf::Color::White)
+		.SetOnClickListener([config]()
+			{
+				if (config->upgradePoints > 0)
+				{
+					config->playerDamageBuff++;
+					config->upgradePoints--;
+				}
 			});
 
 	screen.AddView(std::make_shared<Button>(healthBuffButton));
@@ -402,26 +406,29 @@ void App::RenderUpgradeShopScreen()
 	float secondRowY = 200.0f;
 	float startPosX = rowCenterX - 2 * (buttonSize.x + spacing) / 2;
 	std::vector<std::string> weaponKeys = {
-		config->AxeDamage,
-		config->ChargeDamage,
-		config->LightningDamage,
-		config->FireballDamage,
-		config->BookDamage
+		config->Axe,
+		config->MagicCharge,
+		config->Lightning,
+		config->Fireball,
+		config->Book
 	};
 
-	for (size_t i = 0; i < weaponKeys.size(); ++i) {
+	for (size_t i = 0; i < weaponKeys.size(); ++i)
+	{
 		std::string weaponName = weaponKeys[i];
 		Button weaponButton;
 		weaponButton
 			.SetSize(buttonSize)
 			.SetPosition(View::Alignment::Center, camera, { startPosX + i * (buttonSize.x + spacing), secondRowY })
 			.SetFillColor(sf::Color::Yellow)
-			.SetText(weaponName, mFont, 20, sf::Color::Black)
-			.SetOnClickListener([config, weaponName]() {
-			if (config->upgradePoints > 0) {
-				config->weaponStats[weaponName]++;
-				config->upgradePoints--;
-			}
+			.SetText(weaponName + " " + std::to_string(config->weaponStats[weaponName]), mFont, 20, sf::Color::Black)
+			.SetOnClickListener([config, weaponName]()
+				{
+					if (config->upgradePoints > 0)
+					{
+						config->weaponStats[weaponName]++;
+						config->upgradePoints--;
+					}
 				});
 
 		screen.AddView(std::make_shared<Button>(weaponButton));
@@ -433,9 +440,10 @@ void App::RenderUpgradeShopScreen()
 		.SetPosition(View::Alignment::Center, camera, { 0.f, -300.f })
 		.SetFillColor(sf::Color::Green)
 		.SetText("В главное меню", mFont)
-		.SetOnClickListener([this]() {
-		mConfig->SaveConfig();
-		state = State::MainMenu;
+		.SetOnClickListener([this]()
+			{
+				mConfig->SaveConfig();
+				state = State::MainMenu;
 			});
 
 	Button upgradeButton;

@@ -75,7 +75,7 @@ private:
 	void RenderUpgradeScreen();
 	void RenderMainMenuScreen();
 	void RenderGameSetupScreen();
-	void RenderUpgradeShopScreen();
+	void RenderShopScreen();
 
 	void LoadFont();
 	void LoadTextures();
