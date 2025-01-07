@@ -37,6 +37,7 @@ void App::ProcessEvents()
 			screen.HandleEvents(window, camera, event);
 		}
 	}
+	screen.HandleMouseState(window, camera);
 }
 
 void App::Update(float deltaTime)

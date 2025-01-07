@@ -42,6 +42,36 @@ void Screen::HandleEvents(const sf::RenderWindow& window, const sf::View& camera
 	}
 }
 
+void Screen::HandleMouseState(const sf::RenderWindow& window, const sf::View& camera)
+{
+	sf::Vector2f worldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window), camera);
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		auto now = std::chrono::steady_clock::now();
+
+		if (mButtonPressTimes.find(sf::Mouse::Left) == mButtonPressTimes.end())
+		{
+			mButtonPressTimes[sf::Mouse::Left] = now;
+		}
+
+		if (now - mButtonPressTimes[sf::Mouse::Left] >= mHoldDelay)
+		{
+			for (const auto& view : mViews)
+			{
+				if (view->Contains(worldPos))
+				{
+					view->Click();
+				}
+			}
+		}
+	}
+	else
+	{
+		mButtonPressTimes.erase(sf::Mouse::Left);
+	}
+}
+
 void Screen::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	for (const auto& view : mViews)

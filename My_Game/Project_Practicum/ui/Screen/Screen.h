@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <memory>
+#include <chrono>
 
 struct KeyBinding
 {
@@ -62,11 +63,14 @@ public:
 	void ClearBindings() { mKeyBindings.clear(); }
 
 	void HandleEvents(const sf::RenderWindow& window, const sf::View& camera, const sf::Event& event);
-
+	void HandleMouseState(const sf::RenderWindow& window, const sf::View& camera);
 protected:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
 	std::vector<KeyBinding> mKeyBindings;
 	std::vector<std::shared_ptr<View>> mViews;
+
+	std::unordered_map<sf::Mouse::Button, std::chrono::steady_clock::time_point> mButtonPressTimes;
+	std::chrono::milliseconds mHoldDelay = std::chrono::milliseconds(300);
 };
