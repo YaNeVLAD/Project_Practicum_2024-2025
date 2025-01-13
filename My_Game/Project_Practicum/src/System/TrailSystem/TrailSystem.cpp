@@ -1,5 +1,6 @@
 #include "TrailSystem.h"
 #include "../../Manager/Texture/TextureManager.h"
+#include "../../Config/GameConfig.h"
 
 void TrailSystem::Update(EntityManager& entityManager, float deltaTime)
 {
@@ -49,5 +50,7 @@ void TrailSystem::CreateTrailProjectile(EntityManager& em, Entity* entity) const
 	trailEffect.AddComponent<CollisionComponent>(std::move(collisionShape));
 
 	trailEffect.AddComponent<LifetimeComponent>(2.f);
-	trailEffect.AddComponent<DamageComponent>(trail->damage, 0.1f, Enemy);
+	trailEffect.AddComponent<DamageComponent>(
+		trail->damage + GameConfig::GetInstance()->playerDamageBuff + (GameConfig::GetInstance()->weaponStats[GameConfig::GetInstance()->Fireball] / 2), 0.1f, Enemy
+	);
 }

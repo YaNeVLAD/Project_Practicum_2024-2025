@@ -38,7 +38,7 @@ public:
 
 private:
 	App() :
-		window(sf::VideoMode::getDesktopMode(), "Bloody Survivors"),
+		window(sf::VideoMode::getDesktopMode(), "Monster Survivors"),
 		camera(window.getView()),
 		game(Game::GetInstance(&window, &camera)),
 		state(State::MainMenu),

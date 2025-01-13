@@ -37,11 +37,11 @@ void LightningStrike::Attack(EntityManager& entityManager, TransformComponent* p
 
 	Entity& lightning = entityManager.CreateEntity(EntityType::Projectile);
 
-	lightning.AddComponent<LifetimeComponent>(1.f);
+	lightning.AddComponent<LifetimeComponent>(0.8f);
 	lightning.AddComponent<TransformComponent>(transform->GetPosition());
 
-	lightning.AddComponent<DrawableComponent>(mFrames->at(2), mScale);
-	lightning.AddComponent<AnimationComponent>(0.3f, true);
+	lightning.AddComponent<DrawableComponent>(mFrames->at(0), mScale);
+	lightning.AddComponent<AnimationComponent>(0.15f, true);
 	auto animation = lightning.GetComponent<AnimationComponent>();
 	animation->AddAnimation(AnimationComponent::ATTACK, mFrames);
 	animation->SetState(AnimationComponent::ATTACK);
@@ -94,5 +94,5 @@ Entity* LightningStrike::FindFarthestEnemy(std::vector<Entity*>& enemies, Transf
 
 void LightningStrike::LoadTextures()
 {
-	mFrames = TextureManager::GetTextures("assets/weapon/Charge.png", 64, 64);
+	mFrames = TextureManager::GetTextures("assets/weapon/Lightning.png", 64, 64);
 }

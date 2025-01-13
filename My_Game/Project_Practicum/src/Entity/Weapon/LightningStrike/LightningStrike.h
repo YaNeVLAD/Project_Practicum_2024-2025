@@ -32,7 +32,7 @@ private:
 	float mMaxDistance = 400.0f;
 	
 	sf::Vector2f mCollisionSize = { 32, 32 };
-	sf::Vector2f mScale = { 1.25f, 1.25f };
+	sf::Vector2f mScale = { 1.5f, 1.5f };
 
 	std::shared_ptr<std::vector<sf::Texture>> mFrames;
 

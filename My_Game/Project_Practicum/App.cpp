@@ -139,7 +139,7 @@ void App::RenderUpgradeScreen()
 		{
 			auto sprite = std::make_shared<AnimatedSprite>();
 			sprite->SetSize({ 200.f, 200.f })
-				.SetBackgroundColor(sf::Color::White)
+				.SetBackgroundColor(sf::Color(255, 245, 215))
 				.SetTextures(*weapon->GetAnimation());
 
 			mWeaponSprites[weapon->GetName()] = sprite;
