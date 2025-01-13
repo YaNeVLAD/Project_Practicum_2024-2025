@@ -31,7 +31,7 @@ void BossWeapon::Attack(EntityManager& entityManager, TransformComponent* parent
 	collisionShape->setOrigin(16, 16);
 	projectile.AddComponent<CollisionComponent>(std::move(collisionShape));
 
-	projectile.AddComponent<DamageComponent>(10, 0.5f, Player);
+	projectile.AddComponent<DamageComponent>(1, 0.1f, Player);
 	projectile.AddComponent<RotationComponent>();
 }
 

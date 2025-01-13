@@ -32,7 +32,7 @@ private:
 
 	float mElapsedTime = 0.0f;
 
-	const int MAX_ENEMIES_ON_SCREEN = 100;
+	const int MAX_ENEMIES_ON_SCREEN = 500;
 	const int MAX_CONTAINERS_ON_SCREEN = 10;
 
 	sf::FloatRect getCameraBounds();

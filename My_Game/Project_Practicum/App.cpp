@@ -374,7 +374,7 @@ void App::RenderShopScreen()
 	Button healthBuffButton;
 	healthBuffButton
 		.SetSize(buttonSize)
-		.SetPosition(View::Alignment::Center, camera, { rowCenterX - buttonSize.x - spacing / 2, 100.0f })
+		.SetPosition(View::Alignment::Center, camera, { -110.f, 100.0f })
 		.SetFillColor(sf::Color::Green)
 		.SetText("Increase Health " + std::to_string(mConfig->playerHealthBuff), mFont, 20, sf::Color::White)
 		.SetOnClickListener([this]()
@@ -389,7 +389,7 @@ void App::RenderShopScreen()
 	Button damageBuffButton;
 	damageBuffButton
 		.SetSize(buttonSize)
-		.SetPosition(View::Alignment::Center, camera, { rowCenterX + spacing / 2, 100.0f })
+		.SetPosition(View::Alignment::Center, camera, { 110.f, 100.0f })
 		.SetFillColor(sf::Color::Red)
 		.SetText("Increase Damage " + std::to_string(mConfig->playerDamageBuff), mFont, 20, sf::Color::White)
 		.SetOnClickListener([this]()
@@ -405,7 +405,7 @@ void App::RenderShopScreen()
 	screen.AddView(std::make_shared<Button>(damageBuffButton));
 
 	float secondRowY = 200.0f;
-	float startPosX = rowCenterX - 2 * (buttonSize.x + spacing) / 2;
+	float startPosX = rowCenterX - 2 * (buttonSize.x + spacing) / 2 - 300;
 	std::vector<std::string> weaponKeys = {
 		mConfig->Axe,
 		mConfig->MagicCharge,

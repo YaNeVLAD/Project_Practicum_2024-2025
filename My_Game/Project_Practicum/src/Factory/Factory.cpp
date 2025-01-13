@@ -60,7 +60,7 @@ void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window
 	systemManager.AddSystem<LifetimeSystem>(camera);
 	systemManager.AddSystem<HomingProjectileSystem>();
 	systemManager.AddSystem<OrbitalProjectileSystem>();
-	systemManager.AddSystem<SpawnSystem>(camera, 0.2f, 15.f, 0.f);
+	systemManager.AddSystem<SpawnSystem>(camera, 0.15f, 10.f, 60.f);
 	systemManager.AddSystem<TrailSystem>();
 	systemManager.AddSystem<DamageSystem>();
 	systemManager.AddSystem<ContainerSystem>();
