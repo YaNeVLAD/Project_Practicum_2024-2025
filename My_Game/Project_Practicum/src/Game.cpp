@@ -59,7 +59,7 @@ void Game::RenderPauseScreen()
 		.SetSize({ 200.f, 50.f })
 		.SetFillColor(sf::Color::Yellow)
 		.SetText("Продолжить", font, 18)
-		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 300.f })
+		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 250.f })
 		.SetOnClickListener([this]()
 			{
 				Resume();
@@ -67,6 +67,26 @@ void Game::RenderPauseScreen()
 			});
 
 	screen.AddView(std::make_shared<Button>(continueButton));
+
+	Button exitButton;
+	exitButton
+		.SetSize({ 200.f, 50.f })
+		.SetFillColor(sf::Color::Red)
+		.SetText("Выйти", font, 18)
+		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 310.f })
+		.SetOnClickListener([this]()
+			{
+				auto players = mEntityManager.GetEntitiesWithComponents<PlayerHealthComponent>();
+				if (players.empty())
+				{
+					return;
+				}
+				auto player = players.front();
+				player->GetComponent<PlayerHealthComponent>()->Kill();
+				Resume();
+				screen.Clear();
+			});
+	screen.AddView(std::make_shared<Button>(exitButton));
 }
 
 void Game::RunFrame(float deltaTime)

@@ -153,7 +153,7 @@ void App::RenderUpgradeScreen()
 			.SetSize(buttonSize)
 			.SetFillColor(sf::Color::Yellow)
 			.SetPosition(View::Alignment::Center, camera, { startPosX + i * buttonWidth, 160.f })
-			.SetText(weapon->GetName() + (weapon->GetLevel() == 0 ? "" : " " + std::to_string(weapon->GetLevel())), mFont, 20, sf::Color::Black)
+			.SetText(mConfig->weapons.at(weapon->GetName()) + (weapon->GetLevel() == 0 ? "" : " " + std::to_string(weapon->GetLevel())), mFont, 20, sf::Color::Black)
 			.SetOnClickListener([this, weapon]()
 				{
 					game->UpgradeWeapon(weapon->GetName());
@@ -173,7 +173,7 @@ void App::RenderMainMenuScreen()
 	Button setupButton;
 	setupButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(View::Alignment::Center, camera, { -160.f, 0.f })
+		.SetPosition(View::Alignment::Center, camera, { -220.f, 0.f })
 		.SetFillColor(sf::Color::Green)
 		.SetText("Начать игру", mFont)
 		.SetOnClickListener([this]()
@@ -184,9 +184,9 @@ void App::RenderMainMenuScreen()
 	Button upgradeButton;
 	upgradeButton
 		.SetSize({ 200.0f, 50.0f })
-		.SetPosition(View::Alignment::Center, camera, { 0.f, 60.f })
+		.SetPosition(View::Alignment::Center, camera)
 		.SetFillColor(sf::Color::Yellow)
-		.SetText(std::to_string(mConfig->upgradePoints), mFont)
+		.SetText("Улучшения", mFont)
 		.SetOnClickListener([this]()
 			{
 				state = State::UpgradeShop;
@@ -195,7 +195,7 @@ void App::RenderMainMenuScreen()
 	Button exitButton;
 	exitButton
 		.SetSize({ 200.f, 50.f })
-		.SetPosition(View::Alignment::Center, camera, { 160.f, 0.f })
+		.SetPosition(View::Alignment::Center, camera, { 220.f, 0.f })
 		.SetFillColor(sf::Color::Red)
 		.SetText("Выйти из игры", mFont)
 		.SetOnClickListener([this]()
@@ -365,7 +365,7 @@ void App::RenderShopScreen()
 	screen.Clear();
 
 	mConfig->SaveConfig();
-	sf::Vector2f buttonSize(200.0f, 50.0f);
+	sf::Vector2f buttonSize(250.0f, 50.0f);
 	float spacing = 20.0f;
 
 	float screenWidth = window.getSize().x / static_cast<float>(16);
@@ -374,12 +374,12 @@ void App::RenderShopScreen()
 	Button healthBuffButton;
 	healthBuffButton
 		.SetSize(buttonSize)
-		.SetPosition(View::Alignment::Center, camera, { -110.f, 100.0f })
+		.SetPosition(View::Alignment::Center, camera, { -130.f, 100.0f })
 		.SetFillColor(sf::Color::Green)
-		.SetText("Increase Health " + std::to_string(mConfig->playerHealthBuff), mFont, 20, sf::Color::White)
+		.SetText("Увеличить здоровье " + std::to_string(mConfig->playerHealthBuff), mFont, 20, sf::Color::White)
 		.SetOnClickListener([this]()
 			{
-				if (mConfig->upgradePoints > 0)
+				if (mConfig->upgradePoints > 0 && mConfig->playerHealthBuff < 99)
 				{
 					mConfig->playerHealthBuff++;
 					mConfig->upgradePoints--;
@@ -389,12 +389,12 @@ void App::RenderShopScreen()
 	Button damageBuffButton;
 	damageBuffButton
 		.SetSize(buttonSize)
-		.SetPosition(View::Alignment::Center, camera, { 110.f, 100.0f })
+		.SetPosition(View::Alignment::Center, camera, { 130.f, 100.0f })
 		.SetFillColor(sf::Color::Red)
-		.SetText("Increase Damage " + std::to_string(mConfig->playerDamageBuff), mFont, 20, sf::Color::White)
+		.SetText("Увеличить урон " + std::to_string(mConfig->playerDamageBuff), mFont, 20, sf::Color::White)
 		.SetOnClickListener([this]()
 			{
-				if (mConfig->upgradePoints > 0)
+				if (mConfig->upgradePoints > 0 && mConfig->playerDamageBuff < 99)
 				{
 					mConfig->playerDamageBuff++;
 					mConfig->upgradePoints--;
@@ -404,7 +404,7 @@ void App::RenderShopScreen()
 	screen.AddView(std::make_shared<Button>(healthBuffButton));
 	screen.AddView(std::make_shared<Button>(damageBuffButton));
 
-	float secondRowY = 200.0f;
+	float secondRowY = 250.0f;
 	float startPosX = rowCenterX - 2 * (buttonSize.x + spacing) / 2 - 300;
 	std::vector<std::string> weaponKeys = {
 		mConfig->Axe,
@@ -414,6 +414,13 @@ void App::RenderShopScreen()
 		mConfig->Book
 	};
 
+	Text text;
+	text
+		.SetTextAlignment(Text::TextAlignment::Center)
+		.SetPosition(View::Alignment::Center, camera, { -110.f, 170.f })
+		.SetText("Усиление урона", mFont, 30);
+	screen.AddView(std::make_shared<Text>(text));
+
 	for (size_t i = 0; i < weaponKeys.size(); ++i)
 	{
 		std::string weaponName = weaponKeys[i];
@@ -422,7 +429,7 @@ void App::RenderShopScreen()
 			.SetSize(buttonSize)
 			.SetPosition(View::Alignment::Center, camera, { startPosX + i * (buttonSize.x + spacing), secondRowY })
 			.SetFillColor(sf::Color::Yellow)
-			.SetText(weaponName + " " + std::to_string(mConfig->weaponStats[weaponName]), mFont, 20, sf::Color::Black)
+			.SetText(mConfig->weapons.at(weaponName) + " " + std::to_string(mConfig->weaponStats[weaponName]), mFont, 20, sf::Color::Black)
 			.SetOnClickListener([this, weaponName]()
 				{
 					if (mConfig->upgradePoints > 0)
@@ -438,7 +445,7 @@ void App::RenderShopScreen()
 	Button mainMenuButton;
 	mainMenuButton
 		.SetSize({ 200.f, 50.f })
-		.SetPosition(View::Alignment::Center, camera, { 0.f, -300.f })
+		.SetPosition(View::Alignment::Center, camera, { 0.f, 350.f })
 		.SetFillColor(sf::Color::Green)
 		.SetText("В главное меню", mFont)
 		.SetOnClickListener([this]()
@@ -448,8 +455,8 @@ void App::RenderShopScreen()
 
 	Text upgradePoints;
 	upgradePoints
-		.SetTextAlignment(Text::TextAlignment::Center)
-		.SetText(std::to_string(mConfig->upgradePoints), mFont, 40)
+		.SetTextAlignment(Text::TextAlignment::Left)
+		.SetText("Очков: " + std::to_string(mConfig->upgradePoints), mFont, 40)
 		.SetPosition(View::Alignment::Center, camera, { 0.f, -400.f });
 
 	screen.AddView(std::make_shared<Button>(mainMenuButton));
@@ -460,7 +467,7 @@ void App::RenderShopScreen()
 		.SetSize({ 200.f, 50.f })
 		.SetPosition(View::Alignment::Center, camera)
 		.SetFillColor(sf::Color::Cyan)
-		.SetText("Reset Points", mFont)
+		.SetText("Сбросить очки", mFont)
 		.SetOnClickListener([this]()
 			{
 				mConfig->ResetPoints();

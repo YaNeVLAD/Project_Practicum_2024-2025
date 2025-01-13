@@ -150,13 +150,19 @@ void HUDSystem::RenderAbility(Entity* player)
 	}
 
 	mCooldown
-		.SetSize({ 100.f, 10.f })
+		.SetSize({ 800.f, 30.f })
 		.SetBackgroundColor(sf::Color::Black)
-		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 200.f })
-		.SetProgress(ability->timer / ability->cooldown);
+		.SetPosition(View::Alignment::Center, mCamera, { 0.f, 380.f })
+		.SetProgress(ability->timer / ability->cooldown)
+		.SetProgressLineColor(ability->IsActive() ? sf::Color::Green : sf::Color::Yellow);;
 
-	mCooldown
-		.SetProgressLineColor(ability->IsActive() ? sf::Color::Green : sf::Color::Yellow);
+	Text abilityText;
+	abilityText
+		.SetTextAlignment(Text::TextAlignment::Left)
+		.SetPosition(View::Alignment::Default, mCamera, { mCooldown.GetPosition().x - 200, mCooldown.GetPosition().y })
+		.SetText("Способность(E): ", mFont, 24);
+
+	screen.AddView(std::make_shared<Text>(abilityText));
 
 	screen.AddView(std::make_shared<ProgressBar>(mCooldown));
 }

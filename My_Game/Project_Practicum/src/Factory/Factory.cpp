@@ -60,7 +60,7 @@ void Factory::InitSystems(SystemManager& systemManager, sf::RenderWindow& window
 	systemManager.AddSystem<LifetimeSystem>(camera);
 	systemManager.AddSystem<HomingProjectileSystem>();
 	systemManager.AddSystem<OrbitalProjectileSystem>();
-	systemManager.AddSystem<SpawnSystem>(camera, 0.15f, 10.f, 60.f);
+	systemManager.AddSystem<SpawnSystem>(camera, 0.15f, 10.f, 30.f);
 	systemManager.AddSystem<TrailSystem>();
 	systemManager.AddSystem<DamageSystem>();
 	systemManager.AddSystem<ContainerSystem>();
@@ -216,11 +216,14 @@ void Factory::CreateHealthBonus(EntityManager& entityManager, sf::Vector2f pos)
 	bonus.AddComponent<BonusComponent>(BonusComponent::BonusType::Health);
 
 	bonus.AddComponent<TransformComponent>(pos);
-	bonus.AddComponent<DrawableComponent>(32, 32, sf::Color::Green);
-
+	
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
 	collisionShape->setOrigin(16, 16);
 	bonus.AddComponent<CollisionComponent>(std::move(collisionShape));
+
+	auto textures = TextureManager::GetTextures("assets/bonus/Health.png", 357, 320);
+
+	bonus.AddComponent<DrawableComponent>(textures->at(0), sf::Vector2f(0.15, 0.15));
 
 	bonus.AddComponent<LifetimeComponent>(15.f);
 }
@@ -232,7 +235,8 @@ void Factory::CreateBombBonus(EntityManager& entityManager, sf::Vector2f pos)
 	bonus.AddComponent<BonusComponent>(BonusComponent::BonusType::Bomb);
 
 	bonus.AddComponent<TransformComponent>(pos);
-	bonus.AddComponent<DrawableComponent>(32, 32, sf::Color::Red);
+	auto textures = TextureManager::GetTextures("assets/bonus/Bomb.png", 320, 320);
+	bonus.AddComponent<DrawableComponent>(textures->at(0), sf::Vector2f(0.15, 0.15));
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
 	collisionShape->setOrigin(16, 16);
@@ -248,7 +252,9 @@ void Factory::CreateMagnetBonus(EntityManager& entityManager, sf::Vector2f pos)
 	magnet.AddComponent<BonusComponent>(BonusComponent::BonusType::Magnet);
 
 	magnet.AddComponent<TransformComponent>(pos);
-	magnet.AddComponent<DrawableComponent>(32, 32, sf::Color::Blue);
+	auto textures = TextureManager::GetTextures("assets/bonus/Magnet.png", 920, 512);
+
+	magnet.AddComponent<DrawableComponent>(textures->at(0), sf::Vector2f(0.1, 0.1));
 
 	auto collisionShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(32, 32));
 	collisionShape->setOrigin(16, 16);

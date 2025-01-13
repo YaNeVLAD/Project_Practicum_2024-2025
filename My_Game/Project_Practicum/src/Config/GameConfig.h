@@ -14,11 +14,11 @@ public:
 		Second,
 	};
 
-	const char* Axe = "Axe";
-	const char* MagicCharge = "Magic Charge";
-	const char* Lightning = "Lightning Strike";
-	const char* Fireball = "Fireball";
-	const char* Book = "Book";
+	const std::string Axe = "Axe";
+	const std::string MagicCharge = "Magic Charge";
+	const std::string Lightning = "Lightning Strike";
+	const std::string Fireball = "Fireball";
+	const std::string Book = "Holy Book";
 
 	static GameConfig* GetInstance()
 	{
@@ -28,6 +28,12 @@ public:
 		}
 		return mInstance;
 	}
+
+	const std::unordered_map<std::string, std::string> weapons =
+	{
+		{ Axe, "Топор" }, { Book, "Книга" }, { Fireball, "Огненный шар" },
+		{ MagicCharge, "Заряд" }, { Lightning, "Молния" }
+	};
 
 	size_t upgradePoints = 0;
 	size_t playerHealthBuff = 0;

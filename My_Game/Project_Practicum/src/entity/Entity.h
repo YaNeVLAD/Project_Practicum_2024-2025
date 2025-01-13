@@ -23,11 +23,9 @@ public:
 
     explicit Entity(IdType id, EntityType type) : mId(id), mType(type) {}
 
-    // Запрещаем копирование
     Entity(const Entity&) = delete;
     Entity& operator=(const Entity&) = delete;
 
-    // Разрешаем перемещение
     Entity(Entity&&) noexcept = default;
     Entity& operator=(Entity&&) noexcept = default;
 
